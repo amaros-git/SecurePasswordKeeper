@@ -1,4 +1,4 @@
-package lv.maros.securedpasswordkeeper
+package lv.maros.securedpasswordkeeper.views
 
 import androidx.lifecycle.ViewModel
 
