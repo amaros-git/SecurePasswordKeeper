@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
 import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.databinding.FragmentPasswordListBinding
 import lv.maros.securedpasswordkeeper.utils.setTitle
@@ -14,7 +16,7 @@ class PasswordListFragment : Fragment() {
 
     private lateinit var binding: FragmentPasswordListBinding
 
-    private lateinit var viewModel: PasswordListViewModel
+    private val viewModel: SharedPasswordViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
