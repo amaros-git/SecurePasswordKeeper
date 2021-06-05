@@ -35,11 +35,6 @@ class AddPasswordFragment : Fragment() {
     private fun setupViews() {
         val searchManager =
             requireContext().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-
-        binding.searchView.apply {
-            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
-        }
     }
 
 }
