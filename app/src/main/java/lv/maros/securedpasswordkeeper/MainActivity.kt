@@ -1,41 +1,49 @@
 package lv.maros.securedpasswordkeeper
 
-import android.app.SearchManager
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.SearchRecentSuggestions
-import android.util.Log
-import android.view.Menu
-import android.widget.SearchView
+import android.view.MenuItem
+import androidx.navigation.findNavController
+import androidx.security.crypto.MasterKey
+import androidx.security.crypto.MasterKeys
+import timber.log.Timber
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+
 
 class MainActivity : AppCompatActivity() {
-
-    private val logTag = MainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        onSearchRequested()
+
+        val plaintext: ByteArray = "test".toByteArray()
+        val keygen = KeyGenerator.getInstance("AES")
+        keygen.init(256)
+
+        val key: SecretKey = keygen.generateKey()
+        Timber.d("key = $key")
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+        val ciphertext: ByteArray = cipher.doFinal(plaintext)
+        val iv: ByteArray = cipher.iv
+
+        Timber.d(iv.toString())
+
+
     }
 
-    override fun onSearchRequested(): Boolean {
-        return super.onSearchRequested()
-    }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        handleIntent(intent)
-    }
-
-    private fun handleIntent(intent: Intent) {
-        if (Intent.ACTION_SEARCH == intent.action) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                Log.d(logTag, "query: $query")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                findNavController(R.id.nav_host_fragment).popBackStack()
+                return true
             }
         }
+
+        return super.onOptionsItemSelected(item)
     }
 }

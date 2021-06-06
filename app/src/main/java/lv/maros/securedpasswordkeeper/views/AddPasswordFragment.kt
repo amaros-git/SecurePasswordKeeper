@@ -8,24 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import lv.maros.securedpasswordkeeper.Password
 import lv.maros.securedpasswordkeeper.R
+import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
 import lv.maros.securedpasswordkeeper.databinding.FragmentAddPasswordBinding
+import lv.maros.securedpasswordkeeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.securedpasswordkeeper.utils.setTitle
 
 class AddPasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentAddPasswordBinding
 
+    private val viewModel: SharedPasswordViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        binding = FragmentAddPasswordBinding.inflate(inflater)
-
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding = FragmentAddPasswordBinding.inflate(inflater).also {
+            it.lifecycleOwner = this.viewLifecycleOwner
+            it.viewModel = viewModel
+        }
 
         setTitle(getString(R.string.app_name))
+        setDisplayHomeAsUpEnabled(true)
 
         setupViews()
 
@@ -33,8 +41,38 @@ class AddPasswordFragment : Fragment() {
     }
 
     private fun setupViews() {
-        val searchManager =
-            requireContext().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        binding.save.setOnClickListener {
+            verifyAndSavePassword()
+        }
+    }
+
+    private fun verifyAndSavePassword() {
+        val password = collectPasswordData()
+        if (isInputDataValid(password)) {
+            viewModel.savePassword(password)
+        }
+    }
+
+    private fun isInputDataValid(password: Password): Boolean {
+        return (password.description.isNotEmpty() &&
+                password.username.isNotEmpty() &&
+                password.password.isNotEmpty() &&
+                password.username.length >= USERNAME_MIN_LENGTH &&
+                password.password.length >= USERNAME_MIN_LENGTH)
+    }
+
+
+    private fun collectPasswordData() = Password(
+        0,
+        binding.description.text.toString(),
+        binding.url.text.toString(),
+        binding.username.text.toString(),
+        binding.password.text.toString(),
+        System.currentTimeMillis()
+    )
+
+    companion object {
+        const val USERNAME_MIN_LENGTH = 4
     }
 
 }

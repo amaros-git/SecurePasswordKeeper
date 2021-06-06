@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
 import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.databinding.FragmentPasswordListBinding
+import lv.maros.securedpasswordkeeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.securedpasswordkeeper.utils.setTitle
 
 class PasswordListFragment : Fragment() {
@@ -28,6 +29,7 @@ class PasswordListFragment : Fragment() {
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setTitle(getString(R.string.app_name))
+        setDisplayHomeAsUpEnabled(false)
 
         setupViews()
 
