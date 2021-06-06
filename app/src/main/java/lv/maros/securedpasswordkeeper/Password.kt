@@ -7,6 +7,6 @@ data class Password(
     val description: String,
     val url: String?,
     val username: String,
-    val password: String,
+    val encryptedPassword: String,
     val creationDateEpoch: Long
 )

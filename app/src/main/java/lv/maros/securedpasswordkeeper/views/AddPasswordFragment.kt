@@ -1,13 +1,10 @@
 package lv.maros.securedpasswordkeeper.views
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import lv.maros.securedpasswordkeeper.Password
 import lv.maros.securedpasswordkeeper.R
@@ -56,9 +53,9 @@ class AddPasswordFragment : Fragment() {
     private fun isInputDataValid(password: Password): Boolean {
         return (password.description.isNotEmpty() &&
                 password.username.isNotEmpty() &&
-                password.password.isNotEmpty() &&
+                password.encryptedPassword.isNotEmpty() &&
                 password.username.length >= USERNAME_MIN_LENGTH &&
-                password.password.length >= USERNAME_MIN_LENGTH)
+                password.encryptedPassword.length >= USERNAME_MIN_LENGTH)
     }
 
 
