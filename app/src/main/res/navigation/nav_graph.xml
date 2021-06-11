@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/passwordListFragment">
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="lv.maros.securedpasswordkeeper.views.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_passwordListFragment"
+            app:destination="@id/passwordListFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/passwordListFragment"
@@ -14,6 +24,7 @@
             android:id="@+id/action_passwordListFragment_to_addPasswordFragment"
             app:destination="@id/addPasswordFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/addPasswordFragment"
         android:name="lv.maros.securedpasswordkeeper.views.AddPasswordFragment"
@@ -22,4 +33,5 @@
             android:id="@+id/action_addPasswordFragment_to_passwordListFragment"
             app:destination="@id/passwordListFragment" />
     </fragment>
+
 </navigation>
