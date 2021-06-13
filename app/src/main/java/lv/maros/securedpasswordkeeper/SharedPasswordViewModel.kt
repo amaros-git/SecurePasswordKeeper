@@ -14,7 +14,6 @@ import javax.crypto.SecretKey
 
 class SharedPasswordViewModel (app: Application) : AndroidViewModel(app) {
 
-
     fun savePassword(password: Password) {
         viewModelScope.launch(Dispatchers.Default)  {
 
