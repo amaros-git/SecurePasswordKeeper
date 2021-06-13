@@ -22,6 +22,7 @@ class KeeperMessageHandler private constructor(
     }
 
     companion object {
+        // message types
         const val MESSAGE_AUTHENTICATION_SUCCEEDED   = 1
         const val MESSAGE_AUTHENTICATION_FAILED      = 2
 

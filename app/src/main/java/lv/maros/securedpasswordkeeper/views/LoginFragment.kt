@@ -1,37 +1,40 @@
 package lv.maros.securedpasswordkeeper.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
-import android.provider.Settings
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.biometric.BiometricManager.from
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 
 import lv.maros.securedpasswordkeeper.R
+import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
+import lv.maros.securedpasswordkeeper.authentication.Authenticator
+import lv.maros.securedpasswordkeeper.databinding.FragmentLoginBinding
 import lv.maros.securedpasswordkeeper.utils.KeeperMessageHandler
-import java.util.concurrent.Executor
 
 
 class LoginFragment : Fragment() {
 
     private lateinit var messageHandler: KeeperMessageHandler
 
+    private lateinit var authenticator: Authenticator
+
+    private lateinit var binding: FragmentLoginBinding
+
+    private val viewModel: SharedPasswordViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        val looper = (Looper.myLooper()) ?: Looper.getMainLooper()
-        messageHandler = KeeperMessageHandler.getInstance(looper)
+        binding = FragmentLoginBinding.inflate(inflater).also {
+            it.lifecycleOwner = this.viewLifecycleOwner
+        }
+
+        viewModel.authenticate()
 
        /* // Prompt appears when user clicks "Log in".
         // Consider integrating with the keystore to unlock cryptographic operations,
@@ -42,6 +45,8 @@ class LoginFragment : Fragment() {
             biometricPrompt.authenticate(promptInfo)
         }*/
 
-        return inflater.inflate(R.layout.fragment_login, container, false)
+
+
+        return binding.root
     }
 }

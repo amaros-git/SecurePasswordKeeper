@@ -1,26 +1,28 @@
-package lv.maros.securedpasswordkeeper.adapters.authentication
+package lv.maros.securedpasswordkeeper.authentication
 
-import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import kotlinx.coroutines.*
 import lv.maros.securedpasswordkeeper.utils.KeeperMessageHandler
 import java.util.concurrent.Executor
-import kotlin.coroutines.CoroutineContext
 
 class Authenticator(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val messageHandler: KeeperMessageHandler
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    suspend fun requestAuthentication() {
-        withContext(dispatcher) {
-
+    suspend fun requestAuthentication(): AuthResult<User> {
+        return withContext(dispatcher) {
+            AuthResult.Success(
+                User(System.currentTimeMillis())
+            )
         }
     }
+
+
+
 
     /*executor = ContextCompat.getMainExecutor(requireContext())
     biometricPrompt = BiometricPrompt(this, executor,

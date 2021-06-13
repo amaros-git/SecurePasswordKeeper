@@ -6,17 +6,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import lv.maros.securedpasswordkeeper.authentication.Authenticator
 import lv.maros.securedpasswordkeeper.views.AddPasswordFragment
 import timber.log.Timber
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class SharedPasswordViewModel (app: Application) : AndroidViewModel(app) {
+class SharedPasswordViewModel (
+    private val app: Application,
+    private val authenticator: Authenticator
+) : AndroidViewModel(app) {
 
     fun savePassword(password: Password) {
         viewModelScope.launch(Dispatchers.Default)  {
 
+        }
+    }
+
+
+    fun authenticate() {
+        viewModelScope.launch {
+            Timber.d("Before")
+            authenticator.requestAuthentication()
+            Timber.d("After")
         }
     }
 
