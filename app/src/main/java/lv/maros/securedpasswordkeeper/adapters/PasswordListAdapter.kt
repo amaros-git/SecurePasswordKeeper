@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lv.maros.securedpasswordkeeper.Password
+import lv.maros.securedpasswordkeeper.models.Password
 import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
 import lv.maros.securedpasswordkeeper.databinding.HeaderItemBinding
 import lv.maros.securedpasswordkeeper.databinding.PasswordItemBinding

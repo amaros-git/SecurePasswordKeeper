@@ -1,4 +1,4 @@
-package lv.maros.securedpasswordkeeper
+package lv.maros.securedpasswordkeeper.models
 
 import java.util.*
 

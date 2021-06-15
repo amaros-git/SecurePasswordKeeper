@@ -2,10 +2,10 @@ package lv.maros.securedpasswordkeeper.authentication
 
 import androidx.biometric.BiometricPrompt
 import kotlinx.coroutines.*
-import lv.maros.securedpasswordkeeper.utils.KeeperMessageHandler
+import lv.maros.securedpasswordkeeper.models.User
 import java.util.concurrent.Executor
 
-class Authenticator(
+class KeeperAuthenticator(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
@@ -20,9 +20,6 @@ class Authenticator(
             )
         }
     }
-
-
-
 
     /*executor = ContextCompat.getMainExecutor(requireContext())
     biometricPrompt = BiometricPrompt(this, executor,

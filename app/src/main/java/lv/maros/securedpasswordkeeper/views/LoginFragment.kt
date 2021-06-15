@@ -1,29 +1,29 @@
 package lv.maros.securedpasswordkeeper.views
 
 import android.os.Bundle
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 
-import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
-import lv.maros.securedpasswordkeeper.authentication.Authenticator
+import lv.maros.securedpasswordkeeper.authentication.KeeperAuthenticator
 import lv.maros.securedpasswordkeeper.databinding.FragmentLoginBinding
 import lv.maros.securedpasswordkeeper.utils.KeeperMessageHandler
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private lateinit var messageHandler: KeeperMessageHandler
 
-    private lateinit var authenticator: Authenticator
+    private lateinit var keeperAuthenticator: KeeperAuthenticator
 
     private lateinit var binding: FragmentLoginBinding
 
-    private val viewModel: SharedPasswordViewModel by activityViewModels()
+    @Inject
+    lateinit var viewModel: SharedPasswordViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

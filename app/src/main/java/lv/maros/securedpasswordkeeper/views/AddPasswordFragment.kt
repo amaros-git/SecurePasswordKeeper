@@ -6,13 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import lv.maros.securedpasswordkeeper.Password
+import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.securedpasswordkeeper.models.Password
 import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
 import lv.maros.securedpasswordkeeper.databinding.FragmentAddPasswordBinding
 import lv.maros.securedpasswordkeeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.securedpasswordkeeper.utils.setTitle
 
+@AndroidEntryPoint
 class AddPasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentAddPasswordBinding

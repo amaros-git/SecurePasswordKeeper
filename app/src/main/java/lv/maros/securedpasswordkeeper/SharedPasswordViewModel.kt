@@ -2,20 +2,20 @@ package lv.maros.securedpasswordkeeper
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import lv.maros.securedpasswordkeeper.authentication.Authenticator
-import lv.maros.securedpasswordkeeper.views.AddPasswordFragment
+import lv.maros.securedpasswordkeeper.authentication.KeeperAuthenticator
+import lv.maros.securedpasswordkeeper.models.Password
 import timber.log.Timber
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.inject.Inject
 
-class SharedPasswordViewModel (
+class SharedPasswordViewModel @Inject constructor (
     private val app: Application,
-    private val authenticator: Authenticator
+    private val keeperAuthenticator: KeeperAuthenticator
 ) : AndroidViewModel(app) {
 
     fun savePassword(password: Password) {
@@ -24,12 +24,9 @@ class SharedPasswordViewModel (
         }
     }
 
-
     fun authenticate() {
         viewModelScope.launch {
-            Timber.d("Before")
-            authenticator.requestAuthentication()
-            Timber.d("After")
+            keeperAuthenticator.requestAuthentication()
         }
     }
 
