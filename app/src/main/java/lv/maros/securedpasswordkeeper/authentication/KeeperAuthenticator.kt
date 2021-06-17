@@ -2,8 +2,9 @@ package lv.maros.securedpasswordkeeper.authentication
 
 import androidx.biometric.BiometricPrompt
 import kotlinx.coroutines.*
-import lv.maros.securedpasswordkeeper.models.User
+import lv.maros.securedpasswordkeeper.models.KeeperUser
 import java.util.concurrent.Executor
+import kotlin.coroutines.suspendCoroutine
 
 class KeeperAuthenticator(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -13,15 +14,13 @@ class KeeperAuthenticator(
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    suspend fun requestAuthentication(): AuthResult<User> {
-        return withContext(dispatcher) {
-            AuthResult.Success(
-                User(System.currentTimeMillis())
-            )
+    suspend fun requestAuthentication(): AuthResult<KeeperUser> {
+        return suspendCoroutine {
+
         }
     }
 
-    /*executor = ContextCompat.getMainExecutor(requireContext())
+        /*executor = ContextCompat.getMainExecutor(requireContext())
     biometricPrompt = BiometricPrompt(this, executor,
     object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(
@@ -64,9 +63,4 @@ class KeeperAuthenticator(
     .build()
 
     biometricPrompt.authenticate(promptInfo)*/
-
-    companion object {
-
-    }
-
 }

@@ -1,5 +1,5 @@
 package lv.maros.securedpasswordkeeper.models
 
-data class User(
+data class KeeperUser(
     val loginTime: Long,
 )

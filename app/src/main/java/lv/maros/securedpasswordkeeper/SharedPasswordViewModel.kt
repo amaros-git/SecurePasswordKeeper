@@ -5,8 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import lv.maros.securedpasswordkeeper.authentication.AuthResult
 import lv.maros.securedpasswordkeeper.authentication.KeeperAuthenticator
 import lv.maros.securedpasswordkeeper.models.Password
+import lv.maros.securedpasswordkeeper.models.KeeperUser
 import timber.log.Timber
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -24,9 +26,19 @@ class SharedPasswordViewModel @Inject constructor (
         }
     }
 
-    fun authenticate() {
-        viewModelScope.launch {
-            keeperAuthenticator.requestAuthentication()
+    fun processAuthenticationResult(authResult: AuthResult<KeeperUser>) {
+        when (authResult) {
+            is AuthResult.Success -> {
+                Timber.d("Successful authentication")
+            }
+
+            is AuthResult.Fail -> {
+                Timber.d("Failed authentication")
+            }
+
+            is AuthResult.Error -> {
+                Timber.d("Error authentication")
+            }
         }
     }
 
