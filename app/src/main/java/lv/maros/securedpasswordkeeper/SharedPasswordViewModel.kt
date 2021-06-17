@@ -29,15 +29,15 @@ class SharedPasswordViewModel @Inject constructor (
     fun processAuthenticationResult(authResult: AuthResult<KeeperUser>) {
         when (authResult) {
             is AuthResult.Success -> {
-                Timber.d("Successful authentication")
+                Timber.e("Successful authentication")
             }
 
             is AuthResult.Fail -> {
-                Timber.d("Failed authentication")
+                Timber.e("Failed authentication")
             }
 
             is AuthResult.Error -> {
-                Timber.d("Error authentication")
+                Timber.e("Error authentication")
             }
         }
     }

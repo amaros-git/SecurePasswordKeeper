@@ -14,6 +14,7 @@ import lv.maros.securedpasswordkeeper.authentication.AuthResult
 import lv.maros.securedpasswordkeeper.databinding.FragmentLoginBinding
 import lv.maros.securedpasswordkeeper.models.KeeperUser
 import lv.maros.securedpasswordkeeper.utils.KeeperMessageHandler
+import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -39,6 +40,8 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater).also {
             it.lifecycleOwner = this.viewLifecycleOwner
         }
+
+        Timber.d("Hi bitch")
 
         startBiometricAuthentication()
 
