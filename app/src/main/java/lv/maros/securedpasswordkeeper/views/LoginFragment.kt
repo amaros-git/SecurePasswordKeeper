@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
     ): View {
 
         binding = FragmentLoginBinding.inflate(inflater).also {
-            it.lifecycleOwner = this.viewLifecycleOwner
+            it.lifecycleOwner = viewLifecycleOwner
         }
 
         startBiometricAuthentication()

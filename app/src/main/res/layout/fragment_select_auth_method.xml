@@ -1,14 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".setup.views.SelectAuthMethodFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".setup.views.SelectAuthMethodFragment">
 
-</FrameLayout>
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/password_radio_text"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:padding="@dimen/margin_small"/>
+
+            <RadioButton
+                android:id="@+id/pin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pin_radio_text"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:padding="@dimen/margin_small"/>
+
+            <RadioButton
+                android:id="@+id/biometric"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/biometric_radio_text"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:padding="@dimen/margin_small"/>
+
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

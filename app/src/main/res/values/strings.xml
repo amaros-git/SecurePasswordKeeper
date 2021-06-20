@@ -7,6 +7,9 @@
     <string name="url">URL</string>
     <string name="username">Username*</string>
     <string name="save">Save</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="password_radio_text">Password</string>
+    <string name="pin_radio_text">PIN</string>
+    <string name="biometric_radio_text">Biometric</string>
 </resources>

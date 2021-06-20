@@ -5,16 +5,38 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentFactory
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.internal.lifecycle.DefaultViewModelFactories.getFragmentFactory
 import lv.maros.securedpasswordkeeper.R
+import lv.maros.securedpasswordkeeper.databinding.FragmentSelectAuthMethodBinding
 
 class SelectAuthMethodFragment : Fragment() {
+
+    private lateinit var binding: FragmentSelectAuthMethodBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_select_auth_method, container, false)
+    ): View {
+
+        binding = FragmentSelectAuthMethodBinding.inflate(inflater).also {
+            it.lifecycleOwner = viewLifecycleOwner
+        }
+
+        binding.pin.setOnClickListener {
+            showPinSetupDialog()
+        }
+
+        return binding.root
+    }
+
+    private fun showPinSetupDialog() {
+        val dialogFragment = AuthMethodBottomDialog.newInstance()
+        dialogFragment.show(requireActivity().supportFragmentManager, "opa")
+
     }
 
 }

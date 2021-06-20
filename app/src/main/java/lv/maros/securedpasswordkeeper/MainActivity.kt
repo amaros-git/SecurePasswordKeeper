@@ -27,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         while (aliases.hasMoreElements()) {
             Timber.d("alias = ${aliases.nextElement()}")
         }
-
-
     }
 
 

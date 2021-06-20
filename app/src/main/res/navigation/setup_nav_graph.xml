@@ -2,17 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/welcomeFragment">
-    <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="lv.maros.securedpasswordkeeper.setup.views.WelcomeFragment"
-        android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome" >
-        <action
-            android:id="@+id/action_welcomeFragment_to_selectAuthMethodFragment"
-            app:destination="@id/selectAuthMethodFragment" />
-    </fragment>
+    app:startDestination="@id/selectAuthMethodFragment"
+    android:id="@+id/keeper_nav_graph.xml">
     <fragment
         android:id="@+id/selectAuthMethodFragment"
         android:name="lv.maros.securedpasswordkeeper.setup.views.SelectAuthMethodFragment"
