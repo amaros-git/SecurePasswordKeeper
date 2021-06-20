@@ -41,8 +41,6 @@ class LoginFragment : Fragment() {
             it.lifecycleOwner = this.viewLifecycleOwner
         }
 
-        Timber.d("Hi bitch")
-
         startBiometricAuthentication()
 
         return binding.root

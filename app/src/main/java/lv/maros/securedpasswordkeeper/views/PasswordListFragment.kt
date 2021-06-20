@@ -26,9 +26,10 @@ class PasswordListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentPasswordListBinding.inflate(inflater)
-        //binding.viewModel = viewModel
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding = FragmentPasswordListBinding.inflate(inflater).also {
+            //binding.viewModel = viewModel
+            it.lifecycleOwner = this.viewLifecycleOwner
+        }
 
         setTitle(getString(R.string.app_name))
         setDisplayHomeAsUpEnabled(false)
