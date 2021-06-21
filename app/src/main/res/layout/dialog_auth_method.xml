@@ -3,11 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="lv.maros.securedpasswordkeeper.setup.SharedSetupViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.securedpasswordkeeper.models.Password
 import lv.maros.securedpasswordkeeper.R
-import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
+import lv.maros.securedpasswordkeeper.SharedKeeperViewModel
 import lv.maros.securedpasswordkeeper.databinding.FragmentAddPasswordBinding
 import lv.maros.securedpasswordkeeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.securedpasswordkeeper.utils.setTitle
@@ -19,7 +19,7 @@ class AddPasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentAddPasswordBinding
 
-    private val viewModel: SharedPasswordViewModel by activityViewModels()
+    private val viewModel: SharedKeeperViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

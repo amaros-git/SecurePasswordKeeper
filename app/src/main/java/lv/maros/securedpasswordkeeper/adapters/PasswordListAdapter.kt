@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.securedpasswordkeeper.models.Password
-import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
+import lv.maros.securedpasswordkeeper.SharedKeeperViewModel
 import lv.maros.securedpasswordkeeper.databinding.HeaderItemBinding
 import lv.maros.securedpasswordkeeper.databinding.PasswordItemBinding
 
@@ -19,7 +19,7 @@ private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 
 class PasswordListAdapter(
-        private val viewModel: SharedPasswordViewModel
+        private val viewModel: SharedKeeperViewModel
 ) : ListAdapter<PasswordDataItem, RecyclerView.ViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -76,7 +76,7 @@ class PasswordListAdapter(
 class PasswordViewHolder(
         private val binding: PasswordItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(viewMode: SharedPasswordViewModel, item: Password) {
+    fun bind(viewMode: SharedKeeperViewModel, item: Password) {
         binding.viewModel = viewMode
 
         binding.executePendingBindings()

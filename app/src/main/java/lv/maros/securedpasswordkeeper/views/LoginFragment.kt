@@ -9,12 +9,11 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 
-import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
+import lv.maros.securedpasswordkeeper.SharedKeeperViewModel
 import lv.maros.securedpasswordkeeper.authentication.AuthResult
 import lv.maros.securedpasswordkeeper.databinding.FragmentLoginBinding
 import lv.maros.securedpasswordkeeper.models.KeeperUser
 import lv.maros.securedpasswordkeeper.utils.KeeperMessageHandler
-import timber.log.Timber
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
@@ -30,7 +29,7 @@ class LoginFragment : Fragment() {
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
     @Inject
-    lateinit var viewModel: SharedPasswordViewModel
+    lateinit var viewModel: SharedKeeperViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

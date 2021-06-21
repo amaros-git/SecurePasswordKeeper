@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.securedpasswordkeeper.SharedPasswordViewModel
+import lv.maros.securedpasswordkeeper.SharedKeeperViewModel
 import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.databinding.FragmentPasswordListBinding
 import lv.maros.securedpasswordkeeper.utils.setDisplayHomeAsUpEnabled
@@ -19,7 +19,7 @@ class PasswordListFragment : Fragment() {
 
     private lateinit var binding: FragmentPasswordListBinding
 
-    private val viewModel: SharedPasswordViewModel by activityViewModels()
+    private val viewModel: SharedKeeperViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

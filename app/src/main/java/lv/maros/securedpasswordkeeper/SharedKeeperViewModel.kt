@@ -15,7 +15,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.inject.Inject
 
-class SharedPasswordViewModel @Inject constructor (
+class SharedKeeperViewModel @Inject constructor (
     private val app: Application,
     private val keeperAuthenticator: KeeperAuthenticator
 ) : AndroidViewModel(app) {
