@@ -5,38 +5,50 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentFactory
-import androidx.fragment.app.FragmentManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.internal.lifecycle.DefaultViewModelFactories.getFragmentFactory
-import lv.maros.securedpasswordkeeper.R
+import androidx.fragment.app.activityViewModels
 import lv.maros.securedpasswordkeeper.databinding.FragmentSelectAuthMethodBinding
+import lv.maros.securedpasswordkeeper.setup.SharedSetupViewModel
 
 class SelectAuthMethodFragment : Fragment() {
 
     private lateinit var binding: FragmentSelectAuthMethodBinding
+
+    private val viewModel: SharedSetupViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentSelectAuthMethodBinding.inflate(inflater).also {
-            it.lifecycleOwner = viewLifecycleOwner
-        }
+        binding = FragmentSelectAuthMethodBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.pin.setOnClickListener {
-            showPinSetupDialog()
-        }
+        setupViews()
 
         return binding.root
     }
 
-    private fun showPinSetupDialog() {
-        val dialogFragment = AuthMethodBottomDialog.newInstance()
-        dialogFragment.show(requireActivity().supportFragmentManager, "opa")
+    private fun setupViews() {
+        binding.pin.setOnClickListener {
+            showPinSetupDialog()
+        }
 
+        binding.password.setOnClickListener {
+            showPasswordSetupDialog()
+        }
     }
+
+    private fun showPasswordSetupDialog() {
+        val dialogFragment =
+            PasskeyInputBottomDialog.newInstance(viewModel, PasskeyInputBottomDialog.AUTH_TYPE_PASSWORD)
+        dialogFragment.show(requireActivity().supportFragmentManager, "passwordInputDialog")
+    }
+
+    private fun showPinSetupDialog() {
+        val dialogFragment =
+            PasskeyInputBottomDialog.newInstance(viewModel, PasskeyInputBottomDialog.AUTH_TYPE_PIN)
+        dialogFragment.show(requireActivity().supportFragmentManager, "pinInputDialog")
+    }
+
 
 }

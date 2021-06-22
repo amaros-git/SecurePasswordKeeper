@@ -10,39 +10,77 @@
             type="lv.maros.securedpasswordkeeper.setup.SharedSetupViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passKeyLayout"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password_hint_text"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true">
+            android:layout_marginTop="@dimen/margin_big"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passKey"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passkeyLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:hint="@string/password_hint_text"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/repeatPassKeyLayout"
-            android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passkey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repeatPasskeyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:hint="@string/password_repeat_hint_text"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repeatPasskey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/password_repeat_hint_text"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true">
+            android:layout_marginStart="@dimen/margin_big"
+            android:text="@string/cancel_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repeatPassKey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/save"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:text="@string/save_button"
+            app:layout_constraintBaseline_toBaselineOf="@+id/cancel"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

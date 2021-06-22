@@ -13,13 +13,15 @@ import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.databinding.FragmentPasswordListBinding
 import lv.maros.securedpasswordkeeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.securedpasswordkeeper.utils.setTitle
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PasswordListFragment : Fragment() {
 
     private lateinit var binding: FragmentPasswordListBinding
 
-    private val viewModel: SharedKeeperViewModel by activityViewModels()
+    @Inject
+    lateinit var viewModel: SharedKeeperViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

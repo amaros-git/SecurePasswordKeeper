@@ -1,4 +1,10 @@
 package lv.maros.securedpasswordkeeper.setup
 
-class SharedSetupViewModel {
+import androidx.lifecycle.AndroidViewModel
+import javax.inject.Inject
+
+class SharedSetupViewModel : AndroidViewModel()
+{
+
+
 }
