@@ -60,9 +60,9 @@ class PasskeyInputBottomDialog(
             this.dismiss()
         }
 
-        binding.cancel.setOnClickListener {
+        binding.save.setOnClickListener {
             //val passKey = collectPasskey()
-           // viewModel.verifyAndSave()
+            viewModel.savePasskey("HUJ")
         }
 
 

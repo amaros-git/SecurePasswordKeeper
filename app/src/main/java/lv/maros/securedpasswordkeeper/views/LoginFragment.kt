@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    private val viewModel: SharedSetupViewModel by activityViewModels()
+    private val viewModel: SharedKeeperViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

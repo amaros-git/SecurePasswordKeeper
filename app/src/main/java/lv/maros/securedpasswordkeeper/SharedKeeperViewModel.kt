@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 class SharedKeeperViewModel @Inject constructor (
     private val app: Application,
-    private val keeperAuthenticator: KeeperAuthenticator
 ) : AndroidViewModel(app) {
 
     fun savePassword(password: Password) {
