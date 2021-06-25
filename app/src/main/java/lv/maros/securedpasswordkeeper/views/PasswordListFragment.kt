@@ -20,8 +20,7 @@ class PasswordListFragment : Fragment() {
 
     private lateinit var binding: FragmentPasswordListBinding
 
-    @Inject
-    lateinit var viewModel: SharedKeeperViewModel
+    private val viewModel: SharedKeeperViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

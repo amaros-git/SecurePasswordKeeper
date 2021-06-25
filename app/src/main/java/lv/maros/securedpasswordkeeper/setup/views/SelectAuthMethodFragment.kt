@@ -30,24 +30,27 @@ class SelectAuthMethodFragment : Fragment() {
 
     private fun setupViews() {
         binding.pin.setOnClickListener {
-            showPinSetupDialog()
+            showPasskeyInputDialog(PIN_INPUT_TAG)
         }
 
         binding.password.setOnClickListener {
-            showPasswordSetupDialog()
+            showPasskeyInputDialog(PASSWORD_INPUT_TAG)
         }
     }
 
-    private fun showPasswordSetupDialog() {
+    private fun showPasskeyInputDialog(dialogTag: String) {
+        val authType =
+            if (dialogTag == PASSWORD_INPUT_TAG) PasskeyInputBottomDialog.AUTH_TYPE_PASSWORD
+            else PasskeyInputBottomDialog.AUTH_TYPE_PIN
+
         val dialogFragment =
-            PasskeyInputBottomDialog.newInstance(viewModel, PasskeyInputBottomDialog.AUTH_TYPE_PASSWORD)
-        dialogFragment.show(requireActivity().supportFragmentManager, "passwordInputDialog")
+            PasskeyInputBottomDialog.newInstance(authType)
+        dialogFragment.show(requireActivity().supportFragmentManager, dialogTag)
     }
 
-    private fun showPinSetupDialog() {
-        val dialogFragment =
-            PasskeyInputBottomDialog.newInstance(viewModel, PasskeyInputBottomDialog.AUTH_TYPE_PIN)
-        dialogFragment.show(requireActivity().supportFragmentManager, "pinInputDialog")
+    companion object {
+        private const val PASSWORD_INPUT_TAG = "passwordInputDialog"
+        private const val PIN_INPUT_TAG = "pinInputDialog"
     }
 
 

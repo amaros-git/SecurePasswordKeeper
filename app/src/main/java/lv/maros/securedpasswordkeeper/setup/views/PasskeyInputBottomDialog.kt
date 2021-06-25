@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import lv.maros.securedpasswordkeeper.R
 import lv.maros.securedpasswordkeeper.SharedKeeperViewModel
@@ -13,10 +14,12 @@ import lv.maros.securedpasswordkeeper.setup.SharedSetupViewModel
 import timber.log.Timber
 
 class PasskeyInputBottomDialog(
-    private val viewModel: SharedSetupViewModel,
-    private val authType: Int) : BottomSheetDialogFragment() {
+    private val authType: Int
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogAuthMethodBinding
+
+    private val viewModel: SharedSetupViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +65,7 @@ class PasskeyInputBottomDialog(
 
         binding.save.setOnClickListener {
             //val passKey = collectPasskey()
-            viewModel.savePasskey("HUJ")
+            //viewModel.savePasskey("HUJ")
             this.dismiss()
         }
     }
@@ -72,8 +75,8 @@ class PasskeyInputBottomDialog(
         const val AUTH_TYPE_PIN = 1
         const val AUTH_TYPE_PASSWORD = 2
 
-        fun newInstance(viewModel: SharedSetupViewModel, authType: Int): PasskeyInputBottomDialog {
-            return PasskeyInputBottomDialog(viewModel, authType)
+        fun newInstance(authType: Int): PasskeyInputBottomDialog {
+            return PasskeyInputBottomDialog(authType)
         }
     }
 }
