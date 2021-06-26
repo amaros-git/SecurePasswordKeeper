@@ -6,8 +6,10 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import lv.maros.securedpasswordkeeper.setup.CryptoResult
 import timber.log.Timber
+import java.lang.Exception
+import java.security.MessageDigest
 
-class Crypto (private val app: Application) {
+class Crypto(private val app: Application) {
 
     private fun getEncryptedSharedRef(): SharedPreferences {
         val mainKey = MasterKey.Builder(app)
@@ -24,8 +26,25 @@ class Crypto (private val app: Application) {
 
     }
 
+    /**
+     * returns hash string using SHA-256
+     */
+    fun hashString(data: String): String? {
+        return try {
+            val md = MessageDigest.getInstance("SHA-256").apply {
+                reset()
+                update(data.toByteArray())
+            }
+            md.digest().toString()
+        } catch (e: Exception) {
+            Timber.e("exception during hashing")
+            null
+        }
+    }
+
     fun encryptAndSavePasskey(passkey: String) {
         Timber.d("savePasskey called")
+
         getEncryptedSharedRef().edit().apply {
             putString(PASSKEY_KEY, passkey)
             apply()
