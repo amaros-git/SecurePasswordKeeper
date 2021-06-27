@@ -41,33 +41,41 @@ class Crypto(private val app: Application) {
         }
     }
 
-    fun encryptAndSavePasskey(passkey: String): CryptoResult {
-        Timber.d("savePasskey called")
+    private fun isPasskeyLegal(passkey: String): Boolean {
+        return (passkey.isNotEmpty()) && (passkey.isNotBlank())
+    }
 
-        val hashData = hashString(passkey)
-        return if (hashData.isNullOrEmpty()) {
-            CryptoResult.Error(CryptoResult.HASHING_FAILED_MSG_TYPE)
-        } else {
-            getEncryptedSharedRef().edit().apply {
-                putString(PASSKEY_HASH_KEY, passkey)
-                apply()
+    fun encryptAndSavePasskey(passkey: String): CryptoResult {
+        return if (isPasskeyLegal(passkey)) {
+            val hashData = hashString(passkey)
+
+            if (hashData.isNullOrEmpty()) {
+                CryptoResult.Error(CryptoResult.HASHING_FAILED_MSG_TYPE)
+            } else {
+                getEncryptedSharedRef().edit().apply {
+                    putString(PASSKEY_HASH_KEY, passkey)
+                    apply()
+                }
+                CryptoResult.Success(CryptoResult.SUCCESS_MSG_TYPE)
             }
-            CryptoResult.Error(CryptoResult.SUCCESS_MSG_TYPE)
+        } else { // check passkey content
+            CryptoResult.Error(CryptoResult.ILLEGAL_PASSKEY_MSG_TYPE)
         }
     }
 
     fun verifyPasskey(passkey: String): CryptoResult {
-        Timber.d("verifyPasskey called")
-
         val hashData = hashString(passkey)
         val hashSaved = getEncryptedSharedRef().getString(PASSKEY_HASH_KEY, null)
 
-        return if (hashSaved.isNullOrEmpty()) {
-            CryptoResult.Error(CryptoResult.MISSING_PASSKEY_MSG_TYPE)
-        } else if (hashSaved != hashData) {
-            CryptoResult.Error(CryptoResult.WRONG_PASSKEY_MSG_TYPE)
-        } else {
-            CryptoResult.Success(CryptoResult.SUCCESS_MSG_TYPE)
+        return when {
+            hashSaved.isNullOrEmpty() ->
+                CryptoResult.Error(CryptoResult.MISSING_PASSKEY_MSG_TYPE)
+            hashData != hashSaved ->
+                CryptoResult.Error(CryptoResult.WRONG_PASSKEY_PROVIDED_MSG_TYPE)
+            hashData == hashSaved -> {
+                CryptoResult.Success(CryptoResult.SUCCESS_MSG_TYPE)
+            }
+            else -> CryptoResult.Error(CryptoResult.UNKNOWN_ERROR_MSG_TYPE)
         }
     }
 
