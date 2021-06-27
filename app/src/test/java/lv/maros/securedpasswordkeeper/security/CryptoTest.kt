@@ -46,7 +46,7 @@ class CryptoTest {
 
 
     @Test
-    fun encryptAndSavePasskey_receiveTestPasskeysAndTryToEncrypt() {
+    fun encryptAndSavePasskey_savePasskeysSuccessfully() {
         // Create list of test passkeys
         val testPasskeys = listOf<String>(
             "qwerty123",
@@ -63,7 +63,20 @@ class CryptoTest {
     }
 
     @Test
-    fun verifyPasskey() {
+    fun encryptAndSavePasskey_tryToSaveAndReceiveError() {
+        //TODO empty, blank. And what about space in passkey ?. If PIN then minimal length ?
+    }
+
+    @Test
+    fun verifyPasskey_saveAndCheck() {
+        // Save passkey
+        val passkey = "dhnfj33:02"
+        val hash = crypto.encryptAndSavePasskey(passkey)
+
+        // Verify successfully
+        val result = crypto.verifyPasskey(passkey)
+        assertThat(result, `is`(instanceOf(CryptoResult.Success::class.java)))
+
     }
 
     @Test

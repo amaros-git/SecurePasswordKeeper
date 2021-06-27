@@ -42,7 +42,9 @@ class Crypto(private val app: Application) {
     }
 
     private fun isPasskeyLegal(passkey: String): Boolean {
-        return (passkey.isNotEmpty()) && (passkey.isNotBlank())
+        return (passkey.isNotEmpty()) &&
+                (passkey.isNotBlank()) &&
+                (passkey.length >= PASSKEY_MIN_LENGTH)
     }
 
     fun encryptAndSavePasskey(passkey: String): CryptoResult {
@@ -53,23 +55,25 @@ class Crypto(private val app: Application) {
                 CryptoResult.Error(CryptoResult.HASHING_FAILED_MSG_TYPE)
             } else {
                 getEncryptedSharedRef().edit().apply {
-                    putString(PASSKEY_HASH_KEY, passkey)
+                    putString(PASSKEY_HASH_KEY, hashData)
                     apply()
                 }
                 CryptoResult.Success(CryptoResult.SUCCESS_MSG_TYPE)
             }
         } else { // check passkey content
-            CryptoResult.Error(CryptoResult.ILLEGAL_PASSKEY_MSG_TYPE)
+            CryptoResult.Error(CryptoResult.ILLEGAL_PASSKEY_PROVIDED_MSG_TYPE)
         }
     }
 
     fun verifyPasskey(passkey: String): CryptoResult {
         val hashData = hashString(passkey)
         val hashSaved = getEncryptedSharedRef().getString(PASSKEY_HASH_KEY, null)
+        //Timber.d("hashData = $hashData")
+        //Timber.d("hashSaved = $hashSaved")
 
         return when {
             hashSaved.isNullOrEmpty() ->
-                CryptoResult.Error(CryptoResult.MISSING_PASSKEY_MSG_TYPE)
+                CryptoResult.Error(CryptoResult.MISSING_SAVED_PASSKEY_MSG_TYPE)
             hashData != hashSaved ->
                 CryptoResult.Error(CryptoResult.WRONG_PASSKEY_PROVIDED_MSG_TYPE)
             hashData == hashSaved -> {
@@ -88,6 +92,7 @@ class Crypto(private val app: Application) {
     companion object {
         private const val PASSKEY_HASH_KEY = "passkey_hash"
         private const val ENC_SHARED_REF_NAME = "keeper_shared_prefs"
+        private const val PASSKEY_MIN_LENGTH = 4
     }
 
 }
