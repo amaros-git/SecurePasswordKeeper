@@ -34,7 +34,7 @@ class CryptoTest {
 
     @After
     fun clearSharedReferences() {
-
+        crypto.clearAll()
     }
 
 
@@ -44,5 +44,10 @@ class CryptoTest {
 
     @Test
     fun verifyPasskey() {
+    }
+
+    @Test
+    fun clearAll_addKeyDeleteKeyAndTryToVerifyKey() {
+
     }
 }

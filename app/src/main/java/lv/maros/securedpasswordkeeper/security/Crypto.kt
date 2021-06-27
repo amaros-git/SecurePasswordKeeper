@@ -23,13 +23,12 @@ class Crypto(private val app: Application) {
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
-
     }
 
     /**
-     * returns hash string using SHA-256
+     * returns hashed string using SHA-256 algorithm
      */
-    fun hashString(data: String): String? {
+    private fun hashString(data: String): String? {
         return try {
             val md = MessageDigest.getInstance("SHA-256").apply {
                 reset()
@@ -42,22 +41,44 @@ class Crypto(private val app: Application) {
         }
     }
 
-    fun encryptAndSavePasskey(passkey: String) {
+    fun encryptAndSavePasskey(passkey: String): CryptoResult {
         Timber.d("savePasskey called")
 
-        getEncryptedSharedRef().edit().apply {
-            putString(PASSKEY_KEY, passkey)
-            apply()
+        val hashData = hashString(passkey)
+        return if (hashData.isNullOrEmpty()) {
+            CryptoResult.Error(CryptoResult.HASHING_FAILED_MSG_TYPE)
+        } else {
+            getEncryptedSharedRef().edit().apply {
+                putString(PASSKEY_HASH_KEY, passkey)
+                apply()
+            }
+            CryptoResult.Error(CryptoResult.SUCCESS_MSG_TYPE)
         }
     }
 
-    fun verifyPasskey(): CryptoResult {
-        val key = getEncryptedSharedRef().getString(PASSKEY_KEY, null)
-        return CryptoResult.Success(CryptoResult.SUCCESS_MSG_TYPE)
+    fun verifyPasskey(passkey: String): CryptoResult {
+        Timber.d("verifyPasskey called")
+
+        val hashData = hashString(passkey)
+        val hashSaved = getEncryptedSharedRef().getString(PASSKEY_HASH_KEY, null)
+
+        return if (hashSaved.isNullOrEmpty()) {
+            CryptoResult.Error(CryptoResult.MISSING_PASSKEY_MSG_TYPE)
+        } else if (hashSaved != hashData) {
+            CryptoResult.Error(CryptoResult.WRONG_PASSKEY_MSG_TYPE)
+        } else {
+            CryptoResult.Success(CryptoResult.SUCCESS_MSG_TYPE)
+        }
+    }
+
+    fun clearAll() {
+        val editor = getEncryptedSharedRef().edit()
+        editor.clear()
+        editor.apply()
     }
 
     companion object {
-        private const val PASSKEY_KEY = "passkey"
+        private const val PASSKEY_HASH_KEY = "passkey_hash"
         private const val ENC_SHARED_REF_NAME = "keeper_shared_prefs"
     }
 

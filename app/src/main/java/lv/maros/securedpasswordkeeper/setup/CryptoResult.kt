@@ -9,5 +9,6 @@ sealed class CryptoResult {
         const val SUCCESS_MSG_TYPE = "Success!"
         const val MISSING_PASSKEY_MSG_TYPE = "Didn't find passkey. Was it configured ?"
         const val WRONG_PASSKEY_MSG_TYPE = "Wrong passkey"
+        const val HASHING_FAILED_MSG_TYPE = "Hash is null or empty"
     }
 }
