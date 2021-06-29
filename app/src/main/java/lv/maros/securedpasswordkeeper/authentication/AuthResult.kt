@@ -1,7 +1,6 @@
 package lv.maros.securedpasswordkeeper.authentication
 
-sealed class AuthResult<out T : Any> {
-    data class Success<out T : Any>(val data: T) : AuthResult<T>()
-    data class Fail(val message: String) : AuthResult<Nothing>()
-    data class Error(val message: String) : AuthResult<Nothing>()
+sealed class AuthResult {
+    data class Success(val msgType: String) : AuthResult()
+    data class Error(val msgType: String) : AuthResult()
 }

@@ -6,11 +6,11 @@ sealed class CryptoResult {
 
 
     companion object {
-        const val SUCCESS_MSG_TYPE = "Success!"
-        const val MISSING_SAVED_PASSKEY_MSG_TYPE = "Didn't find passkey. Was it configured ?"
-        const val WRONG_PASSKEY_PROVIDED_MSG_TYPE = "Wrong passkey: didn't match saved"
-        const val ILLEGAL_PASSKEY_PROVIDED_MSG_TYPE = "Passkey is empty or blank or it contains illegal symbols or is too short"
-        const val HASHING_FAILED_MSG_TYPE = "Hash is null or empty"
-        const val UNKNOWN_ERROR_MSG_TYPE = "Something went very wrong"
+        const val MSG_TYPE_SUCCESS = "Success!"
+        const val MSG_TYPE_MISSING_SAVED_PASSKEY = "Didn't find passkey. Was it configured ?"
+        const val MSG_TYPE_WRONG_PASSKEY_PROVIDED = "Wrong passkey: didn't match saved"
+        const val MSG_TYPE_ILLEGAL_PASSKEY_PROVIDED = "Passkey is empty or blank or it contains illegal symbols or is too short"
+        const val MSG_TYPE_HASHING_FAILED = "Hash is null or empty"
+        const val MSG_TYPE_UNKNOWN_ERROR = "Something went very wrong"
     }
 }

@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import lv.maros.securedpasswordkeeper.authentication.AuthResult
 import lv.maros.securedpasswordkeeper.models.KeeperUser
 import lv.maros.securedpasswordkeeper.models.Password
+import lv.maros.securedpasswordkeeper.security.Crypto
+import lv.maros.securedpasswordkeeper.utils.SingleLiveEvent
 import timber.log.Timber
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -21,26 +23,18 @@ class SharedKeeperViewModel @Inject constructor (
     private val app: Application,
 ) : AndroidViewModel(app) {
 
+    private val crypto = Crypto(app)
+
+    val authenticationResult = SingleLiveEvent<AuthResult>()
+
     fun savePassword(password: Password) {
         viewModelScope.launch(Dispatchers.Default)  {
 
         }
     }
 
-    fun processAuthenticationResult(authResult: AuthResult<KeeperUser>) {
-        when (authResult) {
-            is AuthResult.Success -> {
-                Timber.e("Successful authentication")
-            }
-
-            is AuthResult.Fail -> {
-                Timber.e("Failed authentication")
-            }
-
-            is AuthResult.Error -> {
-                Timber.e("Error authentication")
-            }
-        }
+    fun verifyPasskey(passkey: String) {
+        crypto.verifyPasskey(passkey)
     }
 
     fun encryptPassword(passwordString: String) {

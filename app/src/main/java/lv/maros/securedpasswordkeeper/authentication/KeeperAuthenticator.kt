@@ -14,11 +14,13 @@ class KeeperAuthenticator(
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    suspend fun requestAuthentication(): AuthResult<KeeperUser> {
+    suspend fun requestAuthentication(): AuthResult {
         return suspendCoroutine {
 
         }
     }
+
+
 
         /*executor = ContextCompat.getMainExecutor(requireContext())
     biometricPrompt = BiometricPrompt(this, executor,

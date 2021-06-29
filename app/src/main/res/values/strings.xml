@@ -2,6 +2,9 @@
     <string name="app_name">Secure Password Keeper</string>
     <string name="app_label">Password keeper</string>
 
+
+    <string name="login_fragment">Login</string>
+
     <string name="password_description">Password description*</string>
     <string name="password">Password*</string>
     <string name="url">URL</string>
@@ -20,4 +23,5 @@
     <string name="pin_repeat_hint_text">Please repeat PIN</string>
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
+    <string name="login_button">Login</string>
 </resources>
