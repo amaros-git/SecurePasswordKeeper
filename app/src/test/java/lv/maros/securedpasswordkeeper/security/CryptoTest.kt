@@ -73,7 +73,7 @@ class CryptoTest {
         val passkey = "dhnfj33:02"
         val hash = crypto.encryptAndSavePasskey(passkey)
 
-        // Verify successfully
+        // Verify the same passkey successfully
         val result = crypto.verifyPasskey(passkey)
         assertThat(result, `is`(instanceOf(CryptoResult.Success::class.java)))
 

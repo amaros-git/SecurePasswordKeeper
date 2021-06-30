@@ -6,9 +6,9 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import lv.maros.securedpasswordkeeper.setup.CryptoResult
 import timber.log.Timber
-import java.lang.Exception
 import java.security.MessageDigest
 import javax.inject.Inject
+
 
 class Crypto @Inject constructor(private val app: Application) {
 
@@ -31,11 +31,18 @@ class Crypto @Inject constructor(private val app: Application) {
      */
     private fun hashString(data: String): String? {
         return try {
-            val md = MessageDigest.getInstance("SHA-256").apply {
+            val msgDigest = MessageDigest.getInstance("SHA-256").apply {
                 reset()
                 update(data.toByteArray())
             }
-            md.digest().toString()
+
+            val hashBytes = msgDigest.digest()
+            val hashString = StringBuffer()
+            for (byte in hashBytes) {
+                hashString.append(Integer.toHexString(0xFF and byte.toInt()))
+            }
+
+            hashString.toString()
         } catch (e: Exception) {
             Timber.e("exception during hashing")
             null
@@ -69,6 +76,7 @@ class Crypto @Inject constructor(private val app: Application) {
     fun verifyPasskey(passkey: String): CryptoResult {
         val hashData = hashString(passkey)
         val hashSaved = getEncryptedSharedRef().getString(PASSKEY_HASH_KEY, null)
+        Timber.d("passkey = $passkey")
         Timber.d("hashData = $hashData")
         Timber.d("hashSaved = $hashSaved")
 
