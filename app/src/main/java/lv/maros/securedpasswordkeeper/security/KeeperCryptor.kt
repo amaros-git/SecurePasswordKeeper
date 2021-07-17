@@ -10,21 +10,9 @@ import java.security.MessageDigest
 import javax.inject.Inject
 
 
-class Crypto @Inject constructor(private val app: Application) {
+class KeeperCryptor {
 
-    private fun getEncryptedSharedRef(): SharedPreferences {
-        val mainKey = MasterKey.Builder(app)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
 
-        return EncryptedSharedPreferences.create(
-            app,
-            ENC_SHARED_REF_NAME,
-            mainKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
 
     /**
      * returns hashed string using SHA-256 algorithm
@@ -83,11 +71,14 @@ class Crypto @Inject constructor(private val app: Application) {
         return when {
             hashSaved.isNullOrEmpty() ->
                 CryptoResult.Error(CryptoResult.MSG_TYPE_MISSING_SAVED_PASSKEY)
+
             hashData != hashSaved ->
                 CryptoResult.Error(CryptoResult.MSG_TYPE_WRONG_PASSKEY_PROVIDED)
+
             hashData == hashSaved -> {
                 CryptoResult.Success(CryptoResult.MSG_TYPE_SUCCESS)
             }
+
             else -> CryptoResult.Error(CryptoResult.MSG_TYPE_UNKNOWN_ERROR)
         }
     }
@@ -100,7 +91,7 @@ class Crypto @Inject constructor(private val app: Application) {
 
     companion object {
         private const val PASSKEY_HASH_KEY = "passkey_hash"
-        private const val ENC_SHARED_REF_NAME = "keeper_shared_prefs"
+
         private const val PASSKEY_MIN_LENGTH = 4
     }
 

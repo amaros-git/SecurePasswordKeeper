@@ -1,6 +1,7 @@
 package lv.maros.securedpasswordkeeper
 
 import android.app.Application
+import android.content.SharedPreferences
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -11,4 +12,5 @@ class KeeperApplication : Application() {
 
         Timber.plant(Timber.DebugTree())
     }
+
 }

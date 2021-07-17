@@ -3,14 +3,11 @@ package lv.maros.securedpasswordkeeper
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.securedpasswordkeeper.authentication.AuthResult
-import lv.maros.securedpasswordkeeper.models.KeeperUser
 import lv.maros.securedpasswordkeeper.models.Password
-import lv.maros.securedpasswordkeeper.security.Crypto
+import lv.maros.securedpasswordkeeper.security.KeeperCryptor
 import lv.maros.securedpasswordkeeper.utils.SingleLiveEvent
 import timber.log.Timber
 import javax.crypto.Cipher
@@ -23,7 +20,7 @@ class SharedKeeperViewModel @Inject constructor (
     private val app: Application,
 ) : AndroidViewModel(app) {
 
-    private val crypto = Crypto(app)
+    private val crypto = KeeperCryptor(app)
 
     val authenticationResult = SingleLiveEvent<AuthResult>()
 
@@ -34,6 +31,8 @@ class SharedKeeperViewModel @Inject constructor (
     }
 
     fun verifyPasskey(passkey: String) {
+        Timber.d("verifyPasskey called")
+        viewModelScope.launch {  }
         crypto.verifyPasskey(passkey)
     }
 

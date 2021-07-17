@@ -6,25 +6,20 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.securedpasswordkeeper.security.Crypto
+import lv.maros.securedpasswordkeeper.security.KeeperCryptor
 import lv.maros.securedpasswordkeeper.setup.KeeperSetupActivity
 import timber.log.Timber
-import java.security.KeyStore
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var crypto:Crypto
+    private lateinit var crypto:KeeperCryptor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        crypto = Crypto(application)
+        crypto = KeeperCryptor(application)
 
         if (!isKeeperConfigured()) {
             Timber.d("Keeper is not configured")

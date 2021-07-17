@@ -1,12 +1,9 @@
 package lv.maros.securedpasswordkeeper.security
 
 import android.os.Build
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.ExpectFailure
-
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import lv.maros.securedpasswordkeeper.setup.CryptoResult
 
@@ -25,10 +22,10 @@ import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
-//@Config(sdk = [Build.VERSION_CODES.P])
-class CryptoTest {
+@Config(sdk = [Build.VERSION_CODES.P])
+class KeeperCryptorTest {
 
-    private lateinit var crypto: Crypto
+    private lateinit var crypto: KeeperCryptor
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -36,7 +33,7 @@ class CryptoTest {
 
     @Before
     fun setupCrypto() {
-        crypto = Crypto(ApplicationProvider.getApplicationContext())
+        crypto = KeeperCryptor()
     }
 
     @After

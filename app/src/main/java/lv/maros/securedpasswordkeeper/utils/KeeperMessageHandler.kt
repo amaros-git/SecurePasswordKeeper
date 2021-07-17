@@ -7,7 +7,7 @@ import timber.log.Timber
 import java.util.concurrent.Executor
 
 class KeeperMessageHandler private constructor(
-    private val myLooper: Looper
+    myLooper: Looper
 ) : Handler(myLooper) {
 
     override fun handleMessage(msg: Message) {
