@@ -14,7 +14,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="password_radio_text">Password</string>
     <string name="pin_radio_text">PIN</string>
-    <string name="biometric_radio_text">Biometric</string>
+    <string name="disable_auth">Disable authentication</string>
 
     <string name="password_hint_text">Please enter password</string>
     <string name="password_repeat_hint_text">Please repeat password</string>

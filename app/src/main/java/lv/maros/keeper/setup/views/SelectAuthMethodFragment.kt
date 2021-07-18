@@ -36,6 +36,10 @@ class SelectAuthMethodFragment : Fragment() {
         binding.password.setOnClickListener {
             showPasskeyInputDialog(PASSWORD_INPUT_TAG)
         }
+
+        binding.disableAuth.setOnClickListener {
+            //TODO show snackbar with Yes NO
+        }
     }
 
     private fun showPasskeyInputDialog(dialogTag: String) {

@@ -15,5 +15,6 @@ object KeeperConfigStorageModule {
 
     @Singleton
     @Provides
-    fun provideKeeperConfigStorage(@ApplicationContext app: Application) = KeeperConfigStorage(app)
+    fun provideKeeperConfigStorage(@ApplicationContext app: Application) =
+        KeeperConfigStorage(app)
 }

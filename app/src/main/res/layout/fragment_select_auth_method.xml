@@ -39,10 +39,10 @@
                 android:padding="@dimen/margin_small"/>
 
             <RadioButton
-                android:id="@+id/biometric"
+                android:id="@+id/disableAuth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/biometric_radio_text"
+                android:text="@string/disable_auth"
                 android:layout_marginStart="@dimen/margin_big"
                 android:layout_marginEnd="@dimen/margin_big"
                 android:layout_marginBottom="@dimen/margin_medium"

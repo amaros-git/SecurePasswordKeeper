@@ -3,18 +3,17 @@ package lv.maros.keeper.security
 import lv.maros.keeper.setup.CryptoResult
 import timber.log.Timber
 import java.security.MessageDigest
-import javax.inject.Inject
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 
-
+// TODO should be singleton ?
 class KeeperCryptor {
-
-    @Inject
-    lateinit var configStorage: KeeperConfigStorage
 
     /**
      * returns hashed string using SHA-256 algorithm
      */
-    private fun hashData(data: String): String? {
+    fun hashData(data: String): String? {
         return try {
             val msgDigest = MessageDigest.getInstance("SHA-256").apply {
                 reset()
@@ -34,7 +33,7 @@ class KeeperCryptor {
         }
     }
 
-    private fun isPasskeyLegal(passkey: String): Boolean {
+    fun isPasskeyLegal(passkey: String): Boolean {
         return (passkey.isNotEmpty()) &&
                 (passkey.isNotBlank()) &&
                 (passkey.length >= PASSKEY_MIN_LENGTH)
@@ -56,17 +55,12 @@ class KeeperCryptor {
         }
     }
 
-    fun verifyPasskey(passkey: String): CryptoResult {
+    fun verifyPasskey(passkey: String, hashSaved: String): CryptoResult {
         val hashCurrent = hashData(passkey)
-        val hashSaved =
-            configStorage.getConfigParam(KeeperConfigStorage.KEEPER_CONFIG_PARAM_PASSKEY_HASH)
 
         return when {
-            hashSaved.isNullOrEmpty() ->
-                CryptoResult.Error(CryptoResult.MSG_TYPE_MISSING_SAVED_PASSKEY)
-
             hashCurrent != hashSaved ->
-                CryptoResult.Error(CryptoResult.MSG_TYPE_WRONG_PASSKEY_PROVIDED)
+                CryptoResult.Error(CryptoResult.MSG_TYPE_PASSKEY_DOES_NOT_MATCH)
 
             hashCurrent == hashSaved -> {
                 CryptoResult.Success(CryptoResult.MSG_TYPE_SUCCESS)
@@ -74,6 +68,22 @@ class KeeperCryptor {
             // shall not happen
             else -> CryptoResult.Error(CryptoResult.MSG_TYPE_UNKNOWN_ERROR)
         }
+    }
+
+    fun encryptPassword(passwordString: String) {
+        val plaintext: ByteArray = "test".toByteArray()
+
+        val keygen = KeyGenerator.getInstance("AES")
+        keygen.init(256)
+        val key: SecretKey = keygen.generateKey()
+        Timber.d("key = $key")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+        val ciphertext: ByteArray = cipher.doFinal(plaintext)
+        val iv: ByteArray = cipher.iv
+
+        Timber.d(iv.toString())
     }
 
     companion object {
