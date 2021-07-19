@@ -6,9 +6,10 @@ import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.inject.Inject
 
 // TODO should be singleton ?
-class KeeperCryptor {
+class KeeperCryptor @Inject constructor() {
 
     /**
      * returns hashed string using SHA-256 algorithm
@@ -41,6 +42,7 @@ class KeeperCryptor {
     }
 
     fun encryptAndSavePasskey(passkey: String): CryptoResult {
+        Timber.d("encryptAndSavePasskey")
         return if (isPasskeyLegal(passkey)) {
             val hashData = hashData(passkey)
 

@@ -6,20 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.databinding.FragmentSelectAuthMethodBinding
+import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.setup.SharedSetupViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SelectAuthMethodFragment : Fragment() {
 
     private lateinit var binding: FragmentSelectAuthMethodBinding
 
     private val viewModel: SharedSetupViewModel by activityViewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentSelectAuthMethodBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 

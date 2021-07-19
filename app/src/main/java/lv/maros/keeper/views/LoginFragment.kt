@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
                 .navigate(LoginFragmentDirections.actionLoginFragmentToPasswordListFragment())
         } else {
             val result = keeperResult as KeeperResult.Error
-            Timber.d("authentication failed: ${result.msgType}")
+            Timber.d("authentication failed: ${result.value}")
         }
     }
 

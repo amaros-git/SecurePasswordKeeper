@@ -24,4 +24,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
     <string name="login_button">Login</string>
+    <string name="passkey_empty_error">Passkey is empty</string>
+    <string name="passkey_min_len_error">Minimal length is 4 symbols</string>
+    <string name="passkey_dont_match_error">Passkeys doesn\'t match</string>
 </resources>

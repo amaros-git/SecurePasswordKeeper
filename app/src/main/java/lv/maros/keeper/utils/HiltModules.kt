@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.keeper.security.KeeperCryptor
 import javax.inject.Singleton
 
 @Module
@@ -17,4 +18,13 @@ object KeeperConfigStorageModule {
     @Provides
     fun provideKeeperConfigStorage(@ApplicationContext app: Application) =
         KeeperConfigStorage(app)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object KeeperCryptorModule {
+
+    @Singleton
+    @Provides
+    fun provideKeeperCryptor() = KeeperCryptor()
 }
