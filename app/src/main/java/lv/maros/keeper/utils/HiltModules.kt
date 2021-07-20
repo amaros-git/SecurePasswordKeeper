@@ -19,12 +19,3 @@ object KeeperConfigStorageModule {
     fun provideKeeperConfigStorage(@ApplicationContext app: Application) =
         KeeperConfigStorage(app)
 }
-
-@Module
-@InstallIn(SingletonComponent::class)
-object KeeperCryptorModule {
-
-    @Singleton
-    @Provides
-    fun provideKeeperCryptor() = KeeperCryptor()
-}

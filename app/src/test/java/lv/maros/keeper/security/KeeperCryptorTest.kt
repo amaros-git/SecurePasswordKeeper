@@ -52,7 +52,7 @@ class KeeperCryptorTest {
 
         // Encrypt and save each key and check if Success. Test failed if any passkey fails
         testPasskeys.forEach { passkey ->
-            val result = crypto.encryptAndSavePasskey(passkey)
+            val result = crypto.hashPasskey(passkey)
             println("Testing $passkey")
             assertThat(result, `is`(instanceOf(CryptoResult.Success::class.java)))
         }
@@ -67,7 +67,7 @@ class KeeperCryptorTest {
     fun verifyPasskey_saveAndCheck() {
         // Save passkey
         val passkey = "dhnfj33:02"
-        val hash = crypto.encryptAndSavePasskey(passkey)
+        val hash = crypto.hashPasskey(passkey)
 
         // Verify the same passkey successfully
         val result = crypto.verifyPasskey(passkey)

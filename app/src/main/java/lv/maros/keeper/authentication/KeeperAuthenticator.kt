@@ -2,8 +2,11 @@ package lv.maros.keeper.authentication
 
 import androidx.biometric.BiometricPrompt
 import kotlinx.coroutines.*
+import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.utils.KeeperResult
 import java.util.concurrent.Executor
+import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
 class KeeperAuthenticator(
@@ -14,9 +17,37 @@ class KeeperAuthenticator(
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    @Inject lateinit var configStorage: KeeperConfigStorage
+
     suspend fun requestAuthentication(): KeeperResult {
         return suspendCoroutine {
 
+        }
+    }
+
+    fun isPasskeyLegal(passkey: String): Boolean {
+        return (passkey.isNotEmpty()) &&
+                (passkey.isNotBlank()) &&
+                (passkey.length >= KeeperCryptor.)
+        // TODO spaces ?
+    }
+
+    fun verifyPasskey(passkey: String): Boolean {
+        val hashCurrent = KeeperCryptor.hashData(passkey)
+        val hashSaved =
+            configStorage.getKeeperConfigParam(KeeperConfigStorage.KEEPER_CONFIG_PASSKEY_HASH)
+        return when {
+            hashCurrent.isNullOrEmpty() || hashSaved.isNullOrEmpty() -> {
+                false
+            }
+            hashCurrent != hashSaved -> {
+                false
+            }
+            hashCurrent == hashSaved -> {
+                true
+            }
+            // shall not happen
+            else -> false
         }
     }
 
@@ -65,4 +96,8 @@ class KeeperAuthenticator(
     .build()
 
     biometricPrompt.authenticate(promptInfo)*/
+
+    companion object {
+        const val PASSKEY_MIN_LENGTH = 4
+    }
 }

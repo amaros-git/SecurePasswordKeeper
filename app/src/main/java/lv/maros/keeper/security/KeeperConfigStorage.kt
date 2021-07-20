@@ -37,7 +37,7 @@ class KeeperConfigStorage @Inject constructor(private val app: Application) {
         val authType = getKeeperConfigParam(KEEPER_CONFIG_AUTH_TYPE)
         val passkeyHash = getKeeperConfigParam(KEEPER_CONFIG_PASSKEY_HASH)
 
-        return cryptor.hashData(authType + passkeyHash)
+        return cryptor.hashPasskey(authType + passkeyHash)
     }
 
     fun clearAllStorage(): Boolean {

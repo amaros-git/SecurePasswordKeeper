@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.databinding.FragmentSelectAuthMethodBinding
 import lv.maros.keeper.security.KeeperCryptor
@@ -51,14 +52,28 @@ class SelectAuthMethodFragment : Fragment() {
             if (dialogTag == PASSWORD_INPUT_TAG) PasskeyInputBottomDialog.AUTH_TYPE_PASSWORD
             else PasskeyInputBottomDialog.AUTH_TYPE_PIN
 
-        val dialogFragment =
-            PasskeyInputBottomDialog.newInstance(authType)
-        dialogFragment.show(requireActivity().supportFragmentManager, dialogTag)
+            PasskeyInputBottomDialog.newInstance(authType).apply {
+                setFragmentResultListener(DIALOG_RESULT_KEY) {_, bundle ->
+                    processDialogResponse(bundle)
+                }
+            }.show(requireActivity().supportFragmentManager, dialogTag)
+    }
+
+    private fun processDialogResponse(bundle: Bundle) {
+        val hash = bundle.getString(PASSKEY_HASH_KEY)
+        hash?.let {
+            viewModel
+        }
+        //TODO navigate
     }
 
     companion object {
         private const val PASSWORD_INPUT_TAG = "passwordInputDialog"
         private const val PIN_INPUT_TAG = "pinInputDialog"
+
+        const val DIALOG_RESULT_KEY = "dialog_result"
+
+        const val PASSKEY_HASH_KEY = "passkey_key"
     }
 
 

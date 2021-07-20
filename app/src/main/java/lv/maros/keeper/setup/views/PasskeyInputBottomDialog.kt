@@ -7,20 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Keep
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
+import lv.maros.keeper.authentication.KeeperAuthenticator
 import lv.maros.keeper.databinding.DialogAuthMethodBinding
-import lv.maros.keeper.setup.SharedSetupViewModel
-import lv.maros.keeper.utils.KeeperResult
+import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.setup.CryptoResult
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PasskeyInputBottomDialog(
     private val authType: Int
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogAuthMethodBinding
 
-    private val viewModel: SharedSetupViewModel by activityViewModels()
+    @Inject
+    lateinit var authenticator: KeeperAuthenticator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,26 +80,47 @@ class PasskeyInputBottomDialog(
     }
 
     private fun processPasskeys() {
-        val passkey = collectAndVerify()
-        passkey?.let {
-            viewModel.encryptAndSavePasskey(it)
+        val hash = collectAndHashIfValid()
+
+        if (null != hash) {
+            val bundle = Bundle().apply {
+                putString(SelectAuthMethodFragment.PASSKEY_HASH_KEY, hash)
+            }
+            setFragmentResult(SelectAuthMethodFragment.DIALOG_RESULT_KEY, bundle)
 
             this.dismiss() // Dismiss dialog only when success
         }
+        else {
+            showToast("Internal error, please try again")
+        }
     }
 
-    private fun collectAndVerify(): String? {
+    private fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
+        return if (passkey1.isEmpty() || passkey2.isEmpty()) {
+            showToast(requireContext().resources.getString(R.string.passkey_empty_error))
+            false
+        }
+        else if ((passkey1.length < KeeperAuthenticator.PASSKEY_MIN_LENGTH) ||
+                (passkey2.length < KeeperAuthenticator.PASSKEY_MIN_LENGTH)) {
+            showToast(requireContext().resources.getString(R.string.passkey_min_len_error))
+            false
+        }
+        else if (passkey1 != passkey2) {
+            showToast(requireContext().resources.getString(R.string.passkey_dont_match_error))
+            false
+        }
+        else passkey1 == passkey2
+    }
+
+    private fun collectAndHashIfValid(): String? {
         val passkey1 = binding.passkey.text.toString()
         val passkey2 = binding.repeatPasskey.text.toString()
 
-        val result = viewModel.verifyPasskeys(passkey1, passkey2)
-        return if (result is KeeperResult.Success) {
-            result.value
-        }else {
-            showToast((result as KeeperResult.Error).value)
-            null
+        if (verifyPasskeys(passkey1, passkey2)) {
+            KeeperCryptor.hashData(passkey1)
         }
     }
+
 
     private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
