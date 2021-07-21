@@ -48,7 +48,7 @@ class AddPasswordFragment : Fragment() {
     private fun verifyAndSavePassword() {
         val password = getPasswordFromViews()
         if (isInputDataValid(password)) {
-            viewModel.savePassword(password)
+            //viewModel.savePassword(password)
         }
     }
 

@@ -39,9 +39,9 @@ class LoginFragment : Fragment() {
 
         configureViews()
 
-        viewModel.authenticationResult.observe(viewLifecycleOwner) {
+        /*viewModel.authenticationResult.observe(viewLifecycleOwner) {
             handleAuthResult(it)
-        }
+        }*/
 
 
         return binding.root

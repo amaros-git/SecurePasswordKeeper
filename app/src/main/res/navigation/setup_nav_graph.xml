@@ -6,7 +6,7 @@
     android:id="@+id/keeper_nav_graph.xml">
     <fragment
         android:id="@+id/selectAuthMethodFragment"
-        android:name="lv.maros.keeper.setup.views.SelectAuthMethodFragment"
+        android:name="lv.maros.keeper.setup.views.ConfigureAuthMethodFragment"
         android:label="fragment_select_auth_method"
         tools:layout="@layout/fragment_select_auth_method" />
 </navigation>

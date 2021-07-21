@@ -1,22 +1,23 @@
 package lv.maros.keeper.security
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
+import lv.maros.keeper.utils.KeeperResult
 import timber.log.Timber
 import javax.inject.Inject
 
-class KeeperConfigStorage @Inject constructor(private val app: Application) {
+class KeeperConfigStorage @Inject constructor(@ApplicationContext private val app: Context) {
 
     private val sharedRef: SharedPreferences
-
-    private val cryptor = KeeperCryptor()
 
     init {
         sharedRef = createEncryptedSharedRef()
     }
-
     private fun createEncryptedSharedRef(): SharedPreferences {
         return EncryptedSharedPreferences.create(
             app,
@@ -37,7 +38,7 @@ class KeeperConfigStorage @Inject constructor(private val app: Application) {
         val authType = getKeeperConfigParam(KEEPER_CONFIG_AUTH_TYPE)
         val passkeyHash = getKeeperConfigParam(KEEPER_CONFIG_PASSKEY_HASH)
 
-        return cryptor.hashPasskey(authType + passkeyHash)
+        return KeeperCryptor.hashData(authType + passkeyHash)
     }
 
     fun clearAllStorage(): Boolean {
@@ -45,6 +46,7 @@ class KeeperConfigStorage @Inject constructor(private val app: Application) {
             clear()
             commit()
         }
+        return true
     }
 
     fun updateKeeperConfig(values: Map<String, String>): Boolean {
@@ -59,6 +61,14 @@ class KeeperConfigStorage @Inject constructor(private val app: Application) {
             }
         }
 
+        return true
+    }
+
+    fun saveKeeperConfigParam(keeperConfigParam: String, value: String): Boolean {
+        return sharedRef.edit().run {
+            putString(keeperConfigParam, value)
+            commit()
+        }
         return true
     }
 

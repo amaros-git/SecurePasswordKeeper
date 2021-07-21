@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,7 +15,7 @@ import lv.maros.keeper.setup.SharedSetupViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SelectAuthMethodFragment : Fragment() {
+class ConfigureAuthMethodFragment : Fragment() {
 
     private lateinit var binding: FragmentSelectAuthMethodBinding
 
@@ -45,6 +46,11 @@ class SelectAuthMethodFragment : Fragment() {
         binding.disableAuth.setOnClickListener {
             //TODO show snackbar with Yes NO
         }
+        viewModel.showToast.observe(viewLifecycleOwner) {
+            it?.let {
+                showToast(it)
+            }
+        }
     }
 
     private fun showPasskeyInputDialog(dialogTag: String) {
@@ -52,20 +58,14 @@ class SelectAuthMethodFragment : Fragment() {
             if (dialogTag == PASSWORD_INPUT_TAG) PasskeyInputBottomDialog.AUTH_TYPE_PASSWORD
             else PasskeyInputBottomDialog.AUTH_TYPE_PIN
 
-            PasskeyInputBottomDialog.newInstance(authType).apply {
-                setFragmentResultListener(DIALOG_RESULT_KEY) {_, bundle ->
-                    processDialogResponse(bundle)
-                }
-            }.show(requireActivity().supportFragmentManager, dialogTag)
+        PasskeyInputBottomDialog.newInstance(authType)
+            .show(requireActivity().supportFragmentManager, dialogTag)
     }
 
-    private fun processDialogResponse(bundle: Bundle) {
-        val hash = bundle.getString(PASSKEY_HASH_KEY)
-        hash?.let {
-            viewModel
-        }
-        //TODO navigate
+    private fun showToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
+
 
     companion object {
         private const val PASSWORD_INPUT_TAG = "passwordInputDialog"

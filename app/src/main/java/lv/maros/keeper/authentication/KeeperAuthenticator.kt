@@ -9,15 +9,12 @@ import java.util.concurrent.Executor
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
-class KeeperAuthenticator(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
+class KeeperAuthenticator @Inject constructor(configStorage: KeeperConfigStorage) {
 
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    @Inject lateinit var configStorage: KeeperConfigStorage
 
     suspend fun requestAuthentication(): KeeperResult {
         return suspendCoroutine {
@@ -28,28 +25,11 @@ class KeeperAuthenticator(
     fun isPasskeyLegal(passkey: String): Boolean {
         return (passkey.isNotEmpty()) &&
                 (passkey.isNotBlank()) &&
-                (passkey.length >= KeeperCryptor.)
+                (passkey.length >= PASSKEY_MIN_LENGTH)
         // TODO spaces ?
     }
 
-    fun verifyPasskey(passkey: String): Boolean {
-        val hashCurrent = KeeperCryptor.hashData(passkey)
-        val hashSaved =
-            configStorage.getKeeperConfigParam(KeeperConfigStorage.KEEPER_CONFIG_PASSKEY_HASH)
-        return when {
-            hashCurrent.isNullOrEmpty() || hashSaved.isNullOrEmpty() -> {
-                false
-            }
-            hashCurrent != hashSaved -> {
-                false
-            }
-            hashCurrent == hashSaved -> {
-                true
-            }
-            // shall not happen
-            else -> false
-        }
-    }
+
 
 
 

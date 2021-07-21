@@ -27,4 +27,5 @@
     <string name="passkey_empty_error">Passkey is empty</string>
     <string name="passkey_min_len_error">Minimal length is 4 symbols</string>
     <string name="passkey_dont_match_error">Passkeys doesn\'t match</string>
+    <string name="internal_error">Internal error, please try again. Or restart application</string>
 </resources>

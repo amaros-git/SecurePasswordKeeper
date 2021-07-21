@@ -1,21 +1,35 @@
 package lv.maros.keeper.utils
 
 import android.app.Application
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import lv.maros.keeper.authentication.KeeperAuthenticator
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityComponent::class)
 object KeeperConfigStorageModule {
 
     @Singleton
     @Provides
-    fun provideKeeperConfigStorage(@ApplicationContext app: Application) =
+    fun provideKeeperConfigStorage(@ApplicationContext app: Context) =
         KeeperConfigStorage(app)
+}
+
+@Module
+@InstallIn(ActivityComponent::class)
+object KeeperAuthenticatorModule {
+
+    @Singleton
+    @Provides
+    fun provideKeeperConfigStorage(configStorage: KeeperConfigStorage) =
+        KeeperAuthenticator(configStorage)
 }
