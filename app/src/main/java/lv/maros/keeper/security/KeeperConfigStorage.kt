@@ -11,13 +11,16 @@ import lv.maros.keeper.utils.KeeperResult
 import timber.log.Timber
 import javax.inject.Inject
 
-class KeeperConfigStorage @Inject constructor(@ApplicationContext private val app: Context) {
+class KeeperConfigStorage @Inject constructor(
+    @ApplicationContext private val app: Context
+) {
 
     private val sharedRef: SharedPreferences
 
     init {
         sharedRef = createEncryptedSharedRef()
     }
+
     private fun createEncryptedSharedRef(): SharedPreferences {
         return EncryptedSharedPreferences.create(
             app,
@@ -34,34 +37,18 @@ class KeeperConfigStorage @Inject constructor(@ApplicationContext private val ap
             .build()
     }
 
-    private fun calculateKeeperConfigChecksum(): String? {
+  /*  fun calculateKeeperConfigChecksum(): String {
         val authType = getKeeperConfigParam(KEEPER_CONFIG_AUTH_TYPE)
         val passkeyHash = getKeeperConfigParam(KEEPER_CONFIG_PASSKEY_HASH)
 
-        return KeeperCryptor.hashData(authType + passkeyHash)
-    }
+        return cryptor.hashData(authType + passkeyHash)
+    }*/
 
     fun clearAllStorage(): Boolean {
         return sharedRef.edit().run {
             clear()
             commit()
         }
-        return true
-    }
-
-    fun updateKeeperConfig(values: Map<String, String>): Boolean {
-        for (value in values) {
-            Timber.d("key = ${value.key}, value = ${value.value}")
-            val result = sharedRef.edit().run {
-                putString(value.key, value.value)
-                commit()
-            }
-            if (!result) {
-                return false
-            }
-        }
-
-        return true
     }
 
     fun saveKeeperConfigParam(keeperConfigParam: String, value: String): Boolean {
@@ -69,6 +56,23 @@ class KeeperConfigStorage @Inject constructor(@ApplicationContext private val ap
             putString(keeperConfigParam, value)
             commit()
         }
+    }
+
+    /**
+     * params.key is some Keeper Config Param,
+     * param.value is param value
+     *
+     * If any fails, returns false. Otherwise true.
+     */
+    fun saveConfigParams(params: Map<String, String>): Boolean {
+        for (param in params) {
+            val result = sharedRef.edit().run {
+                putString(param.key, param.value)
+                commit()
+            }
+            if (!result) return false
+        }
+
         return true
     }
 
@@ -80,7 +84,7 @@ class KeeperConfigStorage @Inject constructor(@ApplicationContext private val ap
 
     /**
      * simply recalculates checksum and compares with saved
-     */
+     *//*
     fun isKeeperConfigChecksumValid(): Boolean {
         val checksumSaved = getKeeperConfigParam(KEEPER_CONFIG_CHECKSUM)
 
@@ -88,13 +92,13 @@ class KeeperConfigStorage @Inject constructor(@ApplicationContext private val ap
             val checksumCalculated = calculateKeeperConfigChecksum()
 
             !checksumCalculated.isNullOrEmpty() &&
-            !checksumSaved.isNullOrEmpty()
             (checksumCalculated == checksumSaved)
         }
         else {
-            true
+            Timber.d("Keeper config checksum is null or empty")
+            false
         }
-    }
+    }*/
 
 
 
@@ -104,5 +108,6 @@ class KeeperConfigStorage @Inject constructor(@ApplicationContext private val ap
         const val KEEPER_CONFIG_AUTH_TYPE = "keeper_auth_type" // see
         const val KEEPER_CONFIG_PASSKEY_HASH = "keeper_passkey_hash"
         const val KEEPER_CONFIG_CHECKSUM = "keeper_checksum"
+
     }
 }

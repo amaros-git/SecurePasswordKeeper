@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
     // Create viewModel to share it in Fragments
     private val viewModel: SharedKeeperViewModel by viewModels()
 
+/*    @Inject
+    lateinit var configStorage: KeeperConfigStorage*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,34 +31,18 @@ class MainActivity : AppCompatActivity() {
             startSetupActivityAndFinish()
         }
 
-        //else we start Login Fragment
+        //else we start Login Fragment or Password list Fragment
     }
 
     private fun startSetupActivityAndFinish() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, KeeperSetupActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }
 
     private fun isKeeperConfigured(): Boolean {
-        //TODO
-        return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Timber.d("onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.d("onDestroy")
+        return viewModel.isKeeperConfigured()
     }
 
 

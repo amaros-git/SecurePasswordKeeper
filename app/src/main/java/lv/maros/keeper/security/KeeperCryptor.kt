@@ -1,9 +1,5 @@
 package lv.maros.keeper.security
 
-import lv.maros.keeper.R
-import lv.maros.keeper.setup.CryptoResult
-import lv.maros.keeper.setup.views.PasskeyInputBottomDialog
-import lv.maros.keeper.utils.KeeperResult
 import timber.log.Timber
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -11,29 +7,32 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.inject.Inject
 
+/**
+ * @throws java.security.NoSuchAlgorithmException if no Provider supports a
+ * MessageDigestSpi implementation for the
+ * specified algorithm.
+ */
+class KeeperCryptor @Inject constructor() {
 
-object KeeperCryptor {
+    // TODO REWORK to newInstance()
+    private val messageDigest: MessageDigest =
+        MessageDigest.getInstance(HASHING_ALGO_SHA_265)
 
     /**
      * returns hashed string using SHA-256 algorithm
      */
-    fun hashData(data: String): String? {
-        return try {
-            val hashBytes = MessageDigest.getInstance("SHA-256").apply {
-                reset()
-                update(data.toByteArray())
-            }.digest()
+    fun hashData(data: String): String { // TODO GET RID OF NULL !
+        val hashBytes = messageDigest.apply {
+            reset()
+            update(data.toByteArray())
+        }.digest()
 
-            val hashString = StringBuffer()
-            for (byte in hashBytes) {
-                hashString.append(Integer.toHexString(0xFF and byte.toInt()))
-            }
-
-            hashString.toString()
-        } catch (e: Exception) {
-            Timber.e("exception during hashing, please try again")
-            null
+        val hashString = StringBuffer()
+        for (byte in hashBytes) {
+            hashString.append(Integer.toHexString(0xFF and byte.toInt()))
         }
+
+        return hashString.toString()
     }
 
     fun encryptData(data: String, key: String) {
@@ -50,5 +49,10 @@ object KeeperCryptor {
         val iv: ByteArray = cipher.iv
 
         Timber.d(iv.toString())
+    }
+
+
+    companion object {
+        const val HASHING_ALGO_SHA_265 = "SHA-256"
     }
 }

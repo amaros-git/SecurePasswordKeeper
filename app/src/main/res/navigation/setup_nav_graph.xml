@@ -8,5 +8,14 @@
         android:id="@+id/selectAuthMethodFragment"
         android:name="lv.maros.keeper.setup.views.ConfigureAuthMethodFragment"
         android:label="fragment_select_auth_method"
-        tools:layout="@layout/fragment_select_auth_method" />
+        tools:layout="@layout/fragment_select_auth_method" >
+        <action
+            android:id="@+id/action_selectAuthMethodFragment_to_finishSetupFragment"
+            app:destination="@id/finishSetupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finishSetupFragment"
+        android:name="lv.maros.keeper.setup.views.FinishSetupFragment"
+        android:label="fragment_finish_setup"
+        tools:layout="@layout/fragment_finish_setup" />
 </navigation>

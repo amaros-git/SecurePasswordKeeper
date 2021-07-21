@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import lv.maros.keeper.setup.CryptoResult
 
 import org.junit.After
 import org.junit.Before

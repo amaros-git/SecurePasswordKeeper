@@ -9,7 +9,9 @@ import java.util.concurrent.Executor
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
-class KeeperAuthenticator @Inject constructor(configStorage: KeeperConfigStorage) {
+class KeeperAuthenticator @Inject constructor(
+    private val configStorage: KeeperConfigStorage
+) {
 
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
@@ -28,6 +30,17 @@ class KeeperAuthenticator @Inject constructor(configStorage: KeeperConfigStorage
                 (passkey.length >= PASSKEY_MIN_LENGTH)
         // TODO spaces ?
     }
+
+    fun isKeeperConfigured(): Boolean {
+        return (!getAuthType().isNullOrEmpty()) &&
+                (!getPasskeyHash().isNullOrEmpty())
+    }
+
+    private fun getAuthType(): String? =
+        configStorage.getKeeperConfigParam(KeeperConfigStorage.KEEPER_CONFIG_AUTH_TYPE)
+
+    private fun getPasskeyHash(): String? =
+        configStorage.getKeeperConfigParam(KeeperConfigStorage.KEEPER_CONFIG_AUTH_TYPE)
 
 
 

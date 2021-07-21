@@ -13,6 +13,8 @@ import lv.maros.keeper.R
 import lv.maros.keeper.authentication.KeeperAuthenticator
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.setup.views.ConfigureAuthMethodFragment_GeneratedInjector
+import lv.maros.keeper.setup.views.FinishSetupFragment
 import lv.maros.keeper.utils.NavigationCommand
 import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
@@ -20,34 +22,35 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedSetupViewModel @Inject constructor(
+    private val app: Application,
     private val configStorage: KeeperConfigStorage,
-    private val app: Application
+    private val cryptor: KeeperCryptor
 ) : ViewModel() {
+
 
     val showToast: SingleLiveEvent<String> = SingleLiveEvent()
 
-    val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
+    val setupIsFinishedEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    val setupIsFinished: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val authenticationIsConfiguredEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    fun savePasskey(passkey: String) {
-        Timber.d("passkey = $passkey")
+    fun savePasskey(passkey: String, keeperAuthType: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val hash = KeeperCryptor.hashData(passkey)
-            if (null != hash) {
-                val result = configStorage.saveKeeperConfigParam(
-                    KeeperConfigStorage.KEEPER_CONFIG_PASSKEY_HASH,
-                    hash
-                )
-                if (!result) {
-                    //TODO
-                } else {
-                    setupIsFinished.postValue(true)
-                }
-            } else {
-                showToast.postValue(app.getString(R.string.internal_error))
+            val hash = cryptor.hashData(passkey)
+            if (saveParamsToConfig(hash, keeperAuthType)) {
+                authenticationIsConfiguredEvent.postValue(true)
+            }
+            else {
+                //TODO
             }
         }
+    }
+
+    private fun saveParamsToConfig(hash: String, keeperAuthType: String): Boolean {
+        return configStorage.saveConfigParams(mapOf(
+            KeeperConfigStorage.KEEPER_CONFIG_AUTH_TYPE to keeperAuthType,
+            KeeperConfigStorage.KEEPER_CONFIG_PASSKEY_HASH to hash
+        ))
     }
 
     fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
@@ -65,5 +68,11 @@ class SharedSetupViewModel @Inject constructor(
             false
         }
         else passkey1 == passkey2
+    }
+
+    fun finishSetup() {
+        //Verify
+
+        setupIsFinishedEvent.value = true
     }
 }

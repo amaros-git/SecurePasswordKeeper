@@ -5,17 +5,18 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
 import lv.maros.keeper.databinding.DialogAuthMethodBinding
 import lv.maros.keeper.setup.SharedSetupViewModel
+import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSWORD
+import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
 @AndroidEntryPoint
 class PasskeyInputBottomDialog(
-    private val authType: Int
+    private val keeperAuthType: String
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogAuthMethodBinding
@@ -36,11 +37,11 @@ class PasskeyInputBottomDialog(
 
     //TODO - create data class and provide to layout. REFACTOR
     private fun setupViews() {
-        when (authType) {
-            AUTH_TYPE_PIN -> {
+        when (keeperAuthType) {
+            KEEPER_AUTH_TYPE_PIN -> {
                 configurePinLayout()
             }
-            AUTH_TYPE_PASSWORD -> {
+            KEEPER_AUTH_TYPE_PASSWORD -> {
                 configurePasswordLayout()
             }
         }
@@ -79,18 +80,15 @@ class PasskeyInputBottomDialog(
         val passkey2 = binding.repeatPasskey.text.toString()
 
        if (viewModel.verifyPasskeys(passkey1, passkey2)) {
-           viewModel.savePasskey(passkey1)
+           viewModel.savePasskey(passkey1, keeperAuthType)
            dismiss()
         }
     }
 
     companion object {
 
-        const val AUTH_TYPE_PIN = 1
-        const val AUTH_TYPE_PASSWORD = 2
-
-        fun newInstance(authType: Int): PasskeyInputBottomDialog {
-            return PasskeyInputBottomDialog(authType)
+        fun newInstance(keeperAuthType: String): PasskeyInputBottomDialog {
+            return PasskeyInputBottomDialog(keeperAuthType)
         }
     }
 }
