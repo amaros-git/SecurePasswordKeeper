@@ -34,4 +34,6 @@ class FinishSetupFragment : Fragment() {
             viewModel.finishSetup()
         }
     }
+
+
 }

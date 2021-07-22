@@ -1,19 +1,18 @@
 package lv.maros.keeper.views
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
-
 import lv.maros.keeper.SharedKeeperViewModel
-import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.databinding.FragmentLoginBinding
 import lv.maros.keeper.models.KeeperUser
+import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
 import timber.log.Timber
@@ -24,6 +23,17 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
 
     private val viewModel: SharedKeeperViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // if login is not enabled, navigate to Password List
+        if(!viewModel.isLoginEnabled()) {
+            findNavController().navigate(
+                LoginFragmentDirections.actionLoginFragmentToPasswordListFragment()
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +57,11 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-    private fun configureViews() {
+    // Login is the first Fragment in nav graph, so if login is not enabled (default)
+    // simply navigate to Password List Fragment :)
 
+
+    private fun configureViews() {
         binding.login.setOnClickListener {
             val passkey = binding.passkey.text.toString()
             viewModel.verifyPasskey(passkey)

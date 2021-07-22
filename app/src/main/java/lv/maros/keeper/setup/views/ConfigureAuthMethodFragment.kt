@@ -68,7 +68,7 @@ class ConfigureAuthMethodFragment : Fragment() {
             .show(requireActivity().supportFragmentManager, keeperAuthType)
     }
 
-    private fun showToast(msg: String) {
+    private fun showToast(msg: String) { //TODO use error fields on TextView for errors
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 

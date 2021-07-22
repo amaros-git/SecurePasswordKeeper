@@ -80,7 +80,7 @@ class PasskeyInputBottomDialog(
         val passkey2 = binding.repeatPasskey.text.toString()
 
        if (viewModel.verifyPasskeys(passkey1, passkey2)) {
-           viewModel.savePasskey(passkey1, keeperAuthType)
+           viewModel.savePasskeyAndAuthType(passkey1, keeperAuthType)
            dismiss()
         }
     }

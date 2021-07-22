@@ -1,9 +1,7 @@
 package lv.maros.keeper.authentication
 
 import androidx.biometric.BiometricPrompt
-import kotlinx.coroutines.*
 import lv.maros.keeper.security.KeeperConfigStorage
-import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.utils.KeeperResult
 import java.util.concurrent.Executor
 import javax.inject.Inject
@@ -24,23 +22,8 @@ class KeeperAuthenticator @Inject constructor(
         }
     }
 
-    fun isPasskeyLegal(passkey: String): Boolean {
-        return (passkey.isNotEmpty()) &&
-                (passkey.isNotBlank()) &&
-                (passkey.length >= PASSKEY_MIN_LENGTH)
-        // TODO spaces ?
-    }
 
-    fun isKeeperConfigured(): Boolean {
-        return (!getAuthType().isNullOrEmpty()) &&
-                (!getPasskeyHash().isNullOrEmpty())
-    }
 
-    private fun getAuthType(): String? =
-        configStorage.getKeeperConfigParam(KeeperConfigStorage.KEEPER_CONFIG_AUTH_TYPE)
-
-    private fun getPasskeyHash(): String? =
-        configStorage.getKeeperConfigParam(KeeperConfigStorage.KEEPER_CONFIG_AUTH_TYPE)
 
 
 

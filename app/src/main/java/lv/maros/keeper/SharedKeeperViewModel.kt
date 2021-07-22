@@ -3,12 +3,12 @@ package lv.maros.keeper
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lv.maros.keeper.authentication.KeeperAuthenticator
+import lv.maros.keeper.security.KeeperConfigStorage
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedKeeperViewModel @Inject constructor(
-    private val authenticator: KeeperAuthenticator,
+    private val configStorage: KeeperConfigStorage,
     private val app: Application,
 ) : AndroidViewModel(app) {
 
@@ -17,7 +17,11 @@ class SharedKeeperViewModel @Inject constructor(
     }
 
     fun isKeeperConfigured(): Boolean {
-        return authenticator.isKeeperConfigured()
+        return configStorage.isKeeperConfigured()
+    }
+
+    fun isLoginEnabled(): Boolean {
+        return configStorage.getKeeperBooleanConfigParam(KeeperConfigStorage.KEEPER_CONFIG_USE_LOGIN_STRING)
     }
 
 }

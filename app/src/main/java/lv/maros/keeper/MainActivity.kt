@@ -7,20 +7,14 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.security.KeeperConfigStorage
-import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.setup.KeeperSetupActivity
+import lv.maros.keeper.views.LoginFragmentDirections
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    // Create viewModel to share it in Fragments
     private val viewModel: SharedKeeperViewModel by viewModels()
-
-/*    @Inject
-    lateinit var configStorage: KeeperConfigStorage*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             startSetupActivityAndFinish()
         }
 
-        //else we start Login Fragment or Password list Fragment
+        // else we start destination fragment from main nav graph
     }
 
     private fun startSetupActivityAndFinish() {
@@ -45,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         return viewModel.isKeeperConfigured()
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -53,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
 }
