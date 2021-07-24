@@ -28,4 +28,6 @@
     <string name="passkey_min_len_error">Minimal length is 4 symbols</string>
     <string name="passkey_dont_match_error">Passkeys doesn\'t match</string>
     <string name="internal_error">Internal error, please try again. Or restart application</string>
+    <string name="no_passwords">No passwords</string>
+    <string name="add_new_password">Add new password</string>
 </resources>
