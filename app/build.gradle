@@ -79,6 +79,12 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.32-alpha"
     kapt "com.google.dagger:hilt-compiler:2.32-alpha"
 
+    //Room
+    implementation "androidx.room:room-runtime:2.3.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "androidx.room:room-compiler:2.3.0"
+    implementation "androidx.room:room-ktx:2.3.0"
+
     // TESTING
     // Dependencies for local unit tests
     testImplementation "junit:junit:4.13.2"

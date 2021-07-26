@@ -2,19 +2,22 @@ package lv.maros.keeper.utils
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import lv.maros.keeper.views.PasswordListAdapter
 
 
 /**
  * Extension function to setup the RecyclerView
  */
-/*fun <T> RecyclerView.setup(
-    adapter: BaseRecyclerViewAdapter<T>
+fun RecyclerView.setup(
+    adapter: PasswordListAdapter
 ) {
     this.apply {
         layoutManager = LinearLayoutManager(this.context)
         this.adapter = adapter
     }
-}*/
+}
 
 fun Fragment.setTitle(title: String) {
     if (activity is AppCompatActivity) {

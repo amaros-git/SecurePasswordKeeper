@@ -2,8 +2,10 @@ package lv.maros.keeper
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import lv.maros.keeper.models.Password
 import lv.maros.keeper.security.KeeperConfigStorage
 import javax.inject.Inject
 
@@ -14,6 +16,10 @@ class SharedKeeperViewModel @Inject constructor(
 ) : AndroidViewModel(app) {
 
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
+
+    private val _passwordList = MutableLiveData<List<Password>>()
+    val passwordList: LiveData<List<Password>>
+        get() = _passwordList
 
     fun verifyPasskey(passkey: String): Boolean {
         return false

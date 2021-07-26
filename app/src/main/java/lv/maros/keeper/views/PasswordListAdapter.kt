@@ -10,56 +10,47 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.databinding.PasswordItemBinding
+import lv.maros.keeper.models.Password
 
-class ElectionListAdapter() :
-    ListAdapter<ElectionDataItem, RecyclerView.ViewHolder>(ElectionDiffCallback())
-{
-
+class PasswordListAdapter() : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PasswordViewHolder.from(parent)
 
+
+    override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
+        val password: Password = getItem(position)
+        holder.bind(password)
+
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val electionItem = getItem(position) as ElectionDataItem.ElectionItem
-        holder.bind(electionItem.election)
-
+    public override fun getItem(position: Int): Password {
+        return super.getItem(position)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is ElectionDataItem.Header -> ITEM_VIEW_TYPE_HEADER
-            is ElectionDataItem.ElectionItem -> ITEM_VIEW_TYPE_ITEM
-        }
-    }
-
-    fun submitMyList(list: List<Election>?, headerText: String? = null) {
-        list?.let {
-            adapterScope.launch {
-                val items = if (null != headerText) {
-                    listOf(ElectionDataItem.Header(headerText)) + list.map {
-                        ElectionDataItem.ElectionItem(it)
-                    }
-                } else {
-                    list.map { ElectionDataItem.ElectionItem(it) }
+    fun submitMyList(list: List<Password>, headerText: String? = null) {
+        /*val job = adapterScope.launch {
+            val items = if (null != headerText) {
+                listOf(ElectionDataItem.Header(headerText)) + list.map {
+                    ElectionDataItem.ElectionItem(it)
                 }
-
-                withContext(Dispatchers.Main) {
-                    submitList(items)
-                }
+            } else {
+                list.map { ElectionDataItem.ElectionItem(it) }
             }
-        }
+
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
+        }*/
     }
 
 }
 
-class PasswordViewHolder(
-        private val binding: PasswordItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(viewMode: ElectionsViewModel, item: Election) {
-        binding.election = item
+class PasswordViewHolder(private val binding: PasswordItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: Password) {
+        binding.password = item
 
         binding.executePendingBindings()
     }
@@ -67,26 +58,26 @@ class PasswordViewHolder(
     companion object {
         fun from(parent: ViewGroup): PasswordViewHolder {
             val binding = PasswordItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
             )
             return PasswordViewHolder(binding)
         }
     }
 }
 
-class PasswordDiffCallback : DiffUtil.ItemCallback<PasswordDataItem>() {
+class PasswordDiffCallback : DiffUtil.ItemCallback<Password>() {
     override fun areItemsTheSame(
-            oldItem: PasswordDataItem,
-            newItem: PasswordDataItem
+        oldItem: Password,
+        newItem: Password
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-            oldItem: PasswordDataItem,
-            newItem: PasswordDataItem
+        oldItem: Password,
+        newItem: Password
     ): Boolean {
         return oldItem == newItem
     }
