@@ -1,8 +1,6 @@
 package lv.maros.keeper.data.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import lv.maros.keeper.models.PasswordUpdate
 import android.database.sqlite.SQLiteConstraintException
 import lv.maros.keeper.models.Password
 
@@ -19,9 +17,11 @@ interface PasswordDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPassword(password: Password)
 
+    @Query("SELECT * FROM password_table")
+    suspend fun getPasswords(): List<Password>
 
     @Update(entity = Password::class)
-    suspend fun updatePassword(passwordUpdate: PasswordUpdate)
+    suspend fun updatePassword(newPassword: Password)
 
     @Query("SELECT * FROM password_table WHERE id = :passwordId")
     suspend fun getElection(passwordId: Int): Password?

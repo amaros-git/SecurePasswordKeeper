@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity
+@Entity(tableName = "password_table")
 data class Password(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "description") val description: String,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "url") val url: String?,
+    @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "encrypted_password") val encryptedPassword: String,
-    @ColumnInfo(name = "creation_date_epoch") val creationDateEpoch: Long
+    @ColumnInfo(name = "modification_date_epoch") val modificationDateEpoch: Long
 )

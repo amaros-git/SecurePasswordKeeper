@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.authentication.KeeperAuthenticator
-import lv.maros.keeper.utils.IoDispatcher
+import lv.maros.keeper.hilt.IoDispatcher
 import javax.inject.Inject
 
 class KeeperConfigStorage @Inject constructor(

@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.databinding.PasswordItemBinding
 import lv.maros.keeper.models.Password
+import timber.log.Timber
 
-class PasswordListAdapter() : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -29,20 +30,13 @@ class PasswordListAdapter() : ListAdapter<Password, PasswordViewHolder>(Password
         return super.getItem(position)
     }
 
-    fun submitMyList(list: List<Password>, headerText: String? = null) {
-        /*val job = adapterScope.launch {
-            val items = if (null != headerText) {
-                listOf(ElectionDataItem.Header(headerText)) + list.map {
-                    ElectionDataItem.ElectionItem(it)
-                }
-            } else {
-                list.map { ElectionDataItem.ElectionItem(it) }
+    fun submitMyList(list: List<Password>) {
+        adapterScope.launch {
+            Timber.d("HERE")
+            withContext(Dispatchers.Main) { // runs on Main thread because it updates Recycler View
+                submitList(list)
             }
-
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
-        }*/
+        }
     }
 
 }

@@ -53,8 +53,7 @@ class AddPasswordFragment : Fragment() {
     }
 
     private fun isInputDataValid(password: Password): Boolean {
-        return (password.description.isNotEmpty() &&
-                password.username.isNotEmpty() &&
+        return (password.username.isNotEmpty() &&
                 password.encryptedPassword.isNotEmpty() &&
                 password.username.length >= USERNAME_MIN_LENGTH &&
                 password.encryptedPassword.length >= USERNAME_MIN_LENGTH)
@@ -66,7 +65,7 @@ class AddPasswordFragment : Fragment() {
         binding.description.text.toString(),
         binding.url.text.toString(),
         binding.username.text.toString(),
-        binding.password.text.toString(),
+        binding.password.text.toString(), //TODO encrypt !
         System.currentTimeMillis()
     )
 

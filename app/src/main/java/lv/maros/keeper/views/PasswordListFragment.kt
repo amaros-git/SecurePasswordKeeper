@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.R
 import lv.maros.keeper.databinding.FragmentPasswordListBinding
+import lv.maros.keeper.models.Password
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
 import lv.maros.keeper.utils.setup
@@ -40,6 +41,8 @@ class PasswordListFragment : Fragment() {
         setTitle(getString(R.string.app_name))
         setDisplayHomeAsUpEnabled(false)
 
+        configurePasswordListView()
+
         setupViews()
 
         return binding.root
@@ -53,6 +56,10 @@ class PasswordListFragment : Fragment() {
         }
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
+            it.forEach {password ->
+                Timber.d(password.toString())
+            }
+
             it?.let {
                 passwordListAdapter.submitMyList(it)
             }
