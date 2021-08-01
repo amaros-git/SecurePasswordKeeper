@@ -12,6 +12,7 @@ import kotlinx.coroutines.withContext
 import lv.maros.keeper.data.database.PasswordDatabase
 import lv.maros.keeper.models.Password
 import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.keeper.security.KeeperCryptor
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class SharedKeeperViewModel @Inject constructor(
     private val configStorage: KeeperConfigStorage,
     private val passwordDb: PasswordDatabase,
+    private val cryptor: KeeperCryptor,
     private val app: Application,
 ) : AndroidViewModel(app) {
 
@@ -41,9 +43,16 @@ class SharedKeeperViewModel @Inject constructor(
     }
 
     fun isLoginEnabled(): Boolean {
-        return configStorage.getKeeperBooleanConfigParam(KeeperConfigStorage.KEEPER_CONFIG_USE_LOGIN_STRING)
+        return configStorage.getKeeperBooleanConfigParam(KeeperConfigStorage.KEEPER_CONFIG_STRING_USE_LOGIN)
     }
 
+    fun savePassword(password: Password) {
+
+    }
+
+    fun encryptString(plainText: String): String {
+        val encryptionKey =
+    }
 
     private fun TEST_saveSomePasswords() {
         val passwords = listOf(
@@ -60,14 +69,7 @@ class SharedKeeperViewModel @Inject constructor(
                     passwordDb.passwordDao.insertPassword(password)
                 }
             }
-
             val savedPasswords = passwordDb.passwordDao.getPasswords()
-/*
-            savedPasswords.forEach {
-                Timber.d(it.toString())
-            }
-*/
-
             _passwordList.postValue(savedPasswords)
         }
     }

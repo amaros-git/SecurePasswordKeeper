@@ -74,6 +74,6 @@ class KeeperAuthenticator @Inject constructor(
     biometricPrompt.authenticate(promptInfo)*/
 
     companion object {
-        const val PASSKEY_MIN_LENGTH = 4
+
     }
 }

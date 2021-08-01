@@ -7,10 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.keeper.R
-import lv.maros.keeper.authentication.KeeperAuthenticator
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.security.KeeperPasswordGenerator
+import lv.maros.keeper.utils.PASSKEY_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +34,8 @@ class SharedSetupViewModel @Inject constructor(
     ): Boolean {
         return configStorage.saveKeeperConfigParams(
             mapOf(
-                KeeperConfigStorage.KEEPER_CONFIG_AUTH_TYPE_STRING to keeperAuthType,
-                KeeperConfigStorage.KEEPER_CONFIG_PASSKEY_HASH_STRING to hash
+                KeeperConfigStorage.KEEPER_CONFIG_STRING_AUTH_TYPE to keeperAuthType,
+                KeeperConfigStorage.KEEPER_CONFIG_STRING_PASSKEY_HASH to hash
             )
         )
     }
@@ -41,7 +43,7 @@ class SharedSetupViewModel @Inject constructor(
     private fun enableLoginPage() {
         viewModelScope.launch {
             if (!configStorage.saveKeeperConfigParam(
-                    KeeperConfigStorage.KEEPER_CONFIG_USE_LOGIN_STRING,
+                    KeeperConfigStorage.KEEPER_CONFIG_STRING_USE_LOGIN,
                     true
                 )
             ) {
@@ -65,8 +67,8 @@ class SharedSetupViewModel @Inject constructor(
         return if (passkey1.isEmpty() || passkey2.isEmpty()) {
             showToast.value = app.getString(R.string.passkey_empty_error)
             false
-        } else if ((passkey1.length < KeeperAuthenticator.PASSKEY_MIN_LENGTH) ||
-            (passkey2.length < KeeperAuthenticator.PASSKEY_MIN_LENGTH)
+        } else if ((passkey1.length < PASSKEY_MIN_LENGTH) ||
+            (passkey2.length < PASSKEY_MIN_LENGTH)
         ) {
             showToast.value = app.getString(R.string.passkey_min_len_error)
             false
@@ -77,10 +79,21 @@ class SharedSetupViewModel @Inject constructor(
     }
 
     fun finishSetup() {
-        //Verify
+        viewModelScope.launch {
+            createEncryptionKey()
 
-        //enableLoginPage() //TODO
+            setupIsFinishedEvent.value = true
+        }
+    }
 
-        setupIsFinishedEvent.value = true
+    private suspend fun createEncryptionKey() {
+        val encryptionKey = KeeperPasswordGenerator().generatePassword()
+        Timber.d("encryptionKey = $encryptionKey")
+
+        configStorage.saveKeeperConfigParam(
+            KeeperConfigStorage.KEEPER_CONFIG_STRING_ENCRYPTION_KEY,
+            encryptionKey
+        )
+
     }
 }

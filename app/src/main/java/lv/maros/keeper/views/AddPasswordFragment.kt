@@ -11,8 +11,10 @@ import lv.maros.keeper.models.Password
 import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentAddPasswordBinding
+import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddPasswordFragment : Fragment() {
