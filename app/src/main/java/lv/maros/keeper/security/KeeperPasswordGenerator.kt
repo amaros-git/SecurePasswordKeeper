@@ -7,6 +7,6 @@ class KeeperPasswordGenerator(
 ) {
 
     fun generatePassword(length: Int = 16): String {
-        return "ffgw3);0ddf3$$#"
+        return "1234567890123456"
     }
 }

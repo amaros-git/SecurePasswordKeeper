@@ -13,6 +13,7 @@ import lv.maros.keeper.data.database.PasswordDatabase
 import lv.maros.keeper.models.Password
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,6 +26,8 @@ class SharedKeeperViewModel @Inject constructor(
 ) : AndroidViewModel(app) {
 
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
+
+    val showErrorEvent = SingleLiveEvent<String>()
 
     private val _passwordList = MutableLiveData<List<Password>>()
     val passwordList: LiveData<List<Password>>
@@ -50,8 +53,18 @@ class SharedKeeperViewModel @Inject constructor(
 
     }
 
-    fun encryptString(plainText: String): String {
-        val encryptionKey =
+    /**
+     * return empty string if Encryption Key doesn't exist
+     */
+    fun encryptString(plainText: String): String? {
+        val encryptionKey = configStorage.getEncryptionKey()
+        Timber.d("encryption key = $encryptionKey")
+
+        return if (null != encryptionKey) {
+            cryptor.encryptString(plainText, encryptionKey)
+        } else {
+            null
+        }
     }
 
     private fun TEST_saveSomePasswords() {

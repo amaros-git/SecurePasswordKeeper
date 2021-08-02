@@ -40,44 +40,40 @@ class KeeperCryptor @Inject constructor() {
         return hashString.toString()
     }
 
-    fun encryptString(plaintext: String, key: String) {
-        val bytes: ByteArray = plaintext.toByteArray()
+    fun encryptString(plaintext: String, encryptionKey: String): String =
+        encryptDecrypt(Cipher.ENCRYPT_MODE, plaintext, encryptionKey)
 
-        cipher.init(Cipher.ENCRYPT_MODE, key)
-        val ciphertext: ByteArray = cipher.doFinal(plaintext)
-        val iv: ByteArray = cipher.iv
+    fun decryptString(encryptedData: String, encryptionKey: String): String =
+        encryptDecrypt(Cipher.DECRYPT_MODE, encryptedData, encryptionKey)
 
-        Timber.d(iv.toString())
-    }
-
-    private fun createSecretKey(key: String) {
-
-    }
-
-   /* fun generateEncryptionKey(): String {
-        val secretKey: SecretKey = KeyGenerator.getInstance("AES").let {
-            it.init(256)
-            it.generateKey()
+    private fun encryptDecrypt(mode: Int, data: String, encryptionKey: String): String {
+        Timber.d("data = $data")
+        val bytes: ByteArray = cipher.run {
+            init(mode, getSecretKey(encryptionKey))
+            doFinal(data.toByteArray())
+            iv
+        }
+        bytes.forEach {
+            Timber.d(it.toString())
         }
 
-        val key = SecretKeySpec()
-
-        val keyBytes = secretKey.encoded
-        val hashString = StringBuffer()
-        for (byte in keyBytes) {
-            val hex = byte.toString()
-            Timber.d("byte = $byte, hex = $hex")
-            hashString.append(hex)
-        }
-
-        return hashString.toString()
+        return ""
     }
-*/
+
+
+    // TODO it is always new ..
+    private fun getSecretKey(encryptionKey: String): SecretKey {
+        val key = SecretKeySpec(encryptionKey.toByteArray(), SECRET_KEY_ALGO)
+        Timber.d("secret key = ${key.encoded}")
+        return key
+    }
 
 
     companion object {
         const val HASHING_PROVIDER_ALGO_SHA_265 = "SHA-256"
 
         const val CIPHER_TRANSFORMATION_SCHEME = "AES/CBC/PKCS5PADDING"
+
+        const val SECRET_KEY_ALGO = "AES"
     }
 }

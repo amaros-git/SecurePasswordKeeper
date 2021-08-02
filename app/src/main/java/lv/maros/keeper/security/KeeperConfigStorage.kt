@@ -116,11 +116,11 @@ class KeeperConfigStorage @Inject constructor(
         return isConfigured
     }
 
-    private fun getAuthType() =
-        getKeeperStringConfigParam(KEEPER_CONFIG_STRING_AUTH_TYPE)
+    fun getAuthType(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_AUTH_TYPE)
 
-    private fun getPasskeyHash() =
-        getKeeperStringConfigParam(KEEPER_CONFIG_STRING_AUTH_TYPE)
+    fun getPasskeyHash(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_AUTH_TYPE)
+
+    fun getEncryptionKey(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_ENCRYPTION_KEY)
 
 
     /**
