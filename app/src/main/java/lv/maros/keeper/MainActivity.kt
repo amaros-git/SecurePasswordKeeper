@@ -7,9 +7,12 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.setup.KeeperSetupActivity
 import lv.maros.keeper.views.LoginFragmentDirections
 import timber.log.Timber
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -25,7 +28,17 @@ class MainActivity : AppCompatActivity() {
             startSetupActivityAndFinish()
         }
 
+        for (i in 0..2) {
+            getSecretKey("1234567890qwerty")
+        }
         // else we start destination fragment from main nav graph
+    }
+
+    // TODO it is always new ..
+    private fun getSecretKey(encryptionKey: String): SecretKey {
+        val key = SecretKeySpec(encryptionKey.toByteArray(), KeeperCryptor.SECRET_KEY_ALGO)
+        Timber.d("secret key = ${key.hashCode()}")
+        return key
     }
 
     private fun startSetupActivityAndFinish() {

@@ -9,4 +9,8 @@ class KeeperPasswordGenerator(
     fun generatePassword(length: Int = 16): String {
         return "1234567890123456"
     }
+
+    fun generateIV(): String {
+        return "1234567890123456"
+    }
 }

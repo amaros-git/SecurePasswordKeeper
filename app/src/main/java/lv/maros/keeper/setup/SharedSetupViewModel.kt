@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.keeper.R
+import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.security.KeeperPasswordGenerator
@@ -79,21 +80,20 @@ class SharedSetupViewModel @Inject constructor(
     }
 
     fun finishSetup() {
-        viewModelScope.launch {
-            createEncryptionKey()
+        //verify config
+        setupIsFinishedEvent.value = true
+    }
 
-            setupIsFinishedEvent.value = true
+
+    fun saveKeeperConfig(newConfig: KeeperConfig) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if(!configStorage.save(newConfig)) {
+                //TODO show error
+            }
         }
     }
 
-    private suspend fun createEncryptionKey() {
-        val encryptionKey = KeeperPasswordGenerator().generatePassword()
-        Timber.d("encryptionKey = $encryptionKey")
+    fun createEncryptionKey() = KeeperPasswordGenerator().generatePassword()
 
-        configStorage.saveKeeperConfigParam(
-            KeeperConfigStorage.KEEPER_CONFIG_STRING_ENCRYPTION_KEY,
-            encryptionKey
-        )
-
-    }
+    fun createEncryptionIV() = KeeperPasswordGenerator().generateIV()
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.views.PasswordListAdapter
 
 
@@ -31,6 +32,13 @@ fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
             bool
         )
     }
+}
+
+fun KeeperConfig.toList(): List<String> {
+    return listOf(
+        this.authType,
+        this.passkeyHash,
+    )
 }
 
 /*//animate changing the view visibility

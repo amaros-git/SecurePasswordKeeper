@@ -8,7 +8,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.MainActivity
 import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
+import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,6 +29,20 @@ class KeeperSetupActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    // what if fails ?
+    private fun initKeeperConfig() {
+        val encryptionKey = viewModel.createEncryptionKey()
+        val iv = viewModel.createEncryptionIV()
+
+        viewModel.saveKeeperConfig(KeeperConfig(
+            KEEPER_AUTH_TYPE_NONE,
+            null,
+            encryptionKey,
+            iv,
+            false
+        ))
     }
 
     private fun finishSetup() {

@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.hilt.IoDispatcher
+import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import lv.maros.keeper.utils.PASSKEY_MIN_LENGTH
 import javax.inject.Inject
@@ -18,7 +19,6 @@ class KeeperConfigStorage @Inject constructor(
 ) {
 
     private val sharedRef: SharedPreferences
-
     init {
         sharedRef = createEncryptedSharedRef()
     }
@@ -118,9 +118,13 @@ class KeeperConfigStorage @Inject constructor(
 
     fun getAuthType(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_AUTH_TYPE)
 
-    fun getPasskeyHash(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_AUTH_TYPE)
+    fun getPasskeyHash(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_PASSKEY_HASH)
 
     fun getEncryptionKey(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_ENCRYPTION_KEY)
+
+    fun getEncryptionIV(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_ENCRYPTION_KEY)
+
+    fun isLoginEnabled(): Boolean = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_ENCRYPTION_KEY)
 
 
     /**
@@ -131,6 +135,10 @@ class KeeperConfigStorage @Inject constructor(
 
     fun getKeeperBooleanConfigParam(keeperConfigParam: String) =
         sharedRef.getBoolean(keeperConfigParam, false)
+
+    fun save(newConfig: KeeperConfig): Boolean {
+
+    }
 
     /**
      * simply recalculates checksum and compares with saved
@@ -155,11 +163,10 @@ class KeeperConfigStorage @Inject constructor(
     companion object {
         private const val ENC_SHARED_REF_NAME = "keeper_shared_prefs"
 
-        const val KEEPER_CONFIG_STRING_AUTH_TYPE = "keeper_auth_type" // see Keeper Constants
-        const val KEEPER_CONFIG_STRING_PASSKEY_HASH = "keeper_passkey_hash"
-        const val KEEPER_CONFIG_STRING_CHECKSUM = "keeper_checksum"
-        const val KEEPER_CONFIG_STRING_USE_LOGIN = "keeper_use_login"
-        const val KEEPER_CONFIG_STRING_ENCRYPTION_KEY = "keeper_encryption_key"
-
+        private const val KEEPER_CONFIG_STRING_AUTH_TYPE = "keeper_auth_type" // see Keeper Constants
+        private const val KEEPER_CONFIG_STRING_PASSKEY_HASH = "keeper_passkey_hash"
+        private const val KEEPER_CONFIG_STRING_ENCRYPTION_KEY = "keeper_encryption_key"
+        private const val KEEPER_CONFIG_STRING_ENCRYPTION_IV = "keeper_encryption_iv"
+        private const val KEEPER_CONFIG_BOOL_USE_LOGIN = "keeper_use_login"
     }
 }
