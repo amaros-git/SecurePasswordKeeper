@@ -45,9 +45,7 @@ class SharedKeeperViewModel @Inject constructor(
         return configStorage.isKeeperConfigured()
     }
 
-    fun isLoginEnabled(): Boolean {
-        return configStorage.getKeeperBooleanConfigParam(KeeperConfigStorage.KEEPER_CONFIG_STRING_USE_LOGIN)
-    }
+    fun isLoginEnabled() = configStorage.isLoginEnabled()
 
     fun savePassword(password: Password) {
 

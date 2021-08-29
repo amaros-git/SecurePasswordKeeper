@@ -124,7 +124,7 @@ class KeeperConfigStorage @Inject constructor(
 
     fun getEncryptionIV(): String? = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_ENCRYPTION_KEY)
 
-    fun isLoginEnabled(): Boolean = getKeeperStringConfigParam(KEEPER_CONFIG_STRING_ENCRYPTION_KEY)
+    fun isLoginEnabled(): Boolean = getKeeperBooleanConfigParam(KEEPER_CONFIG_BOOL_USE_LOGIN)
 
 
     /**
@@ -136,8 +136,18 @@ class KeeperConfigStorage @Inject constructor(
     fun getKeeperBooleanConfigParam(keeperConfigParam: String) =
         sharedRef.getBoolean(keeperConfigParam, false)
 
-    fun save(newConfig: KeeperConfig): Boolean {
+    fun saveKeeperConfig(newConfig: KeeperConfig): Boolean {
+        return false
+    }
 
+    fun getKeeperConfig(): KeeperConfig {
+        return KeeperConfig(
+            getAuthType(),
+            getPasskeyHash(),
+            getEncryptionKey(),
+            getEncryptionIV(),
+            isLoginEnabled()
+        )
     }
 
     /**

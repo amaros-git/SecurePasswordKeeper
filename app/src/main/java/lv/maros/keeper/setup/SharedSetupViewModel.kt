@@ -13,7 +13,6 @@ import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.security.KeeperPasswordGenerator
 import lv.maros.keeper.utils.PASSKEY_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,39 +29,6 @@ class SharedSetupViewModel @Inject constructor(
 
     val authenticationIsConfiguredEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    private suspend fun saveHashAndAuthTypeToConfig(
-        hash: String, keeperAuthType: String
-    ): Boolean {
-        return configStorage.saveKeeperConfigParams(
-            mapOf(
-                KeeperConfigStorage.KEEPER_CONFIG_STRING_AUTH_TYPE to keeperAuthType,
-                KeeperConfigStorage.KEEPER_CONFIG_STRING_PASSKEY_HASH to hash
-            )
-        )
-    }
-
-    private fun enableLoginPage() {
-        viewModelScope.launch {
-            if (!configStorage.saveKeeperConfigParam(
-                    KeeperConfigStorage.KEEPER_CONFIG_STRING_USE_LOGIN,
-                    true
-                )
-            ) {
-                //TODO handle error
-            }
-        }
-    }
-
-    fun savePasskeyAndAuthType(passkey: String, keeperAuthType: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val hash = cryptor.hashData(passkey)
-            if (saveHashAndAuthTypeToConfig(hash, keeperAuthType)) {
-                authenticationIsConfiguredEvent.postValue(true)
-            } else {
-                //TODO
-            }
-        }
-    }
 
     fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
         return if (passkey1.isEmpty() || passkey2.isEmpty()) {
@@ -85,12 +51,24 @@ class SharedSetupViewModel @Inject constructor(
     }
 
 
-    fun saveKeeperConfig(newConfig: KeeperConfig) {
+    fun updateKeeperConfig(newConfig: KeeperConfig) {
         viewModelScope.launch(Dispatchers.IO) {
-            if(!configStorage.save(newConfig)) {
+            if(!configStorage.saveKeeperConfig(newConfig)) {
                 //TODO show error
             }
         }
+    }
+
+    fun savePasskeyAndAuthType(passkey: String, authType: String) {
+        val currentConfig = configStorage.getKeeperConfig()
+
+        updateKeeperConfig(KeeperConfig(
+            authType,
+            passkey,
+            currentConfig.encryptionKey,
+            currentConfig.encryptionIV,
+            currentConfig.useLogin
+        ))
     }
 
     fun createEncryptionKey() = KeeperPasswordGenerator().generatePassword()

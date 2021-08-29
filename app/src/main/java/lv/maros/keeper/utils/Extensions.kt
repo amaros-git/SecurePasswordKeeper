@@ -34,13 +34,6 @@ fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
     }
 }
 
-fun KeeperConfig.toList(): List<String> {
-    return listOf(
-        this.authType,
-        this.passkeyHash,
-    )
-}
-
 /*//animate changing the view visibility
 fun View.fadeIn() {
     this.visibility = View.VISIBLE
