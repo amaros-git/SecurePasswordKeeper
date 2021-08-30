@@ -45,8 +45,31 @@ class PasswordListFragment : Fragment() {
 
         setupViews()
 
+        setupBottomNavigation()
+
         return binding.root
     }
+
+    private fun setupBottomNavigation() {
+        //I don't need to check any item. This just like a button.
+        binding.bottomNavigation.menu.setGroupCheckable(0, false, false)
+
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.settingsMenu -> {
+                    Timber.d("SETTINGS")
+                    true
+                }
+                R.id.sortMenu -> {
+                    Timber.d("SORT")
+                    true
+                }
+                else -> false
+            }
+        }
+
+    }
+
 
     private fun setupViews() {
         binding.addPassword.setOnClickListener {
@@ -63,7 +86,6 @@ class PasswordListFragment : Fragment() {
             it?.let {
                 passwordListAdapter.submitMyList(it)
             }
-
         }
     }
 
