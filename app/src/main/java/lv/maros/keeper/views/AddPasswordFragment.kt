@@ -8,14 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.models.Password
 import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentAddPasswordBinding
+import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
-import timber.log.Timber
 
 @AndroidEntryPoint
 class AddPasswordFragment : Fragment() {
@@ -34,7 +33,7 @@ class AddPasswordFragment : Fragment() {
             it.viewModel = viewModel
         }
 
-        setTitle(getString(R.string.app_name))
+        setTitle(getString(R.string.add_new_password))
         setDisplayHomeAsUpEnabled(true)
 
         setupViews()
@@ -46,46 +45,68 @@ class AddPasswordFragment : Fragment() {
         binding.save.setOnClickListener {
             verifyAndSavePassword()
         }
-    }
 
-    private fun verifyAndSavePassword() {
-        val tempPassword = getPasswordFromViews()
-        val (id, description, url, username, plainPassword, date) = getPasswordFromViews()
-
-        if (verifyPassword(tempPassword)) {
-            val encryptedPassword = viewModel.encryptString(plainPassword)
-            if (null != encryptedPassword) {
-                val finalPassword =
-                    Password(id, description, url, username, encryptedPassword, date)
-                Timber.d("Final password = $finalPassword")
-                viewModel.savePassword(finalPassword)
-            } else {
-                showToast("System error: cannot encrypt. Please restart app and/or phone")
-            }
+        binding.cancel.setOnClickListener {
+            //TODO
         }
     }
 
-    private fun verifyPassword(password: Password): Boolean {
-        val (_, _, _, username, plainPassword) = getPasswordFromViews()
+    private fun verifyAndSavePassword() {
+        val passwordData = collectPasswordInputData()
 
-        return if (plainPassword.isEmpty() && username.isEmpty()) {
-            showToast("Username or password is empty")
-            false
-        } else if (plainPassword.length < PASSWORD_MIN_LENGTH) {
-            showToast("Password is too short, min length is $PASSWORD_MIN_LENGTH")
-            false
-        } else true
+        if (verifyPasswordInputData(passwordData)) {
+            viewModel.savePassword(passwordData)
+        }
     }
 
-
-    private fun getPasswordFromViews() = Password(
-        0,
-        binding.description.text.toString(),
-        binding.url.text.toString(),
+    private fun collectPasswordInputData() = PasswordInputData(
+        binding.website.text.toString(),
         binding.username.text.toString(),
         binding.password.text.toString(),
-        System.currentTimeMillis()
+        binding.repeatPassword.text.toString()
     )
+
+    //TODO I would move it into viewModel, but how to access the TextLayout error field then ? Don't have a good solution now.
+    private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
+        val (website, username, password, repeatPassword) = passwordData
+
+        return when {
+            password != repeatPassword -> {
+                showToast(requireContext().getString(R.string.password_do_not_match_error))
+                false
+            }
+
+            password.isEmpty() || password.isBlank() -> {
+                binding.passwordLayout.error =
+                    requireContext().getString(R.string.password_empty_error)
+                false
+            }
+            password.length < PASSWORD_MIN_LENGTH -> {
+                binding.passwordLayout.error =
+                    requireContext().getString(R.string.password_min_len_error)
+                false
+            }
+
+            repeatPassword.isEmpty() || repeatPassword.isBlank() -> {
+                binding.repeatPasswordLayout.error =
+                    requireContext().getString(R.string.password_empty_error)
+                false
+            }
+            repeatPassword.length < PASSWORD_MIN_LENGTH -> {
+                binding.repeatPasswordLayout.error =
+                    requireContext().getString(R.string.password_min_len_error)
+                false
+            }
+
+            username.isEmpty() || username.isBlank() -> {
+                binding.repeatPasswordLayout.error =
+                    requireContext().getString(R.string.username_empty_error)
+                false
+            }
+
+            else -> true
+        }
+    }
 
     private fun showToast(msg: String) { //TODO use error fields on TextView for errors
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()

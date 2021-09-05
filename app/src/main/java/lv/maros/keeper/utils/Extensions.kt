@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import lv.maros.keeper.models.KeeperConfig
+import lv.maros.keeper.models.Password
 import lv.maros.keeper.views.PasswordListAdapter
 
 

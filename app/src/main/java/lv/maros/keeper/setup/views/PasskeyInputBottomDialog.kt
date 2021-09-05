@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
 import lv.maros.keeper.databinding.DialogAuthMethodBinding
 import lv.maros.keeper.setup.SharedSetupViewModel
-import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSWORD
+import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
 @AndroidEntryPoint
@@ -41,7 +41,7 @@ class PasskeyInputBottomDialog(
             KEEPER_AUTH_TYPE_PIN -> {
                 configurePinLayout()
             }
-            KEEPER_AUTH_TYPE_PASSWORD -> {
+            KEEPER_AUTH_TYPE_PASSKEY -> {
                 configurePasswordLayout()
             }
         }

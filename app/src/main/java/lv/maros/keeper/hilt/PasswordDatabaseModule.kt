@@ -6,9 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import lv.maros.keeper.authentication.KeeperAuthenticator
-import lv.maros.keeper.data.database.PasswordDatabase
-import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.keeper.data.local.PasswordDatabase
 import javax.inject.Singleton
 
 @Module

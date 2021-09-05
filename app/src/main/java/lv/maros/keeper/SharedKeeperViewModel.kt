@@ -9,10 +9,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lv.maros.keeper.data.database.PasswordDatabase
+import lv.maros.keeper.data.local.PasswordDatabase
+import lv.maros.keeper.data.dto.PasswordDTO
 import lv.maros.keeper.models.Password
+import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,7 +25,7 @@ class SharedKeeperViewModel @Inject constructor(
     private val configStorage: KeeperConfigStorage,
     private val passwordDb: PasswordDatabase,
     private val cryptor: KeeperCryptor,
-    private val app: Application,
+    private val app: Application
 ) : AndroidViewModel(app) {
 
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
@@ -47,14 +50,14 @@ class SharedKeeperViewModel @Inject constructor(
 
     fun isLoginEnabled() = configStorage.isLoginEnabled()
 
-    fun savePassword(password: Password) {
+    fun savePassword(passwordData: PasswordInputData) {
 
     }
 
     /**
      * return empty string if Encryption Key doesn't exist
      */
-    fun encryptString(plainText: String): String? {
+    private fun encryptString(plainText: String): String? {
         val encryptionKey = configStorage.getEncryptionKey()
         Timber.d("encryption key = $encryptionKey")
 
@@ -65,23 +68,42 @@ class SharedKeeperViewModel @Inject constructor(
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private fun TEST_saveSomePasswords() {
-        val passwords = listOf(
-            Password(0, "www.delfi.lv", "test", "user", "sfsdfsdf", System.currentTimeMillis()),
-            Password(0, "www.delfi.lv", "test", "user", "folkmghf", System.currentTimeMillis()),
-            Password(0, "www.delfi.lv", "test", "user", "sfsdfsdf", System.currentTimeMillis()),
-            Password(0, "www.delfi.lv", "test", "user", "4534terfs", System.currentTimeMillis()),
-            Password(0, "www.delfi.lv", "test", "user", "rrghy55", System.currentTimeMillis())
+        val passwordList = listOf(
+            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0)
         )
 
         viewModelScope.launch() {
             withContext(Dispatchers.IO) {
-                for (password in passwords) {
+                for (password in passwordList) {
                     passwordDb.passwordDao.insertPassword(password)
                 }
             }
             val savedPasswords = passwordDb.passwordDao.getPasswords()
-            _passwordList.postValue(savedPasswords)
+
+            val passwords = savedPasswords.map {
+                Password(it.website, it.username, it.encryptedPassword, it.passwordLastModificationDate, it.id)
+            }
+            _passwordList.postValue(passwords)
         }
     }
 

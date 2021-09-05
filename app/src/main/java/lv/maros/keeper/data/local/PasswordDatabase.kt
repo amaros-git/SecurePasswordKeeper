@@ -1,12 +1,12 @@
-package lv.maros.keeper.data.database
+package lv.maros.keeper.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import lv.maros.keeper.models.Password
+import lv.maros.keeper.data.dto.PasswordDTO
 
-@Database(entities = [Password::class], version = 1, exportSchema = false)
+@Database(entities = [PasswordDTO::class], version = 1, exportSchema = false)
 abstract class PasswordDatabase : RoomDatabase() {
 
     abstract val passwordDao: PasswordDao

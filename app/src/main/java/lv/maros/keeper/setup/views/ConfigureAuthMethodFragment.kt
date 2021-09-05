@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.databinding.FragmentSelectAuthMethodBinding
 import lv.maros.keeper.setup.SharedSetupViewModel
-import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSWORD
+import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
 @AndroidEntryPoint
@@ -39,7 +39,7 @@ class ConfigureAuthMethodFragment : Fragment() {
         }
 
         binding.password.setOnClickListener {
-            showPasskeyInputDialog(KEEPER_AUTH_TYPE_PASSWORD)
+            showPasskeyInputDialog(KEEPER_AUTH_TYPE_PASSKEY)
         }
 
         binding.disableAuth.setOnClickListener {

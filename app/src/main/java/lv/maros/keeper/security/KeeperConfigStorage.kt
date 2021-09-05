@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import lv.maros.keeper.hilt.IoDispatcher
 import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
-import lv.maros.keeper.utils.PASSKEY_MIN_LENGTH
+import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import javax.inject.Inject
 
 class KeeperConfigStorage @Inject constructor(
@@ -90,13 +90,6 @@ class KeeperConfigStorage @Inject constructor(
         }
 
         true
-    }
-
-    fun isPasskeyLegal(passkey: String): Boolean {
-        return (passkey.isNotEmpty()) &&
-                (passkey.isNotBlank()) &&
-                (passkey.length >= PASSKEY_MIN_LENGTH)
-        // TODO spaces ?
     }
 
     fun isKeeperConfigured(): Boolean {

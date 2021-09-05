@@ -2,32 +2,37 @@
     <string name="app_name">Secure Password Keeper</string>
     <string name="app_label">Password keeper</string>
 
-
+    <!-- Text Views names -->
     <string name="login_fragment">Login</string>
-
-    <string name="password_description">Password description*</string>
-    <string name="password">Password*</string>
-    <string name="url">URL</string>
-    <string name="username">Username*</string>
-    <string name="save">Save</string>
-
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="login_button">Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="password_radio_text">Password</string>
     <string name="pin_radio_text">PIN</string>
     <string name="disable_auth">Disable authentication</string>
+    <string name="add_new_password">Add new password</string>
 
+
+    <!-- Text Views hints -->
     <string name="password_hint_text">Please enter password</string>
     <string name="password_repeat_hint_text">Please repeat password</string>
-
     <string name="pin_hint_text">Please enter PIN</string>
     <string name="pin_repeat_hint_text">Please repeat PIN</string>
-    <string name="cancel_button">Cancel</string>
-    <string name="save_button">Save</string>
-    <string name="login_button">Login</string>
-    <string name="passkey_empty_error">Passkey is empty</string>
-    <string name="passkey_min_len_error">Minimal length is 4 symbols</string>
-    <string name="passkey_dont_match_error">Passkeys doesn\'t match</string>
+    <string name="password_description">Password description*</string>
+    <string name="repeat_password">Repeat password*</string>
+    <string name="password">Password*</string>
+    <string name="website">Website or any description</string>
+    <string name="username">Username*</string>
+    <string name="save">Save</string>
+
+
+
+    <!-- Text messages, errors -->
+    <string name="password_empty_error">Password is empty</string>
+    <string name="password_min_len_error">Minimal length is 4 symbols</string>
+    <string name="password_do_not_match_error">Passwords don\'t match</string>
     <string name="internal_error">Internal error, please try again. Or restart application</string>
-    <string name="no_passwords">No passwords</string>
-    <string name="add_new_password">Add new password</string>
+    <string name="username_empty_error">Username is empty or contains blanks</string>
+    <string name="password_list_empty">Empty</string>
 </resources>

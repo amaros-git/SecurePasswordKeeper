@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.R
 import lv.maros.keeper.databinding.FragmentPasswordListBinding
-import lv.maros.keeper.models.Password
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
 import lv.maros.keeper.utils.setup

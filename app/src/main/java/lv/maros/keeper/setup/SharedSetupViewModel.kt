@@ -11,7 +11,7 @@ import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.security.KeeperPasswordGenerator
-import lv.maros.keeper.utils.PASSKEY_MIN_LENGTH
+import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
 import javax.inject.Inject
 
@@ -29,20 +29,24 @@ class SharedSetupViewModel @Inject constructor(
 
     val authenticationIsConfiguredEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-
+    //TODO rework to use error field on TextViewLayout
     fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
-        return if (passkey1.isEmpty() || passkey2.isEmpty()) {
-            showToast.value = app.getString(R.string.passkey_empty_error)
-            false
-        } else if ((passkey1.length < PASSKEY_MIN_LENGTH) ||
-            (passkey2.length < PASSKEY_MIN_LENGTH)
-        ) {
-            showToast.value = app.getString(R.string.passkey_min_len_error)
-            false
-        } else if (passkey1 != passkey2) {
-            showToast.value = app.getString(R.string.passkey_dont_match_error)
-            false
-        } else passkey1 == passkey2
+        return when {
+            passkey1.isEmpty() || passkey2.isEmpty() -> {
+                showToast.value = app.getString(R.string.password_empty_error)
+                false
+            }
+            passkey1.length < PASSWORD_MIN_LENGTH ||
+                    passkey2.length < PASSWORD_MIN_LENGTH -> {
+                showToast.value = app.getString(R.string.password_min_len_error)
+                false
+            }
+            passkey1 != passkey2 -> {
+                showToast.value = app.getString(R.string.password_do_not_match_error)
+                false
+            }
+            else -> passkey1 == passkey2
+        }
     }
 
     fun finishSetup() {
