@@ -1,9 +1,9 @@
 package lv.maros.keeper.models
 
 data class KeeperConfig (
-    val authType: String?,
-    val passkeyHash: String?,
-    val encryptionKey: String?,
-    val encryptionIV: String?,
-    val useLogin: Boolean
+    var authType: String?,
+    var passkeyHash: String?,
+    var encryptionKey: String?,
+    var encryptionIV: String?,
+    var useLogin: Boolean
 )

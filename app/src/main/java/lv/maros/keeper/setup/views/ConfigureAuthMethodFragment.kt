@@ -46,7 +46,7 @@ class ConfigureAuthMethodFragment : Fragment() {
             //TODO show snackbar with Yes NO
         }
 
-        viewModel.showToast.observe(viewLifecycleOwner) {
+        viewModel.showToastEvent.observe(viewLifecycleOwner) {
             it?.let {
                 showToast(it)
             }

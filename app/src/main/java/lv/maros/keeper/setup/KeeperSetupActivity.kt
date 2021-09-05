@@ -30,12 +30,11 @@ class KeeperSetupActivity : AppCompatActivity() {
 
     }
 
-    // what if fails ?
     private fun initKeeperConfig() {
         val encryptionKey = viewModel.createEncryptionKey()
         val iv = viewModel.createEncryptionIV()
 
-        viewModel.updateKeeperConfig(KeeperConfig(
+        viewModel.saveOrUpdateKeeperConfig(KeeperConfig(
             KEEPER_AUTH_TYPE_NONE,
             null,
             encryptionKey,

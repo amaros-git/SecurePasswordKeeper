@@ -23,7 +23,7 @@ class SharedSetupViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val showToast: SingleLiveEvent<String> = SingleLiveEvent()
+    val showToastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
     val setupIsFinishedEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
@@ -33,16 +33,16 @@ class SharedSetupViewModel @Inject constructor(
     fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
         return when {
             passkey1.isEmpty() || passkey2.isEmpty() -> {
-                showToast.value = app.getString(R.string.password_empty_error)
+                showToastEvent.value = app.getString(R.string.password_empty_error)
                 false
             }
             passkey1.length < PASSWORD_MIN_LENGTH ||
                     passkey2.length < PASSWORD_MIN_LENGTH -> {
-                showToast.value = app.getString(R.string.password_min_len_error)
+                showToastEvent.value = app.getString(R.string.password_min_len_error)
                 false
             }
             passkey1 != passkey2 -> {
-                showToast.value = app.getString(R.string.password_do_not_match_error)
+                showToastEvent.value = app.getString(R.string.password_do_not_match_error)
                 false
             }
             else -> passkey1 == passkey2
@@ -55,24 +55,28 @@ class SharedSetupViewModel @Inject constructor(
     }
 
 
-    fun updateKeeperConfig(newConfig: KeeperConfig) {
+    fun saveOrUpdateKeeperConfig(newConfig: KeeperConfig) {
         viewModelScope.launch(Dispatchers.IO) {
-            if(!configStorage.saveKeeperConfig(newConfig)) {
-                //TODO show error
+            if(!configStorage.saveOrUpdateKeeperConfig(newConfig)) {
+                showToastEvent.postValue(app.getString(R.string.internal_error))
             }
         }
     }
 
-    fun savePasskeyAndAuthType(passkey: String, authType: String) {
-        val currentConfig = configStorage.getKeeperConfig()
+    fun completeAuthConfigurationAndNavigate(passkey: String, authType: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val newConfig = configStorage.getKeeperConfig().apply {
+                this.passkeyHash = passkey
+                this.authType = authType
+            }
 
-        updateKeeperConfig(KeeperConfig(
-            authType,
-            passkey,
-            currentConfig.encryptionKey,
-            currentConfig.encryptionIV,
-            currentConfig.useLogin
-        ))
+            if (configStorage.saveOrUpdateKeeperConfig(newConfig)) {
+                authenticationIsConfiguredEvent.postValue(true)
+            }
+            else {
+                showToastEvent.postValue(app.getString(R.string.internal_error))
+            }
+        }
     }
 
     fun createEncryptionKey() = KeeperPasswordGenerator().generatePassword()
