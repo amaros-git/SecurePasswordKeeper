@@ -18,7 +18,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:hint="@string/password_hint_text">
+            tools:hint="@string/password_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passkey"

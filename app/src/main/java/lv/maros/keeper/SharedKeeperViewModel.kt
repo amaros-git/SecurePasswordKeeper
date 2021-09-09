@@ -15,7 +15,6 @@ import lv.maros.keeper.models.Password
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
-import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
 import javax.inject.Inject
@@ -36,9 +35,6 @@ class SharedKeeperViewModel @Inject constructor(
     val passwordList: LiveData<List<Password>>
         get() = _passwordList
 
-    init { //TODO REMOVE WHEN TEST ARE READY
-        TEST_saveSomePasswords()
-    }
 
     fun verifyPasskey(passkey: String): Boolean {
         return false
@@ -68,8 +64,35 @@ class SharedKeeperViewModel @Inject constructor(
         }
     }
 
+    fun loadPassword() {
+        viewModelScope.launch(Dispatchers.Main) {
+            val savedPasswords = passwordDb.passwordDao.getAllPasswords()
 
+            if (savedPasswords.isNotEmpty()) {
+                val passwordToShow = ArrayList<Password>()
+                passwordToShow.addAll(savedPasswords.map { passwordDTO ->
+                    Password(
+                        passwordDTO.website,
+                        passwordDTO.username,
+                        passwordDTO.encryptedPassword,
+                        passwordDTO.passwordLastModificationDate,
+                        passwordDTO.id)
+                })
 
+                _passwordList.value = passwordToShow
+            }
+
+            //check if no data has to be shown
+            invalidateShowNoData()
+        }
+    }
+
+    /**
+     * Inform the user that there's not any data if the remindersList is empty
+     */
+    private fun invalidateShowNoData() {
+        showNoData.value = passwordList.value == null || passwordList.value!!.isEmpty()
+    }
 
 
 
@@ -86,10 +109,9 @@ class SharedKeeperViewModel @Inject constructor(
     private fun TEST_saveSomePasswords() {
         val passwordList = listOf(
             PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0)
+            PasswordDTO("Amazone", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("220.lv", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("Aliexpress", "test", "user", System.currentTimeMillis(),0),
         )
 
         viewModelScope.launch() {
@@ -98,12 +120,12 @@ class SharedKeeperViewModel @Inject constructor(
                     passwordDb.passwordDao.insertPassword(password)
                 }
             }
-            val savedPasswords = passwordDb.passwordDao.getPasswords()
+           /* val savedPasswords = passwordDb.passwordDao.getAllPasswords()
 
             val passwords = savedPasswords.map {
                 Password(it.website, it.username, it.encryptedPassword, it.passwordLastModificationDate, it.id)
             }
-            _passwordList.postValue(passwords)
+            _passwordList.postValue(passwords)*/
         }
     }
 

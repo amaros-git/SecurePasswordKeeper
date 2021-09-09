@@ -15,13 +15,12 @@
 
 
     <!-- Text Views hints -->
-    <string name="password_hint_text">Please enter password</string>
-    <string name="password_repeat_hint_text">Please repeat password</string>
-    <string name="pin_hint_text">Please enter PIN</string>
-    <string name="pin_repeat_hint_text">Please repeat PIN</string>
-    <string name="password_description">Password description*</string>
-    <string name="repeat_password">Repeat password*</string>
+    <string name="password_hint">Please enter password</string>
+    <string name="password_repeat_hint">Please repeat password</string>
+    <string name="pin_hint">Please enter PIN</string>
+    <string name="pin_repeat_hint">Please repeat PIN</string>
     <string name="password">Password*</string>
+    <string name="repeat_password">Repeat password*</string>
     <string name="website">Website or any description</string>
     <string name="username">Username*</string>
     <string name="save">Save</string>
@@ -35,4 +34,5 @@
     <string name="internal_error">Internal error, please try again. Or restart application</string>
     <string name="username_empty_error">Username is empty or contains blanks</string>
     <string name="password_list_empty">Empty</string>
+    <string name="no_data">No Data</string>
 </resources>

@@ -1,5 +1,8 @@
 package lv.maros.keeper.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +41,7 @@ fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
 
 fun CharSequence.isNotBlankOrEmpty(): Boolean = !isBlank() && !isEmpty()
 
-/*//animate changing the view visibility
+//animate changing the view visibility
 fun View.fadeIn() {
     this.visibility = View.VISIBLE
     this.alpha = 0f
@@ -57,4 +60,4 @@ fun View.fadeOut() {
             this@fadeOut.visibility = View.GONE
         }
     })
-}*/
+}

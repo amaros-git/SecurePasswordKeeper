@@ -18,7 +18,7 @@ interface PasswordDao {
     suspend fun insertPassword(password: PasswordDTO)
 
     @Query("SELECT * FROM password_table")
-    suspend fun getPasswords(): List<PasswordDTO>
+    suspend fun getAllPasswords(): List<PasswordDTO>
 
     @Update(entity = PasswordDTO::class)
     suspend fun updatePassword(newPassword: PasswordDTO)

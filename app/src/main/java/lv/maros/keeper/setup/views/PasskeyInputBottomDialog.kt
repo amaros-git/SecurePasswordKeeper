@@ -57,20 +57,20 @@ class PasskeyInputBottomDialog(
 
     private fun configurePasswordLayout() {
         binding.apply {
-            passkeyLayout.hint = resources.getText(R.string.password_hint_text)
+            passkeyLayout.hint = resources.getText(R.string.password_hint)
             passkey.inputType = InputType.TYPE_CLASS_TEXT
 
-            repeatPasskeyLayout.hint = resources.getText(R.string.password_repeat_hint_text)
+            repeatPasskeyLayout.hint = resources.getText(R.string.password_repeat_hint)
             repeatPasskey.inputType = InputType.TYPE_CLASS_TEXT
         }
     }
 
     private fun configurePinLayout() {
         binding.apply {
-            passkeyLayout.hint = resources.getText(R.string.pin_hint_text)
+            passkeyLayout.hint = resources.getText(R.string.pin_hint)
             passkey.inputType = InputType.TYPE_CLASS_NUMBER
 
-            repeatPasskeyLayout.hint = resources.getText(R.string.pin_repeat_hint_text)
+            repeatPasskeyLayout.hint = resources.getText(R.string.pin_repeat_hint)
             repeatPasskey.inputType = InputType.TYPE_CLASS_NUMBER
         }
     }

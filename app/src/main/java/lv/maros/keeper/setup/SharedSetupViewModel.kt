@@ -11,6 +11,7 @@ import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.security.KeeperPasswordGenerator
+import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class SharedSetupViewModel @Inject constructor(
 
     val authenticationIsConfiguredEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    //TODO rework to use error field on TextViewLayout
+    //TODO rework and use error field on TextViewLayout
     fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
         return when {
             passkey1.isEmpty() || passkey2.isEmpty() -> {
@@ -54,12 +55,19 @@ class SharedSetupViewModel @Inject constructor(
         setupIsFinishedEvent.value = true
     }
 
-
-    fun saveOrUpdateKeeperConfig(newConfig: KeeperConfig) {
+    //TODO re-factor
+    fun initKeeperConfig() {
         viewModelScope.launch(Dispatchers.IO) {
-            if(!configStorage.saveOrUpdateKeeperConfig(newConfig)) {
-                showToastEvent.postValue(app.getString(R.string.internal_error))
-            }
+            val encryptionKey = KeeperPasswordGenerator().generatePassword()
+            val iv = KeeperPasswordGenerator().generateIV()
+
+            configStorage.saveOrUpdateKeeperConfig(KeeperConfig(
+                KEEPER_AUTH_TYPE_NONE,
+                null,
+                encryptionKey,
+                iv,
+                false
+            ))
         }
     }
 
@@ -78,8 +86,4 @@ class SharedSetupViewModel @Inject constructor(
             }
         }
     }
-
-    fun createEncryptionKey() = KeeperPasswordGenerator().generatePassword()
-
-    fun createEncryptionIV() = KeeperPasswordGenerator().generateIV()
 }
