@@ -1,12 +1,13 @@
 package lv.maros.keeper.views
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
@@ -15,6 +16,7 @@ import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AddPasswordFragment : Fragment() {
@@ -70,12 +72,12 @@ class AddPasswordFragment : Fragment() {
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
 
-        return when {
-            password != repeatPassword -> {
-                showToast(requireContext().getString(R.string.password_do_not_match_error))
-                false
-            }
+        Timber.d("Verifying Password: $passwordData")
 
+        resetAllTextInputLayouts(binding.addPasswordLayout)
+
+        //TODO refactor it
+        return when {
             password.isEmpty() || password.isBlank() -> {
                 binding.passwordLayout.error =
                     requireContext().getString(R.string.password_empty_error)
@@ -97,14 +99,32 @@ class AddPasswordFragment : Fragment() {
                     requireContext().getString(R.string.password_min_len_error)
                 false
             }
+            password != repeatPassword -> {
+                binding.passwordLayout.error = getString(R.string.password_dont_match_error)
+                binding.repeatPasswordLayout.error = getString(R.string.password_dont_match_error)
+                false
+            }
 
             username.isEmpty() || username.isBlank() -> {
-                binding.repeatPasswordLayout.error =
+                binding.usernameLayout.error =
                     requireContext().getString(R.string.username_empty_error)
                 false
             }
 
             else -> true
+        }
+    }
+
+    private fun resetAllTextInputLayouts(passwordLayout: ViewGroup) {
+        val childCount = passwordLayout.childCount
+        Timber.d("Child count = $childCount")
+        for (i in 0..childCount) {
+            val view = passwordLayout.getChildAt(i)
+
+            if (view is TextInputLayout) {
+                Timber.d("Found TextInputLayout at position $i")
+                view.error = null
+            }
         }
     }
 

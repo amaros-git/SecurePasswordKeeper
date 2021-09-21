@@ -47,7 +47,23 @@ class SharedKeeperViewModel @Inject constructor(
     fun isLoginEnabled() = configStorage.isLoginEnabled()
 
     fun savePassword(passwordData: PasswordInputData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val encryptedPassword = encryptString(passwordData.password)
 
+            if (null != encryptedPassword) {
+                val passwordDto = PasswordDTO(
+                    passwordData.website,
+                    passwordData.username,
+                    encryptedPassword,
+                    System.currentTimeMillis(),
+                    0
+                )
+                passwordDb.passwordDao.insertPassword(passwordDto)
+            }
+            else {
+                showErrorEvent.postValue(app.getString(R.string.internal_error))
+            }
+        }
     }
 
     /**
@@ -70,22 +86,26 @@ class SharedKeeperViewModel @Inject constructor(
 
             if (savedPasswords.isNotEmpty()) {
                 val passwordToShow = ArrayList<Password>()
-                passwordToShow.addAll(savedPasswords.map { passwordDTO ->
-                    Password(
-                        passwordDTO.website,
-                        passwordDTO.username,
-                        passwordDTO.encryptedPassword,
-                        passwordDTO.passwordLastModificationDate,
-                        passwordDTO.id)
+                passwordToShow.addAll(savedPasswords.map { passwordDto ->
+                    passwordDtoToPassword(passwordDto)
                 })
 
                 _passwordList.value = passwordToShow
             }
 
-            //check if no data has to be shown
+            //check if no data image has to be shown
             invalidateShowNoData()
         }
     }
+
+    private fun passwordDtoToPassword(passwordDto: PasswordDTO) =
+        Password(
+            passwordDto.website,
+            passwordDto.username,
+            passwordDto.encryptedPassword,
+            passwordDto.passwordLastModificationDate,
+            passwordDto.id
+        )
 
     /**
      * Inform the user that there's not any data if the remindersList is empty
