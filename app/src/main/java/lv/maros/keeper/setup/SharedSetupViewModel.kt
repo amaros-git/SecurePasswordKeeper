@@ -58,8 +58,8 @@ class SharedSetupViewModel @Inject constructor(
     //TODO re-factor
     fun initKeeperConfig() {
         viewModelScope.launch(Dispatchers.IO) {
-            val encryptionKey = KeeperPasswordGenerator().generatePassword()
-            val iv = KeeperPasswordGenerator().generateIV()
+            val encryptionKey = KeeperPasswordGenerator().generateEncryptionKey()
+            val iv = KeeperPasswordGenerator().generateEncryptionIV()
 
             configStorage.saveOrUpdateKeeperConfig(KeeperConfig(
                 KEEPER_AUTH_TYPE_NONE,

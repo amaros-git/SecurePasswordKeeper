@@ -1,16 +1,18 @@
 package lv.maros.keeper.security
 
+import java.security.SecureRandom
+
 class KeeperPasswordGenerator(
     private val useLetters: Boolean = true,
     private val useDigits: Boolean = true,
     private val useSymbols: Boolean = true
 ) {
 
-    fun generatePassword(length: Int = 16): String {
-        return "1234567890123456"
+    fun generateEncryptionKey(length: Int = 16): String {
+        return "kF8g8hDDXvypd5KP"
     }
 
-    fun generateIV(): String {
-        return "1234567890123456"
+    fun generateEncryptionIV(): String {
+        return "fbBMmGE2Z6GtKvEs"
     }
 }

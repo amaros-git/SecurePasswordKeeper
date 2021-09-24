@@ -1,83 +1,47 @@
 package lv.maros.keeper.security
 
-import android.os.Build
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.instanceOf
-
-import org.robolectric.annotation.Config
-
+import org.hamcrest.Matchers.nullValue
+import org.junit.Before
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@ExperimentalCoroutinesApi
-@Config(sdk = [Build.VERSION_CODES.P])
 class KeeperCryptorTest {
 
-    private lateinit var crypto: KeeperCryptor
+    private val logTag = KeeperCryptorTest::class.java.simpleName
 
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
+    private val key = "kF8g8hDDXvypd5KP"
+    private val iv = "fbBMmGE2Z6GtKvEs"
 
-
-    @Before
-    fun setupCrypto() {
-        crypto = KeeperCryptor()
-    }
-
-    @After
-    fun clearSharedReferences() {
-        crypto.clearAll()
-    }
-
+    private val cryptor = KeeperCryptor()
 
     @Test
-    fun encryptAndSavePasskey_savePasskeysSuccessfully() {
-        // Create list of test passkeys
-        val testPasskeys = listOf<String>(
-            "qwerty123",
-            "~!@#$%^&*(_)-=|}{:?><",
-            "\"34d\"d\""
+    fun hashData() {
+
+    }
+
+    @Test
+    fun encryptString() {
+        val inputData = mutableListOf(
+            "12345",
+            "adwqeqe",
+            "c 343:24323cc?>Z\"!#$#%^&$%^"
         )
 
-        // Encrypt and save each key and check if Success. Test failed if any passkey fails
-        testPasskeys.forEach { passkey ->
-            val result = crypto.hashPasskey(passkey)
-            println("Testing $passkey")
-            assertThat(result, `is`(instanceOf(CryptoResult.Success::class.java)))
+        inputData.forEach {
+            val result = cryptor.encryptString(it, key, iv)
+            System.err.println("TEST")
         }
-    }
 
-    @Test
-    fun encryptAndSavePasskey_tryToSaveAndReceiveError() {
-        //TODO empty, blank. And what about space in passkey ?. If PIN then minimal length ?
-    }
 
-    @Test
-    fun verifyPasskey_saveAndCheck() {
-        // Save passkey
-        val passkey = "dhnfj33:02"
-        val hash = crypto.hashPasskey(passkey)
-
-        // Verify the same passkey successfully
-        val result = crypto.verifyPasskey(passkey)
-        assertThat(result, `is`(instanceOf(CryptoResult.Success::class.java)))
 
     }
 
     @Test
-    fun clearAll_addKeyDeleteKeyAndTryToVerifyKey() {
-
+    fun decryptString() {
     }
-
-
 }

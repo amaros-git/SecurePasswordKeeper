@@ -50,6 +50,8 @@ class SharedKeeperViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val encryptedPassword = encryptString(passwordData.password)
 
+            Timber.d("Encrypted password = $encryptedPassword")
+
             if (null != encryptedPassword) {
                 val passwordDto = PasswordDTO(
                     passwordData.website,
@@ -59,6 +61,8 @@ class SharedKeeperViewModel @Inject constructor(
                     0
                 )
                 passwordDb.passwordDao.insertPassword(passwordDto)
+
+                Timber.d("Saved password dto: $passwordDto")
             }
             else {
                 showErrorEvent.postValue(app.getString(R.string.internal_error))
@@ -70,11 +74,12 @@ class SharedKeeperViewModel @Inject constructor(
      * return empty string if Encryption Key doesn't exist
      */
     private fun encryptString(plainText: String): String? {
-        val encryptionKey = configStorage.getEncryptionKey()
-        Timber.d("encryption key = $encryptionKey")
+        val key = configStorage.getEncryptionKey()
+        val iv = configStorage.getEncryptionIV()
+        //Timber.d("encryption key = $encryptionKey")
 
-        return if (null != encryptionKey) {
-            cryptor.encryptString(plainText, encryptionKey)
+        return if (null != key && null != iv) {
+            cryptor.encryptString(plainText, key, iv)
         } else {
             null
         }
@@ -91,6 +96,18 @@ class SharedKeeperViewModel @Inject constructor(
                 })
 
                 _passwordList.value = passwordToShow
+
+                Timber.d("Read from the db:")
+                passwordToShow.forEach {
+                    Timber.d("$it")
+                }
+
+                val encKey = configStorage.getEncryptionKey()
+                encKey?.let {
+                    //val result = cryptor.decryptString(passwordToShow[0].encryptedPassword, it)
+                    //Timber.d("decypted password = $result")
+                }
+
             }
 
             //check if no data image has to be shown

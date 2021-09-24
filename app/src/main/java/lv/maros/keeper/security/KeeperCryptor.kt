@@ -40,31 +40,30 @@ class KeeperCryptor @Inject constructor() {
         return hashString.toString()
     }
 
-    fun encryptString(plaintext: String, encryptionKey: String): String =
-        encryptDecrypt(Cipher.ENCRYPT_MODE, plaintext, encryptionKey)
+    fun encryptString(data: String, key: String, iv: String) : String =
+        encryptDecrypt(Cipher.ENCRYPT_MODE, data, key, iv)
 
-    fun decryptString(encryptedData: String, encryptionKey: String): String =
-        encryptDecrypt(Cipher.DECRYPT_MODE, encryptedData, encryptionKey)
+    fun decryptString(encryptedData: String, key: String, iv: String): String =
+        encryptDecrypt(Cipher.DECRYPT_MODE, encryptedData, key, iv)
 
-    private fun encryptDecrypt(mode: Int, data: String, encryptionKey: String): String {
-        Timber.d("data = $data, bytes = ${data.toByteArray()}")
+    private fun encryptDecrypt(mode: Int, data: String, key: String, iv: String): String {
+        Timber.d("data = $data, key = $key, iv = $iv")
         val bytes: ByteArray = cipher.run {
-            init(mode, getSecretKey(encryptionKey))
-            doFinal(data.toByteArray())
+            init(mode, getSecretKey(key))
+            doFinal(data.toByteArray(Charsets.UTF_8))
         }
         bytes.forEach {
             Timber.d(it.toString())
         }
 
-        return ""
+        return bytes.toString()
     }
 
 
-    // TODO it is always new ..
-    private fun getSecretKey(encryptionKey: String): SecretKey {
-        val key = SecretKeySpec(encryptionKey.toByteArray(), SECRET_KEY_ALGO)
-        Timber.d("secret key = ${key.hashCode()}")
-        return key
+    private fun getSecretKey(key: String): SecretKey {
+        val secretKey = SecretKeySpec(key.encodeToByteArray(), SECRET_KEY_ALGO)
+        Timber.d("secret key hash = ${secretKey.hashCode()}")
+        return secretKey
     }
 
 
