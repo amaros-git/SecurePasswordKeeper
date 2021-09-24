@@ -1,6 +1,7 @@
 package lv.maros.keeper
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +18,7 @@ import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +36,55 @@ class SharedKeeperViewModel @Inject constructor(
     private val _passwordList = MutableLiveData<List<Password>>()
     val passwordList: LiveData<List<Password>>
         get() = _passwordList
+
+
+    init {
+        test()
+    }
+
+    private fun test() {
+        val iv = configStorage.getEncryptionIV()!!
+        val key = configStorage.getEncryptionKey()!!
+        Timber.d("key = $key, iv = $iv")
+
+        val inputString = "12345"
+        val data = inputString.encodeToByteArray()
+
+        val encryptedData = cryptor.encryptDecryptV2(Cipher.ENCRYPT_MODE, data, key, iv)
+        printByteArrayInOneLine(encryptedData, " ")
+        Timber.d("encrypted hex string: ${encryptedData.toHexString()}")
+
+
+        val decryptedData = cryptor.encryptDecryptV2(Cipher.DECRYPT_MODE, encryptedData, key, iv)
+
+        /*Timber.d("input data     = $inputString")
+        Timber.d("encryptedData  = ${encryptedData.decodeToString()}")
+        Timber.d("decrypted data = ${decryptedData.decodeToString()}")*/
+
+
+    }
+
+    fun ByteArray.toHexString(): String {
+        val stringBuf = StringBuffer()
+        this.forEach {
+            stringBuf.append(0xFF and it.toInt())
+            stringBuf.append(" ")
+        }
+
+        return stringBuf.toString()
+    }
+
+    fun printByteArrayInOneLine(bytes: ByteArray, separator: String) {
+        val stringBuf = StringBuffer()
+        bytes.forEach {
+            stringBuf.append(it.toInt())
+            stringBuf.append(separator)
+        }
+
+        Timber.d(stringBuf.toString())
+
+    }
+
 
 
     fun verifyPasskey(passkey: String): Boolean {
@@ -103,10 +154,8 @@ class SharedKeeperViewModel @Inject constructor(
                 }
 
                 val encKey = configStorage.getEncryptionKey()
-                encKey?.let {
-                    //val result = cryptor.decryptString(passwordToShow[0].encryptedPassword, it)
-                    //Timber.d("decypted password = $result")
-                }
+                val iv = configStorage.getEncryptionIV()
+
 
             }
 

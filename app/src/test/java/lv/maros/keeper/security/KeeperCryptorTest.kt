@@ -9,7 +9,7 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+//@RunWith(AndroidJUnit4::class)
 class KeeperCryptorTest {
 
     private val logTag = KeeperCryptorTest::class.java.simpleName
@@ -27,14 +27,32 @@ class KeeperCryptorTest {
     @Test
     fun encryptString() {
         val inputData = mutableListOf(
-            "12345",
+            "123456789012345",
             "adwqeqe",
             "c 343:24323cc?>Z\"!#$#%^&$%^"
         )
 
-        inputData.forEach {
+       /* inputData.forEach {
             val result = cryptor.encryptString(it, key, iv)
-            System.err.println("TEST")
+            println(result)
+        }*/
+
+        val result = cryptor.encryptString(inputData[0], key, iv)
+
+        val decoded = cryptor.decryptString(result, key, iv)
+        println("decoded = $decoded")
+
+        val bytes = result.encodeToByteArray()
+        bytes.forEach {
+            print(it)
+            print(" ")
+        }
+
+        println()
+
+        bytes.forEach {
+            print((0xFF and it.toInt()))
+            print(" ")
         }
 
 

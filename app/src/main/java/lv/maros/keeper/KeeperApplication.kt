@@ -11,5 +11,4 @@ class KeeperApplication : Application() {
 
         Timber.plant(Timber.DebugTree())
     }
-
 }

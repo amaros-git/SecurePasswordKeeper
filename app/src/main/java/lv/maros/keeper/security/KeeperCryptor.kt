@@ -6,6 +6,7 @@ import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class KeeperCryptor @Inject constructor() {
     fun hashData(data: String): String {
         val hashBytes = messageDigest.apply {
             reset()
-            update(data.toByteArray())
+            update(data.encodeToByteArray())
         }.digest()
 
         val hashString = StringBuffer()
@@ -49,14 +50,20 @@ class KeeperCryptor @Inject constructor() {
     private fun encryptDecrypt(mode: Int, data: String, key: String, iv: String): String {
         Timber.d("data = $data, key = $key, iv = $iv")
         val bytes: ByteArray = cipher.run {
-            init(mode, getSecretKey(key))
-            doFinal(data.toByteArray(Charsets.UTF_8))
+            init(mode, getSecretKey(key), IvParameterSpec(iv.encodeToByteArray()))
+            doFinal(data.encodeToByteArray())
         }
         bytes.forEach {
             Timber.d(it.toString())
         }
 
-        return bytes.toString()
+        return bytes.decodeToString()
+    }
+
+    fun encryptDecryptV2(mode: Int, data: ByteArray, key: String, iv: String): ByteArray {
+        cipher.init(mode, getSecretKey(key), IvParameterSpec(iv.encodeToByteArray()))
+
+        return cipher.doFinal(data)
     }
 
 
