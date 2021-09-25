@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
         }
 
     }
-
+/*
     private fun handleAuthResult(keeperResult: KeeperResult) {
         if (keeperResult is KeeperResult.Success) {
             findNavController()
@@ -77,7 +77,7 @@ class LoginFragment : Fragment() {
             val result = keeperResult as KeeperResult.Error
             Timber.d("authentication failed: ${result.value}")
         }
-    }
+    }*/
 
 
 

@@ -16,6 +16,7 @@ import lv.maros.keeper.models.Password
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
 import javax.crypto.Cipher
@@ -43,7 +44,7 @@ class SharedKeeperViewModel @Inject constructor(
     }
 
     private fun test() {
-        val iv = configStorage.getEncryptionIV()!!
+       /* val iv = configStorage.getEncryptionIV()!!
         val key = configStorage.getEncryptionKey()!!
         Timber.d("key = $key, iv = $iv")
 
@@ -56,7 +57,7 @@ class SharedKeeperViewModel @Inject constructor(
 
 
         val decryptedData = cryptor.encryptDecryptV2(Cipher.DECRYPT_MODE, encryptedData, key, iv)
-
+*/
         /*Timber.d("input data     = $inputString")
         Timber.d("encryptedData  = ${encryptedData.decodeToString()}")
         Timber.d("decrypted data = ${decryptedData.decodeToString()}")*/
@@ -98,8 +99,15 @@ class SharedKeeperViewModel @Inject constructor(
     fun isLoginEnabled() = configStorage.isLoginEnabled()
 
     fun savePassword(passwordData: PasswordInputData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val encryptedPassword = encryptString(passwordData.password)
+       /* viewModelScope.launch(Dispatchers.IO) {
+            val result = encryptString(passwordData.password)
+            when (result) {
+                is KeeperResult.Success -> {
+
+                }
+
+                is Kee
+            }
 
             Timber.d("Encrypted password = $encryptedPassword")
 
@@ -118,13 +126,13 @@ class SharedKeeperViewModel @Inject constructor(
             else {
                 showErrorEvent.postValue(app.getString(R.string.internal_error))
             }
-        }
+        }*/
     }
 
     /**
      * return empty string if Encryption Key doesn't exist
      */
-    private fun encryptString(plainText: String): String? {
+    private fun encryptString(plainText: String): KeeperResult<String> {
         val key = configStorage.getEncryptionKey()
         val iv = configStorage.getEncryptionIV()
         //Timber.d("encryption key = $encryptionKey")
@@ -132,7 +140,7 @@ class SharedKeeperViewModel @Inject constructor(
         return if (null != key && null != iv) {
             cryptor.encryptString(plainText, key, iv)
         } else {
-            null
+            KeeperResult.Error("Encryption key or iv doesn't exist")
         }
     }
 

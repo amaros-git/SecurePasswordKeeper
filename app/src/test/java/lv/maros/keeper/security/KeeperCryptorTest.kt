@@ -1,11 +1,9 @@
 package lv.maros.keeper.security
 
-import android.util.Log
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import lv.maros.keeper.utils.KeeperResult
 import org.junit.Test
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.Before
 import org.junit.runner.RunWith
 
@@ -37,10 +35,12 @@ class KeeperCryptorTest {
             println(result)
         }*/
 
-        val result = cryptor.encryptString(inputData[0], key, iv)
+        val encryptionResult = cryptor.encryptString(inputData[0], key, iv)
+        assertThat(encryptionResult, `is`(instanceOf(KeeperResult.Success::class.java)))
 
-        val decoded = cryptor.decryptString(result, key, iv)
-        println("decoded = $decoded")
+        //val decoded = cryptor.decryptString(result, key, iv)
+       // println("decoded = $decoded")
+/*
 
         val bytes = result.encodeToByteArray()
         bytes.forEach {
@@ -54,6 +54,7 @@ class KeeperCryptorTest {
             print((0xFF and it.toInt()))
             print(" ")
         }
+*/
 
 
 

@@ -1,10 +1,10 @@
 package lv.maros.keeper.security
 
+import lv.maros.keeper.utils.KeeperResult
 import timber.log.Timber
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -41,26 +41,31 @@ class KeeperCryptor @Inject constructor() {
         return hashString.toString()
     }
 
-    fun encryptString(data: String, key: String, iv: String) : String =
-        encryptDecrypt(Cipher.ENCRYPT_MODE, data, key, iv)
+    fun encryptString(data: String, key: String, iv: String): KeeperResult<String> {
+        val encryptedBytes =
+            encryptDecrypt(Cipher.ENCRYPT_MODE, data.encodeToByteArray(), key, iv)
 
-    fun decryptString(encryptedData: String, key: String, iv: String): String =
-        encryptDecrypt(Cipher.DECRYPT_MODE, encryptedData, key, iv)
-
-    private fun encryptDecrypt(mode: Int, data: String, key: String, iv: String): String {
-        Timber.d("data = $data, key = $key, iv = $iv")
-        val bytes: ByteArray = cipher.run {
-            init(mode, getSecretKey(key), IvParameterSpec(iv.encodeToByteArray()))
-            doFinal(data.encodeToByteArray())
-        }
-        bytes.forEach {
-            Timber.d(it.toString())
-        }
-
-        return bytes.decodeToString()
+        return KeeperResult.Success(convertToSignedHexString(encryptedBytes))
     }
 
-    fun encryptDecryptV2(mode: Int, data: ByteArray, key: String, iv: String): ByteArray {
+    fun decryptString(encryptedData: String, key: String, iv: String): KeeperResult<String> {
+        val encryptedByteList = encryptedData.split(ENCRYPTED_HEX_PASSWORD_DELIMITER)
+
+        return if (encryptedByteList.size.rem(ENCRYPTED_PASSWORD_BLOCK_LENGTH) == 0) {
+            val decryptedBytes = encryptDecrypt(
+                Cipher.DECRYPT_MODE,
+                convertToByteArray(encryptedByteList),
+                key, iv)
+
+            KeeperResult.Success(decryptedBytes.decodeToString())
+        }
+        else {
+            KeeperResult.Error("Wrong length or format")
+        }
+    }
+
+
+    private fun encryptDecrypt(mode: Int, data: ByteArray, key: String, iv: String): ByteArray {
         cipher.init(mode, getSecretKey(key), IvParameterSpec(iv.encodeToByteArray()))
 
         return cipher.doFinal(data)
@@ -73,6 +78,34 @@ class KeeperCryptor @Inject constructor() {
         return secretKey
     }
 
+    private fun convertToSignedHexString(
+        bytes: ByteArray,
+        delimiter: String = ENCRYPTED_HEX_PASSWORD_DELIMITER
+    ): String {
+        val strBuf = StringBuffer()
+
+        for (i in bytes.indices) {
+            val hex = String.format("%02x", bytes[i])
+            strBuf.append(hex)
+
+            if (i < (bytes.size - 1)) {
+                strBuf.append(delimiter)
+            }
+        }
+
+        return strBuf.toString()
+    }
+
+    private fun convertToByteArray(byteList: List<String>): ByteArray {
+        val bytes = ByteArray(byteList.size)
+        for (i in byteList.indices) {
+            val int = Integer.parseInt(byteList[i], 16)
+            bytes[i] = int.toByte()
+        }
+
+        return bytes
+    }
+
 
     companion object {
         const val HASHING_PROVIDER_ALGO_SHA_265 = "SHA-256"
@@ -80,5 +113,9 @@ class KeeperCryptor @Inject constructor() {
         const val CIPHER_TRANSFORMATION_SCHEME = "AES/CBC/PKCS5PADDING"
 
         const val SECRET_KEY_ALGO = "AES"
+
+        const val ENCRYPTED_HEX_PASSWORD_DELIMITER = "/"
+
+        const val ENCRYPTED_PASSWORD_BLOCK_LENGTH = 16
     }
 }

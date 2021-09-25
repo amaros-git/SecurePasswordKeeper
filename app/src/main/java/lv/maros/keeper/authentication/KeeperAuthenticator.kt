@@ -16,11 +16,11 @@ class KeeperAuthenticator @Inject constructor(
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
 
-    suspend fun requestAuthentication(): KeeperResult {
+  /*  suspend fun requestAuthentication(): KeeperResult {
         return suspendCoroutine {
 
         }
-    }
+    }*/
 
 
 

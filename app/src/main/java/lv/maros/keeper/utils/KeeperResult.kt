@@ -3,7 +3,7 @@ package lv.maros.keeper.utils
 /**
  * General purpose class.
  */
-sealed class KeeperResult {
-    data class Success(val value: String) : KeeperResult()
-    data class Error(val value: String) : KeeperResult()
+sealed class KeeperResult<out T: Any> {
+    data class Success<out T: Any>(val data: T) : KeeperResult<T>()
+    data class Error(val value: String) : KeeperResult<Nothing>()
 }
