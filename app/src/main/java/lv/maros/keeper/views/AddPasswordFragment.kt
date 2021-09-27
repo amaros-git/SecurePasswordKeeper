@@ -13,7 +13,7 @@ import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentAddPasswordBinding
 import lv.maros.keeper.models.PasswordInputData
-import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
+import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
 import timber.log.Timber
@@ -45,7 +45,9 @@ class AddPasswordFragment : Fragment() {
 
     private fun setupViews() {
         binding.save.setOnClickListener {
-            verifyAndSavePassword()
+            resetAllTextInputLayouts(binding.addPasswordLayout)
+
+            collectVerifyAndSavePassword()
         }
 
         binding.cancel.setOnClickListener {
@@ -53,7 +55,7 @@ class AddPasswordFragment : Fragment() {
         }
     }
 
-    private fun verifyAndSavePassword() {
+    private fun collectVerifyAndSavePassword() {
         val passwordData = collectPasswordInputData()
 
         if (verifyPasswordInputData(passwordData)) {
@@ -68,53 +70,6 @@ class AddPasswordFragment : Fragment() {
         binding.repeatPassword.text.toString()
     )
 
-    //TODO I would move it into viewModel, but how to access the TextLayout error field then ? Don't have a good solution now.
-    private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
-        val (website, username, password, repeatPassword) = passwordData
-
-        Timber.d("Verifying Password: $passwordData")
-
-        resetAllTextInputLayouts(binding.addPasswordLayout)
-
-        //TODO refactor it
-        return when {
-            password.isEmpty() || password.isBlank() -> {
-                binding.passwordLayout.error =
-                    requireContext().getString(R.string.password_empty_error)
-                false
-            }
-            password.length < PASSWORD_MIN_LENGTH -> {
-                binding.passwordLayout.error =
-                    requireContext().getString(R.string.password_min_len_error)
-                false
-            }
-
-            repeatPassword.isEmpty() || repeatPassword.isBlank() -> {
-                binding.repeatPasswordLayout.error =
-                    requireContext().getString(R.string.password_empty_error)
-                false
-            }
-            repeatPassword.length < PASSWORD_MIN_LENGTH -> {
-                binding.repeatPasswordLayout.error =
-                    requireContext().getString(R.string.password_min_len_error)
-                false
-            }
-            password != repeatPassword -> {
-                binding.passwordLayout.error = getString(R.string.password_dont_match_error)
-                binding.repeatPasswordLayout.error = getString(R.string.password_dont_match_error)
-                false
-            }
-
-            username.isEmpty() || username.isBlank() -> {
-                binding.usernameLayout.error =
-                    requireContext().getString(R.string.username_empty_error)
-                false
-            }
-
-            else -> true
-        }
-    }
-
     private fun resetAllTextInputLayouts(passwordLayout: ViewGroup) {
         val childCount = passwordLayout.childCount
         Timber.d("Child count = $childCount")
@@ -127,6 +82,17 @@ class AddPasswordFragment : Fragment() {
             }
         }
     }
+
+    //TODO
+    private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
+        val(website, username, password, repeatPassword) = passwordData
+        // 1. Check password
+        val passwordResult = KeeperPasswordManager.verifyPassword(password)
+
+
+        return true
+    }
+
 
     private fun showToast(msg: String) { //TODO use error fields on TextView for errors
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()

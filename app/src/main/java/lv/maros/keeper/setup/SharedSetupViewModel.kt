@@ -10,9 +10,9 @@ import lv.maros.keeper.R
 import lv.maros.keeper.models.KeeperConfig
 import lv.maros.keeper.security.KeeperConfigStorage
 import lv.maros.keeper.security.KeeperCryptor
-import lv.maros.keeper.security.KeeperPasswordGenerator
+import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
-import lv.maros.keeper.utils.PASSWORD_MIN_LENGTH
+import lv.maros.keeper.utils.KEEPER_PASSKEY_PIN_MIN_LENGTH
 import lv.maros.keeper.utils.SingleLiveEvent
 import javax.inject.Inject
 
@@ -37,8 +37,8 @@ class SharedSetupViewModel @Inject constructor(
                 showToastEvent.value = app.getString(R.string.password_empty_error)
                 false
             }
-            passkey1.length < PASSWORD_MIN_LENGTH ||
-                    passkey2.length < PASSWORD_MIN_LENGTH -> {
+            passkey1.length < KEEPER_PASSKEY_PIN_MIN_LENGTH ||
+                    passkey2.length < KEEPER_PASSKEY_PIN_MIN_LENGTH -> {
                 showToastEvent.value = app.getString(R.string.password_min_len_error)
                 false
             }
@@ -58,8 +58,8 @@ class SharedSetupViewModel @Inject constructor(
     //TODO re-factor
     fun initKeeperConfig() {
         viewModelScope.launch(Dispatchers.IO) {
-            val encryptionKey = KeeperPasswordGenerator().generateEncryptionKey()
-            val iv = KeeperPasswordGenerator().generateEncryptionIV()
+            val encryptionKey = KeeperPasswordManager.generateEncryptionKey()
+            val iv = KeeperPasswordManager.generateEncryptionIV()
 
             configStorage.saveOrUpdateKeeperConfig(KeeperConfig(
                 KEEPER_AUTH_TYPE_NONE,
