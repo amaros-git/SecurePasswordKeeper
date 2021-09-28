@@ -24,30 +24,40 @@ class KeeperCryptorTest {
     }
 
     @Test
-    fun encryptString() {
+    fun encryptString_encryptAndCompare() {
         //Get test passwords and encrypted values
         val testPasswordMap = getTestPasswordMap()
 
-        //Check each entry
         testPasswordMap.forEach { entry ->
             //Encrypt password and check if success is returned
             val encryptionResult = cryptor.encryptString(entry.key, key, iv)
             assertThat(encryptionResult, `is`(instanceOf(KeeperResult.Success::class.java)))
 
-            //Check is a new encrypted password is equal to saved.
-            val encryptedData = (encryptionResult as KeeperResult.Success).data
-            assertThat(encryptedData, `is`(equalTo(entry.value)))
+            //Check is a new encrypted password is equal to reference value.
+            val encryptedPassword = (encryptionResult as KeeperResult.Success).data
+            assertThat(encryptedPassword, `is`(equalTo(entry.value)))
         }
     }
 
     @Test
-    fun decryptString() {
+    fun decryptString_decryptAndCompare() {
+        //Get test passwords and encrypted values
+        val testPasswordMap = getTestPasswordMap()
 
+        testPasswordMap.forEach { entry ->
+            //Encrypt password and check if success is returned
+            val decryptionResult = cryptor.decryptString(entry.value, key, iv)
+            assertThat(decryptionResult, `is`(instanceOf(KeeperResult.Success::class.java)))
+
+            //Check is a new encrypted password is equal to the reference value.
+            val decryptedPassword = (decryptionResult as KeeperResult.Success).data
+            assertThat(decryptedPassword, `is`(equalTo(entry.key)))
+        }
     }
 }
 
 /**
- * key is password, value is this encrypted password
+ * key is a password, value is an encrypted password
  */
 fun getTestPasswordMap(): Map<String, String> {
     return mapOf(
