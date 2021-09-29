@@ -98,35 +98,25 @@ class SharedKeeperViewModel @Inject constructor(
 
     fun isLoginEnabled() = configStorage.isLoginEnabled()
 
-    fun savePassword(passwordData: PasswordInputData) {
-       /* viewModelScope.launch(Dispatchers.IO) {
-            val result = encryptString(passwordData.password)
-            when (result) {
+    fun saveAndNavigateIfSuccess(passwordData: PasswordInputData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val encryptionResult = encryptString(passwordData.password)) {
                 is KeeperResult.Success -> {
-
+                    val passwordDto = PasswordDTO(
+                        passwordData.website,
+                        passwordData.username,
+                        encryptionResult.data,
+                        System.currentTimeMillis(),
+                        0
+                    )
+                    passwordDb.passwordDao.insertPassword(passwordDto)
                 }
 
-                is Kee
+                is KeeperResult.Error -> {
+                    showErrorEvent.postValue(app.getString(R.string.internal_error))
+                }
             }
-
-            Timber.d("Encrypted password = $encryptedPassword")
-
-            if (null != encryptedPassword) {
-                val passwordDto = PasswordDTO(
-                    passwordData.website,
-                    passwordData.username,
-                    encryptedPassword,
-                    System.currentTimeMillis(),
-                    0
-                )
-                passwordDb.passwordDao.insertPassword(passwordDto)
-
-                Timber.d("Saved password dto: $passwordDto")
-            }
-            else {
-                showErrorEvent.postValue(app.getString(R.string.internal_error))
-            }
-        }*/
+        }
     }
 
     /**

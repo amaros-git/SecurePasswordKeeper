@@ -14,6 +14,7 @@ import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentAddPasswordBinding
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperPasswordManager
+import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
 import timber.log.Timber
@@ -59,7 +60,7 @@ class AddPasswordFragment : Fragment() {
         val passwordData = collectPasswordInputData()
 
         if (verifyPasswordInputData(passwordData)) {
-            viewModel.savePassword(passwordData)
+            viewModel.saveAndNavigateIfSuccess(passwordData)
         }
     }
 
@@ -72,26 +73,48 @@ class AddPasswordFragment : Fragment() {
 
     private fun resetAllTextInputLayouts(passwordLayout: ViewGroup) {
         val childCount = passwordLayout.childCount
-        Timber.d("Child count = $childCount")
         for (i in 0..childCount) {
             val view = passwordLayout.getChildAt(i)
 
             if (view is TextInputLayout) {
-                Timber.d("Found TextInputLayout at position $i")
                 view.error = null
             }
         }
     }
 
-    //TODO
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val(website, username, password, repeatPassword) = passwordData
-        // 1. Check password
+        // 1. Check both password
         val passwordResult = KeeperPasswordManager.verifyPassword(password)
+        if (passwordResult is KeeperResult.Error) {
+            binding.passwordLayout.error =
+                convertToUiErrorString(passwordResult.value)
+            return false
+        }
 
+        val repeatPasswordResult = KeeperPasswordManager.verifyPassword(repeatPassword)
+        if (repeatPasswordResult is KeeperResult.Error) {
+            binding.repeatPasswordLayout.error =
+                convertToUiErrorString(repeatPasswordResult.value)
+            return false
+        }
+
+        //2. Check username
 
         return true
     }
+
+    private fun convertToUiErrorString(passwordError: String): String =
+        when (passwordError) {
+            KeeperPasswordManager.PASSWORD_TOO_SHORT -> {
+                getString(R.string.password_min_len_error)
+            }
+            KeeperPasswordManager.PASSWORD_IS_BLANK -> {
+                getString(R.string.password_empty_error)
+            }
+
+            else -> getString(R.string.internal_error)
+        }
 
 
     private fun showToast(msg: String) { //TODO use error fields on TextView for errors
