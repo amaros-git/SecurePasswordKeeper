@@ -101,12 +101,12 @@ class PasswordListFragment : Fragment() {
             requireContext(),
             binding.passwordList,
             object : ClickListener {
-                override fun onClick(view: View?, position: Int) {
+                override fun onClick(view: View, position: Int) {
                     Timber.d("OnClick")
                 }
 
-                override fun onLongClick(view: View?, position: Int) {
-                    Timber.d("onLongClick")
+                override fun onLongClick(view: View, position: Int) {
+                    Timber.d("onLongClick on position $position")
                 }
             }))
 
