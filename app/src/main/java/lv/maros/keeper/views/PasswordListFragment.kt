@@ -122,28 +122,22 @@ class PasswordListFragment : Fragment() {
 
                     bottomMenu.visibility = View.VISIBLE
 
-                    Timber.d("item is ${view.javaClass.name}, name = ${resources.getResourceEntryName(view.id)}")
+                    Timber.d(
+                        "item is ${view.javaClass.name}, name = ${
+                            resources.getResourceEntryName(
+                                view.id
+                            )
+                        }"
+                    )
 
                     val holder = binding.passwordList.findViewHolderForAdapterPosition(position)
-
-                   /* val holder = binding.passwordList.findViewHolderForAdapterPosition(position)
-                    val item =.itemView
-                    item?.let {
-                        Timber.d("item is ${item.javaClass.name}, name = ${resources.getResourceEntryName(item.id)}")
-                        //TODO should I check view class ?
-                        val passwordView = item as ConstraintLayout
-
-
-                    }
-
-                    hold*/
                 }
             }))
 
-
-        /*val itemTouchCallback = ItemTouchHelper(reminderListItemTouchCallback)
-        itemTouchCallback.attachToRecyclerView(binding.passwordList)*/
     }
+
+
+
 
     /*  private var reminderListItemTouchCallback: ItemTouchHelper.SimpleCallback =
           object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
