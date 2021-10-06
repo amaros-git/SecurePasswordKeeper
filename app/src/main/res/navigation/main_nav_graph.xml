@@ -9,7 +9,7 @@
         android:id="@+id/loginFragment"
         android:name="lv.maros.keeper.views.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_passwordListFragment"
             app:destination="@id/passwordListFragment"
@@ -21,16 +21,21 @@
         android:id="@+id/passwordListFragment"
         android:name="lv.maros.keeper.views.PasswordListFragment"
         android:label="password_list_fragment"
-        tools:layout="@layout/fragment_password_list" >
+        tools:layout="@layout/fragment_password_list">
         <action
             android:id="@+id/action_passwordListFragment_to_addPasswordFragment"
-            app:destination="@id/addPasswordFragment" />
+            app:destination="@id/addPasswordFragment">
+            <argument
+                android:name="myArg"
+                android:defaultValue="1"
+                app:argType="integer" />
+        </action>
     </fragment>
 
     <fragment
         android:id="@+id/addPasswordFragment"
         android:name="lv.maros.keeper.views.AddPasswordFragment"
-        android:label="AddPasswordFragment" >
+        android:label="AddPasswordFragment">
         <action
             android:id="@+id/action_addPasswordFragment_to_passwordListFragment"
             app:destination="@id/passwordListFragment" />
