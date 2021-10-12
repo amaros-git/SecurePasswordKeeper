@@ -39,4 +39,5 @@
     <string name="username_or_login_text">Username or login</string>
     <string name="password_dont_match_error">Passwords don\'t match</string>
     <string name="space_char_error">Password cannot contain space character</string>
+    <string name="password_label">Password</string>
 </resources>

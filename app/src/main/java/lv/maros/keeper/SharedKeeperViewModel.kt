@@ -40,30 +40,9 @@ class SharedKeeperViewModel @Inject constructor(
 
 
     init {
-        test()
+        TEST_saveSomePasswords()
     }
 
-    private fun test() {
-       /* val iv = configStorage.getEncryptionIV()!!
-        val key = configStorage.getEncryptionKey()!!
-        Timber.d("key = $key, iv = $iv")
-
-        val inputString = "12345"
-        val data = inputString.encodeToByteArray()
-
-        val encryptedData = cryptor.encryptDecryptV2(Cipher.ENCRYPT_MODE, data, key, iv)
-        printByteArrayInOneLine(encryptedData, " ")
-        Timber.d("encrypted hex string: ${encryptedData.toHexString()}")
-
-
-        val decryptedData = cryptor.encryptDecryptV2(Cipher.DECRYPT_MODE, encryptedData, key, iv)
-*/
-        /*Timber.d("input data     = $inputString")
-        Timber.d("encryptedData  = ${encryptedData.decodeToString()}")
-        Timber.d("decrypted data = ${decryptedData.decodeToString()}")*/
-
-
-    }
 
     fun ByteArray.toHexString(): String {
         val stringBuf = StringBuffer()
@@ -150,11 +129,6 @@ class SharedKeeperViewModel @Inject constructor(
                 passwordToShow.forEach {
                     Timber.d("$it")
                 }
-
-                val encKey = configStorage.getEncryptionKey()
-                val iv = configStorage.getEncryptionIV()
-
-
             }
 
             //check if no data image has to be shown

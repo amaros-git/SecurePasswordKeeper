@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -103,40 +105,29 @@ class PasswordListFragment : Fragment() {
         passwordListAdapter = PasswordListAdapter()
         binding.passwordList.setup(passwordListAdapter)
 
-        binding.passwordList.addOnItemTouchListener(RecyclerTouchListener(
-            requireContext(),
-            binding.passwordList,
-            object : ClickListener {
-                override fun onClick(view: View, position: Int) {
-                    Timber.d("OnClick")
-                }
+        binding.passwordList.addOnItemTouchListener(
+            RecyclerTouchListener(
+                requireContext(),
+                binding.passwordList,
+                object : ClickListener {
 
-                override fun onLongClick(view: View, position: Int) {
-                    Timber.d("onLongClick on position $position")
+                    override fun onClick(view: View, position: Int) {
+                        Timber.d("OnClick")
+                    }
 
-                    val passwordItemLayout = view as ConstraintLayout
-                    passwordItemLayout.setBackgroundColor(Color.GREEN)
+                    override fun onLongClick(view: View, position: Int) {
+                        //TODO I shall create custom layout for Password Item
+                        if (view is CardView) {
+                            view.findViewById<CheckBox>(R.id.itemSelectBox).apply {
+                                visibility = View.VISIBLE
+                            }
 
-                    val bottomMenu: BottomNavigationView =
-                        passwordItemLayout.findViewById(R.id.passwordItemBottomMenu)
-
-                    bottomMenu.visibility = View.VISIBLE
-
-                    Timber.d(
-                        "item is ${view.javaClass.name}, name = ${
-                            resources.getResourceEntryName(
-                                view.id
-                            )
-                        }"
-                    )
-
-                    val holder = binding.passwordList.findViewHolderForAdapterPosition(position)
-                }
-            }))
+                        }
+                    }
+                })
+        )
 
     }
-
-
 
 
     /*  private var reminderListItemTouchCallback: ItemTouchHelper.SimpleCallback =
