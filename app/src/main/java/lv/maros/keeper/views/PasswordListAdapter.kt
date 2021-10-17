@@ -1,7 +1,9 @@
 package lv.maros.keeper.views
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +34,6 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 
     fun submitMyList(list: List<Password>) {
         adapterScope.launch {
-            Timber.d("HERE")
             withContext(Dispatchers.Main) { // runs on Main thread because it updates Recycler View
                 submitList(list)
             }
@@ -42,10 +43,14 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 }
 
 class PasswordViewHolder(private val binding: PasswordItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+    RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
+
+    init {
+        binding.root.setOnLongClickListener(this)
+    }
+
     fun bind(item: Password) {
         binding.password = item
-
         binding.executePendingBindings()
     }
 
@@ -58,6 +63,12 @@ class PasswordViewHolder(private val binding: PasswordItemBinding) :
             )
             return PasswordViewHolder(binding)
         }
+    }
+
+    override fun onLongClick(v: View): Boolean {
+        Toast.makeText(v.context, "long click", Toast.LENGTH_SHORT).show()
+
+        return true
     }
 }
 

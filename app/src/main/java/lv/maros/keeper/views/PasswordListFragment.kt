@@ -1,5 +1,6 @@
 package lv.maros.keeper.views
 
+import android.graphics.Canvas
 import android.graphics.Color
 import android.opengl.Visibility
 import android.os.Bundle
@@ -19,11 +20,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.SharedKeeperViewModel
-import lv.maros.keeper.R
 import lv.maros.keeper.databinding.FragmentPasswordListBinding
 import lv.maros.keeper.databinding.PasswordItemBinding
 import lv.maros.keeper.utils.*
 import timber.log.Timber
+
+import android.graphics.drawable.ColorDrawable
+import lv.maros.keeper.R
+
 
 @AndroidEntryPoint
 class PasswordListFragment : Fragment() {
@@ -105,7 +109,7 @@ class PasswordListFragment : Fragment() {
         passwordListAdapter = PasswordListAdapter()
         binding.passwordList.setup(passwordListAdapter)
 
-        binding.passwordList.addOnItemTouchListener(
+        /*binding.passwordList.addOnItemTouchListener(
             RecyclerTouchListener(
                 requireContext(),
                 binding.passwordList,
@@ -117,23 +121,31 @@ class PasswordListFragment : Fragment() {
 
                     override fun onLongClick(view: View, position: Int) {
                         //TODO I shall create custom layout for Password Item
-                        if (view is CardView) {
+                        Timber.d("OnLongClick")
+                        *//*if (view is CardView) {
                             view.findViewById<CheckBox>(R.id.itemSelectBox).apply {
                                 visibility = View.VISIBLE
                             }
 
-                        }
+                        }*//*
                     }
                 })
+        )*/
+
+        ItemTouchHelper(passwordListItemTouchCallback).attachToRecyclerView(
+            binding.passwordList
         )
+
 
     }
 
 
-    /*  private var reminderListItemTouchCallback: ItemTouchHelper.SimpleCallback =
-          object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    private var passwordListItemTouchCallback: ItemTouchHelper.SimpleCallback =
+        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-              override fun onMove(
+            private val background = ColorDrawable(Color.BLUE)
+
+            override fun onMove(
                   recyclerView: RecyclerView,
                   viewHolder: RecyclerView.ViewHolder,
                   target: RecyclerView.ViewHolder
@@ -144,7 +156,45 @@ class PasswordListFragment : Fragment() {
               override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                   val position = viewHolder.adapterPosition
                   val password = passwordListAdapter.getItem(position)
-                  Timber.d("performed swipe on $password")
+                  //Timber.d("performed swipe on $password")
               }
-          }*/
+
+              override fun onChildDraw(
+                  c: Canvas,
+                  recyclerView: RecyclerView,
+                  viewHolder: RecyclerView.ViewHolder,
+                  dX: Float,
+                  dY: Float,
+                  actionState: Int,
+                  isCurrentlyActive: Boolean
+              ) {
+                  super.onChildDraw(c, recyclerView, viewHolder, dX /5, dY, actionState, isCurrentlyActive)
+
+                  val itemView = viewHolder.itemView
+
+                  if (dX > 0) {
+                      background.setBounds(
+                          itemView.left,
+                          itemView.top,
+                          itemView.left + dX.toInt(),
+                          itemView.bottom
+                      )
+                  } else if (dX < 0) {
+                      background.setBounds(
+                          itemView.right + dX.toInt(),
+                          itemView.top,
+                          itemView.right,
+                          itemView.bottom
+                      )
+                  } else {
+                      background.setBounds(0, 0, 0, 0)
+                  }
+
+                  background.draw(c)
+              }
+
+            override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+                return 3f
+            }
+        }
 }

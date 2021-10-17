@@ -172,18 +172,14 @@ class SharedKeeperViewModel @Inject constructor(
             PasswordDTO("Aliexpress", "test", "user", System.currentTimeMillis(),0),
         )
 
-        viewModelScope.launch() {
-            withContext(Dispatchers.IO) {
-                for (password in passwordList) {
-                    passwordDb.passwordDao.insertPassword(password)
+        viewModelScope.launch {
+            if(passwordDb.passwordDao.getAllPasswords().isEmpty()) {
+                withContext(Dispatchers.IO) {
+                    for (password in passwordList) {
+                        passwordDb.passwordDao.insertPassword(password)
+                    }
                 }
             }
-           /* val savedPasswords = passwordDb.passwordDao.getAllPasswords()
-
-            val passwords = savedPasswords.map {
-                Password(it.website, it.username, it.encryptedPassword, it.passwordLastModificationDate, it.id)
-            }
-            _passwordList.postValue(passwords)*/
         }
     }
 
