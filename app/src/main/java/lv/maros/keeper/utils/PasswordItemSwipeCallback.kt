@@ -7,10 +7,9 @@ import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.ListAdapter
 import lv.maros.keeper.R
-import lv.maros.keeper.views.PasswordListAdapter
 
 
 class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int = 0) :
@@ -18,7 +17,7 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
 
     private val background = ColorDrawable(Color.BLUE)
 
-    private val icon: Drawable =
+    private val deleteIcon: Drawable =
         ContextCompat.getDrawable(context, R.drawable.ic_delete_black_48dp)!!
 
 
@@ -47,19 +46,39 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
             isCurrentlyActive
         )
 
-        val itemView = viewHolder.itemView
+        drawIcon(viewHolder.itemView, dX, c)
 
-        val iconMargin = (itemView.height - icon.intrinsicHeight) / 2
-        val iconTop = itemView.top + (itemView.height - icon.intrinsicHeight) / 2
-        val iconBottom = iconTop + icon.intrinsicHeight
+    }
+
+    private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
+
+        val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
+        val iconTop = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
+        val iconBottom = iconTop + deleteIcon.intrinsicHeight
 
         when {
             dX > 0 -> { //swipe right
 
-                val iconLeft = itemView.left + iconMargin + icon.intrinsicWidth
+                val iconLeft = itemView.left + iconMargin + deleteIcon.intrinsicWidth
                 val iconRight = itemView.left + iconMargin
-                icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            }
+            dX < 0 -> {
+                val iconLeft = itemView.right - iconMargin - deleteIcon.intrinsicWidth
+                val iconRight = itemView.right - iconMargin
+                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)//swipe left
+            }
+            else -> {
+                deleteIcon.setBounds(0, 0, 0, 0)
+            }
+        }
 
+        deleteIcon.draw(c)
+    }
+
+    private fun drawBackground(itemView: View, dX: Float, c: Canvas) {
+        when {
+            dX > 0 -> { //swipe right
                 background.setBounds(
                     itemView.left,
                     itemView.top,
@@ -68,10 +87,6 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
                 )
             }
             dX < 0 -> {
-                val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
-                val iconRight = itemView.right - iconMargin
-                icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)//swipe left
-
                 background.setBounds(
                     itemView.right + dX.toInt(),
                     itemView.top,
@@ -84,9 +99,9 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
             }
         }
 
-        //background.draw(c)
-        icon.draw(c)
+        background.draw(c)
     }
+
 
     override fun onMove(
         recyclerView: RecyclerView,
