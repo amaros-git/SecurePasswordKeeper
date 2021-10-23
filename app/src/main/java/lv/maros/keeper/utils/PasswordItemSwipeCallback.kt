@@ -19,7 +19,7 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
     private val background = ColorDrawable(Color.BLUE)
 
     private val icon: Drawable =
-        ContextCompat.getDrawable(context, R.drawable.baseline_settings_20)!!
+        ContextCompat.getDrawable(context, R.drawable.ic_delete_black_48dp)!!
 
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
