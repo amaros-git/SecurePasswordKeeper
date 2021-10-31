@@ -7,9 +7,12 @@ import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.drawable.Drawable
+import android.view.MotionEvent
+
 import android.view.View
 import androidx.core.content.ContextCompat
 import lv.maros.keeper.R
+import timber.log.Timber
 
 
 class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int = 0) :
@@ -20,11 +23,36 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
     private val deleteIcon: Drawable =
         ContextCompat.getDrawable(context, R.drawable.ic_delete_black_48dp)!!
 
+    private val marginMedium = context.resources.getDimension(R.dimen.margin_medium).toInt()
 
+    private val swipeDxLimit = 6 //TODO should depend on screen size
+
+    init {
+        Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
+
+    }
+
+    /**
+     * this method is called when swipe is finished. I use it to
+     * bind
+     */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
         val position = viewHolder.adapterPosition
-        //val password = passwordListAdapter.getItem(position)
-        //Timber.d("performed swipe on $password")
+        val itemView = viewHolder.itemView
+        Timber.d("performed swipe on $position")
+        
+        itemView.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    Timber.d("down")
+                }
+                MotionEvent.ACTION_UP -> {
+                    Timber.d("Click")
+                    v.performClick()
+                }
+            }
+            false
+        }
     }
 
     override fun onChildDraw(
@@ -40,7 +68,7 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
             c,
             recyclerView,
             viewHolder,
-            dX / 5,
+            dX / swipeDxLimit,
             dY,
             actionState,
             isCurrentlyActive
@@ -58,15 +86,14 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
 
         when {
             dX > 0 -> { //swipe right
-
-                val iconLeft = itemView.left + iconMargin + deleteIcon.intrinsicWidth
+                /*val iconLeft = itemView.left + iconMargin + deleteIcon.intrinsicWidth
                 val iconRight = itemView.left + iconMargin
-                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)*/
             }
             dX < 0 -> {
-                val iconLeft = itemView.right - iconMargin - deleteIcon.intrinsicWidth
-                val iconRight = itemView.right - iconMargin
-                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)//swipe left
+                val iconLeft = itemView.right - deleteIcon.intrinsicWidth - marginMedium
+                val iconRight = itemView.right - marginMedium
+                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
             }
             else -> {
                 deleteIcon.setBounds(0, 0, 0, 0)
