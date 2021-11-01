@@ -12,6 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import lv.maros.keeper.R
+import lv.maros.keeper.views.PasswordViewHolder
 import timber.log.Timber
 
 
@@ -39,20 +40,12 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
         val position = viewHolder.adapterPosition
         val itemView = viewHolder.itemView
-        Timber.d("performed swipe on $position")
-        
-        itemView.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    Timber.d("down")
-                }
-                MotionEvent.ACTION_UP -> {
-                    Timber.d("Click")
-                    v.performClick()
-                }
-            }
-            false
-        }
+        //Timber.d("performed swipe on $position")
+
+
+        /*(viewHolder as PasswordViewHolder).container.setOnClickListener {
+            Timber.d("Click")
+        }*/
     }
 
     override fun onChildDraw(

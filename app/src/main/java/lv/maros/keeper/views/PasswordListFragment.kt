@@ -26,6 +26,8 @@ import lv.maros.keeper.utils.*
 import timber.log.Timber
 
 import android.graphics.drawable.ColorDrawable
+import android.widget.SimpleAdapter
+import android.widget.Toast
 import lv.maros.keeper.R
 
 
@@ -132,7 +134,7 @@ class PasswordListFragment : Fragment() {
                 })
         )*/
 
-
+       /*
         ItemTouchHelper(
             PasswordItemSwipeCallback(
                 requireContext(),
@@ -140,7 +142,28 @@ class PasswordListFragment : Fragment() {
             )
         ).attachToRecyclerView(
             binding.passwordList
-        )
+        )*/
+
+       /* ItemTouchHelper(swipeCallback).attachToRecyclerView(
+            binding.passwordList
+        )*/
+
+
+        val swipeCallback: SwipeHelper = object : SwipeHelper(requireContext(), binding.passwordList) {
+            override fun instantiateUnderlayButton(
+                viewHolder: RecyclerView.ViewHolder?,
+                underlayButtons: MutableList<UnderlayButton>?
+            ) {
+                underlayButtons?.add(SwipeHelper.UnderlayButton(
+                    "Test",
+                    0,
+                    Color.GREEN
+                ) { Toast.makeText(requireContext(), "Click", Toast.LENGTH_SHORT).show() })
+            }
+        }
+
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(
+            binding.passwordList)
     }
 
 }

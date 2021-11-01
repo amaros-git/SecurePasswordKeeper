@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,8 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 
 class PasswordViewHolder(private val binding: PasswordItemBinding) :
     RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
+
+    val container: ConstraintLayout = binding.passwordItemLayout //TODO must not depend on ConstrainLayout. Use custom view for password
 
     init {
         binding.root.setOnLongClickListener(this)
