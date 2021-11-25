@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.drawable.Drawable
+import android.view.GestureDetector
 import android.view.MotionEvent
 
 import android.view.View
@@ -26,23 +27,32 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
 
     private val marginMedium = context.resources.getDimension(R.dimen.margin_medium).toInt()
 
-    private val swipeDxLimit = 6 //TODO should depend on screen size
+    private var swipeThreshold = 0.5f
 
     init {
         Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
 
     }
 
+    private val gestureDetector: GestureDetector.SimpleOnGestureListener  =
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+                Timber.d("onSingleTapConfirmed")
+                return true;
+            }
+        }
+
     /**
      * this method is called when swipe is finished. I use it to
      * bind
      */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+        Timber.d("onSwiped")
+
         val position = viewHolder.adapterPosition
         val itemView = viewHolder.itemView
-        //Timber.d("performed swipe on $position")
 
-
+        //swipeThreshold = 0.5f * buttons.size * SwipeHelper.BUTTON_WIDTH
         /*(viewHolder as PasswordViewHolder).container.setOnClickListener {
             Timber.d("Click")
         }*/
@@ -61,7 +71,7 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
             c,
             recyclerView,
             viewHolder,
-            dX / swipeDxLimit,
+            dX / 6,
             dY,
             actionState,
             isCurrentlyActive
@@ -70,6 +80,8 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
         drawIcon(viewHolder.itemView, dX, c)
 
     }
+
+    private fun drawImageView()
 
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
 
