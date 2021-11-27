@@ -134,22 +134,22 @@ class PasswordListFragment : Fragment() {
                 })
         )*/
 
-       /*
         ItemTouchHelper(
             PasswordItemSwipeCallback(
                 requireContext(),
-                ItemTouchHelper.LEFT
+                ItemTouchHelper.LEFT,
+                binding.passwordList
             )
         ).attachToRecyclerView(
             binding.passwordList
-        )*/
-
-       /* ItemTouchHelper(swipeCallback).attachToRecyclerView(
+        )
+/*
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(
             binding.passwordList
         )*/
 
 
-        val swipeCallback: SwipeHelper = object : SwipeHelper(requireContext(), binding.passwordList) {
+        /*val swipeCallback: SwipeHelper = object : SwipeHelper(requireContext(), binding.passwordList) {
             override fun instantiateUnderlayButton(
                 viewHolder: RecyclerView.ViewHolder?,
                 underlayButtons: MutableList<UnderlayButton>?
@@ -163,7 +163,7 @@ class PasswordListFragment : Fragment() {
         }
 
         ItemTouchHelper(swipeCallback).attachToRecyclerView(
-            binding.passwordList)
+            binding.passwordList)*/
     }
 
 }

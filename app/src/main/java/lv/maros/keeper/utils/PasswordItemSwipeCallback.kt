@@ -1,8 +1,7 @@
 package lv.maros.keeper.utils
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +16,15 @@ import lv.maros.keeper.views.PasswordViewHolder
 import timber.log.Timber
 
 
-class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int = 0) :
-    ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+class PasswordItemSwipeCallback(
+    private val context: Context,
+    private val swipeDirs: Int,
+    private val recyclerView: RecyclerView,
+    private val dragDirs: Int = 0) :
+    ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs
+) {
+
+    private val gestureDetector: GestureDetector
 
     private val background = ColorDrawable(Color.BLUE)
 
@@ -27,30 +33,82 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
 
     private val marginMedium = context.resources.getDimension(R.dimen.margin_medium).toInt()
 
-    private var swipeThreshold = 0.5f
+    private var swipeThreshold = 0.2f
 
-    init {
-        Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
+    private var swipedPos = -1
 
-    }
+    private var clickRegion: RectF? = null
 
-    private val gestureDetector: GestureDetector.SimpleOnGestureListener  =
+    private val dXDivider = 6
+
+    private val gestureListener: GestureDetector.SimpleOnGestureListener  =
         object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-                Timber.d("onSingleTapConfirmed")
-                return true;
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                clickRegion?.let {
+                    if (it.contains(e.x, e.y)) {
+                        Timber.d("onSingleTapConfirmed")
+                        return true;
+                    }
+                }
+
+                return false
             }
         }
 
-    /**
-     * this method is called when swipe is finished. I use it to
-     * bind
-     */
+    private val onTouchListener:View.OnTouchListener =
+        View.OnTouchListener { v, e ->
+            processOnTouch(v, e)
+        }
+
+
+
+    init {
+        Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
+        gestureDetector = GestureDetector(context, gestureListener)
+        recyclerView.setOnTouchListener(onTouchListener)
+
+    }
+
+
+    private fun processOnTouch(view: View, e: MotionEvent): Boolean {
+        if (swipedPos >= 0) {
+            val point = Point(e.rawX.toInt(), e.rawY.toInt())
+
+            val swipedViewHolder = recyclerView.findViewHolderForAdapterPosition(swipedPos)
+
+            swipedViewHolder?.let {
+                val swipedItem = swipedViewHolder.itemView
+
+                val rect = Rect()
+                swipedItem.getGlobalVisibleRect(rect)
+
+                return if (e.action == MotionEvent.ACTION_DOWN ||
+                    e.action == MotionEvent.ACTION_UP ||
+                    e.action == MotionEvent.ACTION_MOVE
+                ) {
+                    if (rect.top < point.y && rect.bottom > point.y) {
+                        gestureDetector.onTouchEvent(e)
+                    } else {
+                        false
+                    }
+
+                } else {
+                    false
+                }
+            }
+        }
+
+        return false
+    }
+
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
         Timber.d("onSwiped")
 
-        val position = viewHolder.adapterPosition
+        swipedPos = viewHolder.adapterPosition
+/*
         val itemView = viewHolder.itemView
+
+        swipeThreshold = 0.5f * 10 * SwipeHelper.BUTTON_WIDTH*/
 
         //swipeThreshold = 0.5f * buttons.size * SwipeHelper.BUTTON_WIDTH
         /*(viewHolder as PasswordViewHolder).container.setOnClickListener {
@@ -71,7 +129,7 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
             c,
             recyclerView,
             viewHolder,
-            dX / 6,
+            dX / dXDivider,
             dY,
             actionState,
             isCurrentlyActive
@@ -81,7 +139,19 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
 
     }
 
-    private fun drawImageView()
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        return swipeThreshold
+    }
+
+    override fun getSwipeEscapeVelocity(defaultValue: Float): Float {
+        return 0.5f * defaultValue
+    }
+
+    override fun getSwipeVelocityThreshold(defaultValue: Float): Float {
+        return 5.0f * defaultValue
+    }
+
+    //private fun drawImageView()
 
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
 
@@ -98,7 +168,15 @@ class PasswordItemSwipeCallback(context: Context, swipeDirs: Int, dragDirs: Int 
             dX < 0 -> {
                 val iconLeft = itemView.right - deleteIcon.intrinsicWidth - marginMedium
                 val iconRight = itemView.right - marginMedium
+
                 deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+
+                clickRegion = RectF(
+                    iconLeft.toFloat(),
+                    iconTop.toFloat(),
+                    iconRight.toFloat(),
+                    iconBottom.toFloat()
+                )
             }
             else -> {
                 deleteIcon.setBounds(0, 0, 0, 0)
