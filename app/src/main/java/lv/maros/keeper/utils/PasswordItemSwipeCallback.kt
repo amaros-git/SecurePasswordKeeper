@@ -1,5 +1,6 @@
 package lv.maros.keeper.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
@@ -12,9 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import lv.maros.keeper.R
-import lv.maros.keeper.views.PasswordViewHolder
 import timber.log.Timber
-
 
 class PasswordItemSwipeCallback(
     private val context: Context,
@@ -24,12 +23,15 @@ class PasswordItemSwipeCallback(
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs
 ) {
 
-    private val gestureDetector: GestureDetector
+    private lateinit var gestureDetector: GestureDetector
 
     private val background = ColorDrawable(Color.BLUE)
 
     private val deleteIcon: Drawable =
-        ContextCompat.getDrawable(context, R.drawable.ic_delete_black_48dp)!!
+        ContextCompat.getDrawable(context, R.drawable.baseline_delete_black_48)!!
+
+    private val editIcon: Drawable =
+        ContextCompat.getDrawable(context, R.drawable.baseline_edit_black_48)!!
 
     private val marginMedium = context.resources.getDimension(R.dimen.margin_medium).toInt()
 
@@ -57,16 +59,21 @@ class PasswordItemSwipeCallback(
 
     private val onTouchListener:View.OnTouchListener =
         View.OnTouchListener { v, e ->
+            v.performClick()
             processOnTouch(v, e)
         }
 
 
 
     init {
-        Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
+        configureSwipeCallback()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun configureSwipeCallback() {
+        //Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
         gestureDetector = GestureDetector(context, gestureListener)
         recyclerView.setOnTouchListener(onTouchListener)
-
     }
 
 
@@ -156,26 +163,37 @@ class PasswordItemSwipeCallback(
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
 
         val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
-        val iconTop = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
-        val iconBottom = iconTop + deleteIcon.intrinsicHeight
+
 
         when {
             dX > 0 -> { //swipe right
-                /*val iconLeft = itemView.left + iconMargin + deleteIcon.intrinsicWidth
-                val iconRight = itemView.left + iconMargin
-                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)*/
-            }
-            dX < 0 -> {
-                val iconLeft = itemView.right - deleteIcon.intrinsicWidth - marginMedium
-                val iconRight = itemView.right - marginMedium
+                val editIconRight = itemView.left + editIcon.intrinsicWidth + marginMedium
+                val editIconLeft = itemView.left + marginMedium
+                val editIconTop = itemView.top + (itemView.height - editIcon.intrinsicHeight) / 2
+                val editIconBottom = editIconTop + editIcon.intrinsicHeight
 
-                deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                editIcon.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom)
 
                 clickRegion = RectF(
-                    iconLeft.toFloat(),
-                    iconTop.toFloat(),
-                    iconRight.toFloat(),
-                    iconBottom.toFloat()
+                    editIconLeft.toFloat(),
+                    editIconTop.toFloat(),
+                    editIconRight.toFloat(),
+                    editIconBottom.toFloat()
+                )
+            }
+            dX < 0 -> { //swipe left
+                val deleteIconLeft = itemView.right - deleteIcon.intrinsicWidth - marginMedium
+                val deleteIconRight = itemView.right - marginMedium
+                val deleteIconTop = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
+                val deleteIconBottom = deleteIconTop + deleteIcon.intrinsicHeight
+
+                deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
+
+                clickRegion = RectF(
+                    deleteIconLeft.toFloat(),
+                    deleteIconTop.toFloat(),
+                    deleteIconRight.toFloat(),
+                    deleteIconBottom.toFloat()
                 )
             }
             else -> {
@@ -184,6 +202,7 @@ class PasswordItemSwipeCallback(
         }
 
         deleteIcon.draw(c)
+        editIcon.draw(c)
     }
 
     private fun drawBackground(itemView: View, dX: Float, c: Canvas) {

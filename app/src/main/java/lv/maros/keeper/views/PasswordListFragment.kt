@@ -137,7 +137,7 @@ class PasswordListFragment : Fragment() {
         ItemTouchHelper(
             PasswordItemSwipeCallback(
                 requireContext(),
-                ItemTouchHelper.LEFT,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
                 binding.passwordList
             )
         ).attachToRecyclerView(
