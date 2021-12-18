@@ -18,13 +18,17 @@ import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
 import timber.log.Timber
+import java.sql.Time
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class AddPasswordFragment : Fragment() {
+class AddEditPasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentAddPasswordBinding
 
     private val viewModel: SharedKeeperViewModel by activityViewModels()
+
+    private var currentMode = MODE_ADD_PASSWORD //default mode
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +40,23 @@ class AddPasswordFragment : Fragment() {
             it.viewModel = viewModel
         }
 
-        setTitle(getString(R.string.add_new_password))
-        setDisplayHomeAsUpEnabled(true)
+        configureThisFragment()
 
         setupViews()
 
         return binding.root
+    }
+
+    private fun configureThisFragment() {
+        setTitle(getString(R.string.add_new_password))
+        setDisplayHomeAsUpEnabled(true)
+
+        arguments?.getInt(getString(R.string.password_add_edit_fragment_mode))
+            ?.let { receivedMode ->
+                currentMode = receivedMode
+            }
+
+        Timber.d ("Starting fragment with mode $currentMode")
     }
 
     private fun setupViews() {
@@ -83,7 +98,7 @@ class AddPasswordFragment : Fragment() {
     }
 
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
-        val(website, username, password, repeatPassword) = passwordData
+        val (website, username, password, repeatPassword) = passwordData
         // 1. Check both password
         val passwordResult = KeeperPasswordManager.verifyPassword(password)
         if (passwordResult is KeeperResult.Error) {
@@ -121,5 +136,9 @@ class AddPasswordFragment : Fragment() {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
+    companion object {
+        const val MODE_ADD_PASSWORD = 0
+        const val MODE_EDIT_PASSWORD = 1
+    }
 
 }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,6 +16,7 @@ import lv.maros.keeper.utils.*
 import timber.log.Timber
 
 import lv.maros.keeper.R
+import lv.maros.keeper.helpers.geasture.PasswordClickListener
 import lv.maros.keeper.helpers.geasture.PasswordItemSwipeCallback
 
 
@@ -121,11 +123,22 @@ class PasswordListFragment : Fragment() {
                 })
         )*/
 
+        val passwordClickListener: PasswordClickListener = object : PasswordClickListener {
+            override fun onDeleteClick() {
+                Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onEditClick() {
+                Toast.makeText(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
         ItemTouchHelper(
             PasswordItemSwipeCallback(
                 requireContext(),
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
-                binding.passwordList
+                binding.passwordList,
+                passwordClickListener
             )
         ).attachToRecyclerView(
             binding.passwordList
