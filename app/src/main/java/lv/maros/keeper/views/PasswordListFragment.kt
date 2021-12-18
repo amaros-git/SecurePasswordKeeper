@@ -1,34 +1,21 @@
 package lv.maros.keeper.views
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentPasswordListBinding
-import lv.maros.keeper.databinding.PasswordItemBinding
 import lv.maros.keeper.utils.*
 import timber.log.Timber
 
-import android.graphics.drawable.ColorDrawable
-import android.widget.SimpleAdapter
-import android.widget.Toast
 import lv.maros.keeper.R
+import lv.maros.keeper.helpers.geasture.PasswordItemSwipeCallback
 
 
 @AndroidEntryPoint

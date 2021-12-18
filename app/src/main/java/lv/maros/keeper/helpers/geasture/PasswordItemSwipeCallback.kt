@@ -1,4 +1,4 @@
-package lv.maros.keeper.utils
+package lv.maros.keeper.helpers.geasture
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -35,7 +35,7 @@ class PasswordItemSwipeCallback(
 
     private val marginMedium = context.resources.getDimension(R.dimen.margin_medium).toInt()
 
-    private var swipeThreshold = 0.2f
+    private var swipeThreshold = SWIPE_IN_THRESHOLD //TODO change swiping left or right
 
     private var swipedPos = -1
 
@@ -71,7 +71,6 @@ class PasswordItemSwipeCallback(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun configureSwipeCallback() {
-        //Timber.d("intrinsicHeight = ${deleteIcon.intrinsicHeight}, intrinsicWidth = ${deleteIcon.intrinsicWidth} ")
         gestureDetector = GestureDetector(context, gestureListener)
         recyclerView.setOnTouchListener(onTouchListener)
     }
@@ -81,10 +80,8 @@ class PasswordItemSwipeCallback(
         if (swipedPos >= 0) {
             val point = Point(e.rawX.toInt(), e.rawY.toInt())
 
-            val swipedViewHolder = recyclerView.findViewHolderForAdapterPosition(swipedPos)
-
-            swipedViewHolder?.let {
-                val swipedItem = swipedViewHolder.itemView
+            recyclerView.findViewHolderForAdapterPosition(swipedPos)?.let { viewHolder ->
+                val swipedItem = viewHolder.itemView
 
                 val rect = Rect()
                 swipedItem.getGlobalVisibleRect(rect)
@@ -98,17 +95,20 @@ class PasswordItemSwipeCallback(
                     } else {
                         false
                     }
-
                 } else {
                     false
                 }
             }
         }
 
+        swipedPos = -1
+
         return false
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+        swipeThreshold = SWIPE_OUT_THRESHOLD
+
         Timber.d("onSwiped")
 
         swipedPos = viewHolder.adapterPosition
@@ -161,10 +161,6 @@ class PasswordItemSwipeCallback(
     //private fun drawImageView()
 
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
-
-        val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
-
-
         when {
             dX > 0 -> { //swipe right
                 val editIconRight = itemView.left + editIcon.intrinsicWidth + marginMedium
@@ -196,41 +192,12 @@ class PasswordItemSwipeCallback(
                     deleteIconBottom.toFloat()
                 )
             }
-            else -> {
-                deleteIcon.setBounds(0, 0, 0, 0)
-            }
         }
 
         deleteIcon.draw(c)
         editIcon.draw(c)
+
     }
-
-    private fun drawBackground(itemView: View, dX: Float, c: Canvas) {
-        when {
-            dX > 0 -> { //swipe right
-                background.setBounds(
-                    itemView.left,
-                    itemView.top,
-                    itemView.left + dX.toInt(),
-                    itemView.bottom
-                )
-            }
-            dX < 0 -> {
-                background.setBounds(
-                    itemView.right + dX.toInt(),
-                    itemView.top,
-                    itemView.right,
-                    itemView.bottom
-                )
-            }
-            else -> {
-                background.setBounds(0, 0, 0, 0)
-            }
-        }
-
-        background.draw(c)
-    }
-
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -240,4 +207,14 @@ class PasswordItemSwipeCallback(
         return false
     }
 
+
+    companion object {
+        private const val SWIPE_IN_THRESHOLD = 0.2f
+        private const val SWIPE_OUT_THRESHOLD = 0.8f
+    }
+
+}
+
+interface UnderlayButtonClickListener {
+    fun onClick(pos: Int)
 }

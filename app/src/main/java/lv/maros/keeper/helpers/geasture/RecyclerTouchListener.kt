@@ -1,10 +1,10 @@
-package lv.maros.keeper.utils
+package lv.maros.keeper.helpers.geasture
 
-import android.app.Application
 import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
+import lv.maros.keeper.utils.ClickListener
 
 
 class RecyclerTouchListener(

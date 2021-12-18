@@ -1,4 +1,4 @@
-package lv.maros.keeper.utils;
+package lv.maros.keeper.helpers.geasture;
 
 import android.content.Context;
 import android.graphics.Canvas;
