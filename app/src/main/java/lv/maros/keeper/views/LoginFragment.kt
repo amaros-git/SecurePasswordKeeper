@@ -127,4 +127,5 @@ class LoginFragment : Fragment() {
     private fun createSessionUser(): KeeperUser {
         return KeeperUser(System.currentTimeMillis())
     }
+
 }

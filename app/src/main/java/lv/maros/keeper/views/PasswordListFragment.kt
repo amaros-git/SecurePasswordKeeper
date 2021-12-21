@@ -18,6 +18,7 @@ import timber.log.Timber
 import lv.maros.keeper.R
 import lv.maros.keeper.helpers.geasture.PasswordClickListener
 import lv.maros.keeper.helpers.geasture.PasswordItemSwipeCallback
+import lv.maros.keeper.models.Password
 
 
 @AndroidEntryPoint
@@ -38,14 +39,11 @@ class PasswordListFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-
         setTitle(getString(R.string.app_name))
         setDisplayHomeAsUpEnabled(false)
 
-        configurePasswordListView()
-
+        configurePasswordRecyclerView()
         setupViews()
-
         setupBottomNavigation()
 
         return binding.root
@@ -77,12 +75,32 @@ class PasswordListFragment : Fragment() {
 
     }
 
+    private fun navigateToAddEditFragment(mode: Int, password: Password?) {
+        when (mode) {
+            PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
+
+            }
+
+            PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
+
+            }
+
+            else -> {
+                Timber.e("Wrong mode provided for AddEditFragment")
+            }
+        }
+
+        val action =
+            PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                PasswordAddEditFragment.MODE_ADD_PASSWORD
+            )
+
+        findNavController().navigate(action)
+    }
 
     private fun setupViews() {
         binding.addPassword.setOnClickListener {
-            findNavController().navigate(
-                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment()
-            )
+
         }
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
@@ -96,43 +114,20 @@ class PasswordListFragment : Fragment() {
         }
     }
 
-    private fun configurePasswordListView() {
-        passwordListAdapter = PasswordListAdapter()
-        binding.passwordList.setup(passwordListAdapter)
-
-        /*binding.passwordList.addOnItemTouchListener(
-            RecyclerTouchListener(
-                requireContext(),
-                binding.passwordList,
-                object : ClickListener {
-
-                    override fun onClick(view: View, position: Int) {
-                        Timber.d("OnClick")
-                    }
-
-                    override fun onLongClick(view: View, position: Int) {
-                        //TODO I shall create custom layout for Password Item
-                        Timber.d("OnLongClick")
-                        *//*if (view is CardView) {
-                            view.findViewById<CheckBox>(R.id.itemSelectBox).apply {
-                                visibility = View.VISIBLE
-                            }
-
-                        }*//*
-                    }
-                })
-        )*/
-
-        val passwordClickListener: PasswordClickListener = object : PasswordClickListener {
-            override fun onDeleteClick() {
-                Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onEditClick() {
-                Toast.makeText(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
-            }
-
+    private val passwordClickListener: PasswordClickListener = object : PasswordClickListener {
+        override fun onDeleteClick() {
+            Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
         }
+
+        override fun onEditClick() {
+            Toast.makeText(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun configurePasswordRecyclerView() {
+        passwordListAdapter = PasswordListAdapter()
+
+        binding.passwordList.setup(passwordListAdapter)
 
         ItemTouchHelper(
             PasswordItemSwipeCallback(
@@ -143,27 +138,6 @@ class PasswordListFragment : Fragment() {
         ).attachToRecyclerView(
             binding.passwordList
         )
-/*
-        ItemTouchHelper(swipeCallback).attachToRecyclerView(
-            binding.passwordList
-        )*/
-
-
-        /*val swipeCallback: SwipeHelper = object : SwipeHelper(requireContext(), binding.passwordList) {
-            override fun instantiateUnderlayButton(
-                viewHolder: RecyclerView.ViewHolder?,
-                underlayButtons: MutableList<UnderlayButton>?
-            ) {
-                underlayButtons?.add(SwipeHelper.UnderlayButton(
-                    "Test",
-                    0,
-                    Color.GREEN
-                ) { Toast.makeText(requireContext(), "Click", Toast.LENGTH_SHORT).show() })
-            }
-        }
-
-        ItemTouchHelper(swipeCallback).attachToRecyclerView(
-            binding.passwordList)*/
     }
 
 }

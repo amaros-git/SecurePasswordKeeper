@@ -22,7 +22,7 @@ import java.sql.Time
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class AddEditPasswordFragment : Fragment() {
+class PasswordAddEditFragment : Fragment() {
 
     private lateinit var binding: FragmentAddPasswordBinding
 
