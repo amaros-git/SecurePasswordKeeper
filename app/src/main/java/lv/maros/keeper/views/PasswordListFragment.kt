@@ -75,32 +75,34 @@ class PasswordListFragment : Fragment() {
 
     }
 
-    private fun navigateToAddEditFragment(mode: Int, password: Password?) {
-        when (mode) {
+    private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
+        val action = when (mode) {
             PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
-
+                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                    mode
+                )
             }
-
             PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
-
+                Timber.d("Here")
+                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(1)
             }
-
             else -> {
                 Timber.e("Wrong mode provided for AddEditFragment")
+                null
             }
         }
 
-        val action =
-            PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
-                PasswordAddEditFragment.MODE_ADD_PASSWORD
-            )
+        if (null != action) {
+            findNavController().navigate(action)
+        } else {
+            //TODO
+        }
 
-        findNavController().navigate(action)
     }
 
     private fun setupViews() {
         binding.addPassword.setOnClickListener {
-
+            navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
         }
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
@@ -120,7 +122,7 @@ class PasswordListFragment : Fragment() {
         }
 
         override fun onEditClick() {
-            Toast.makeText(requireContext(), "EDIT", Toast.LENGTH_SHORT).show()
+            navigateToAddEditFragment(PasswordAddEditFragment.MODE_EDIT_PASSWORD)
         }
     }
 

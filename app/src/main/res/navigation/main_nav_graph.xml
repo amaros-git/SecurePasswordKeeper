@@ -24,16 +24,20 @@
         tools:layout="@layout/fragment_password_list">
         <action
             android:id="@+id/action_passwordListFragment_to_addPasswordFragment"
-            app:destination="@id/addPasswordFragment">
+            app:destination="@id/passwordAddEditFragment">
             <argument
-                android:name="@string/password_add_edit_fragment_mode"
+                android:name="mode"
                 app:argType="integer"
                 android:defaultValue="0" />
+            <argument
+                android:name="@string/password_add_edit_fragment_password_id"
+                app:argType="integer"
+                android:defaultValue="-1" />
         </action>
     </fragment>
 
     <fragment
-        android:id="@+id/addPasswordFragment"
+        android:id="@+id/passwordAddEditFragment"
         android:name="lv.maros.keeper.views.PasswordAddEditFragment"
         android:label="AddPasswordFragment">
         <action

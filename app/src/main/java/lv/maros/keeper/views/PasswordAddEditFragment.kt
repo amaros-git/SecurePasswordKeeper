@@ -28,17 +28,16 @@ class PasswordAddEditFragment : Fragment() {
 
     private val viewModel: SharedKeeperViewModel by activityViewModels()
 
-    private var currentMode = MODE_ADD_PASSWORD //default mode
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentAddPasswordBinding.inflate(inflater).also {
-            it.lifecycleOwner = this.viewLifecycleOwner
-            it.viewModel = viewModel
-        }
+        binding = FragmentAddPasswordBinding.inflate(inflater)
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.viewModel = viewModel
+
+
 
         configureThisFragment()
 
@@ -47,16 +46,17 @@ class PasswordAddEditFragment : Fragment() {
         return binding.root
     }
 
-    private fun configureThisFragment() {
-        setTitle(getString(R.string.add_new_password))
-        setDisplayHomeAsUpEnabled(true)
-
-        arguments?.getInt(getString(R.string.password_add_edit_fragment_mode))
+    private fun getMode(): Int {
+        arguments?.getInt("mode")
             ?.let { receivedMode ->
                 currentMode = receivedMode
+                Timber.d("receivedMode = $receivedMode, Starting fragment with mode $currentMode")
             }
+    }
 
-        Timber.d ("Starting fragment with mode $currentMode")
+    private fun configureThisFragment(mode: Int) {
+        setTitle(getString(R.string.add_new_password))
+        setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setupViews() {
@@ -90,7 +90,6 @@ class PasswordAddEditFragment : Fragment() {
         val childCount = passwordLayout.childCount
         for (i in 0..childCount) {
             val view = passwordLayout.getChildAt(i)
-
             if (view is TextInputLayout) {
                 view.error = null
             }

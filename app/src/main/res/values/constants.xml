@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="password_add_edit_fragment_mode">mode</string>
+    <string name="password_add_edit_fragment_password_id">passwordId</string>
 </resources>
