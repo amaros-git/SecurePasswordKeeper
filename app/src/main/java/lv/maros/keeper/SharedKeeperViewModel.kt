@@ -1,7 +1,6 @@
 package lv.maros.keeper
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.data.local.PasswordDatabase
 import lv.maros.keeper.data.dto.PasswordDTO
@@ -19,7 +19,6 @@ import lv.maros.keeper.security.KeeperCryptor
 import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.SingleLiveEvent
 import timber.log.Timber
-import javax.crypto.Cipher
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,7 +42,6 @@ class SharedKeeperViewModel @Inject constructor(
         TEST_saveSomePasswords()
     }
 
-
     fun ByteArray.toHexString(): String {
         val stringBuf = StringBuffer()
         this.forEach {
@@ -64,8 +62,6 @@ class SharedKeeperViewModel @Inject constructor(
         Timber.d(stringBuf.toString())
 
     }
-
-
 
     fun verifyPasskey(passkey: String): Boolean {
         return false
@@ -98,9 +94,6 @@ class SharedKeeperViewModel @Inject constructor(
         }
     }
 
-    /**
-     * return empty string if Encryption Key doesn't exist
-     */
     private fun encryptString(plainText: String): KeeperResult<String> {
         val key = configStorage.getEncryptionKey()
         val iv = configStorage.getEncryptionIV()
@@ -124,15 +117,21 @@ class SharedKeeperViewModel @Inject constructor(
                 })
 
                 _passwordList.value = passwordToShow
-
-                Timber.d("Read from the db:")
-                passwordToShow.forEach {
-                    Timber.d("$it")
-                }
             }
 
             //check if no data image has to be shown
             invalidateShowNoData()
+        }
+    }
+
+    fun getPassword(passwordId: Int): Password? {
+        return runBlocking {
+            val passwordDto = passwordDb.passwordDao.getPassword(passwordId)
+            if (null != passwordDto) {
+                passwordDtoToPassword(passwordDto)
+            } else {
+                null
+            }
         }
     }
 
@@ -153,27 +152,16 @@ class SharedKeeperViewModel @Inject constructor(
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     private fun TEST_saveSomePasswords() {
         val passwordList = listOf(
-            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("Amazone", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("220.lv", "test", "user", System.currentTimeMillis(),0),
-            PasswordDTO("Aliexpress", "test", "user", System.currentTimeMillis(),0),
+            PasswordDTO("www.delfi.lv", "test", "user", System.currentTimeMillis(), 0),
+            PasswordDTO("Amazone", "test", "user", System.currentTimeMillis(), 0),
+            PasswordDTO("220.lv", "test", "user", System.currentTimeMillis(), 0),
+            PasswordDTO("Aliexpress", "test", "user", System.currentTimeMillis(), 0),
         )
 
         viewModelScope.launch {
-            if(passwordDb.passwordDao.getAllPasswords().isEmpty()) {
+            if (passwordDb.passwordDao.getAllPasswords().isEmpty()) {
                 withContext(Dispatchers.IO) {
                     for (password in passwordList) {
                         passwordDb.passwordDao.insertPassword(password)

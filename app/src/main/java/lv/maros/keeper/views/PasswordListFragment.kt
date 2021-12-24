@@ -83,8 +83,10 @@ class PasswordListFragment : Fragment() {
                 )
             }
             PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
-                Timber.d("Here")
-                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(1)
+                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                    mode,
+                    passwordId
+                )
             }
             else -> {
                 Timber.e("Wrong mode provided for AddEditFragment")
@@ -116,12 +118,19 @@ class PasswordListFragment : Fragment() {
         }
     }
 
+    private fun getPasswordId(swipedPos: Int) :Int {
+        val password = passwordListAdapter.getItem(swipedPos)
+        Timber.d("Swiped on ${password.website}")
+        return 0
+    }
+
     private val passwordClickListener: PasswordClickListener = object : PasswordClickListener {
-        override fun onDeleteClick() {
+        override fun onDeleteClick(swipedPos: Int) {
             Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
         }
 
-        override fun onEditClick() {
+        override fun onEditClick(swipedPos: Int) {
+            getPasswordId(swipedPos)
             navigateToAddEditFragment(PasswordAddEditFragment.MODE_EDIT_PASSWORD)
         }
     }

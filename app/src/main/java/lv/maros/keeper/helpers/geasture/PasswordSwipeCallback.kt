@@ -47,17 +47,16 @@ class PasswordItemSwipeCallback(
     private val gestureListener: GestureDetector.SimpleOnGestureListener =
         object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                Timber.d("onSingleTapConfirmed")
                 deleteClickRegion?.let {
                     if (it.contains(e.x, e.y)) {
-                        passwordClickListener.onDeleteClick()
+                        passwordClickListener.onDeleteClick(swipedPos)
                         return true;
                     }
                 }
 
                 editClickRegion?.let {
                     if (it.contains(e.x, e.y)) {
-                        passwordClickListener.onEditClick()
+                        passwordClickListener.onEditClick(swipedPos)
                         return true;
                     }
                 }
@@ -71,7 +70,6 @@ class PasswordItemSwipeCallback(
             v.performClick()
             processOnTouch(v, e)
         }
-
 
     init {
         configureSwipeCallback()
@@ -94,7 +92,8 @@ class PasswordItemSwipeCallback(
                 val rect = Rect()
                 swipedItem.getGlobalVisibleRect(rect)
 
-                return if (e.action == MotionEvent.ACTION_DOWN ||
+                return if (
+                    e.action == MotionEvent.ACTION_DOWN ||
                     e.action == MotionEvent.ACTION_UP ||
                     e.action == MotionEvent.ACTION_MOVE
                 ) {
@@ -164,7 +163,6 @@ class PasswordItemSwipeCallback(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
         swipeThreshold = SWIPE_OUT_THRESHOLD
-
         swipedPos = viewHolder.adapterPosition
     }
 
@@ -220,6 +218,7 @@ class PasswordItemSwipeCallback(
 }
 
 interface PasswordClickListener {
-    fun onDeleteClick()
-    fun onEditClick()
+    fun onDeleteClick(swipedPos: Int)
+
+    fun onEditClick(swipedPos: Int)
 }

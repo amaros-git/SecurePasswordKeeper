@@ -3,7 +3,6 @@ package lv.maros.keeper.security
 import lv.maros.keeper.utils.KeeperResult
 import timber.log.Timber
 import java.security.MessageDigest
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
@@ -13,7 +12,7 @@ import javax.inject.Inject
 /**
  * @throws java.security.NoSuchAlgorithmException if no Provider supports a
  * MessageDigestSpi implementation for the specified algorithm.
- * @throws NoSuchPaddingException if <code>transformation</code>
+ * @throws javax.crypto.NoSuchPaddingException if <code>transformation</code>
  * contains a padding scheme that is not available.
  */
 class KeeperCryptor @Inject constructor() {

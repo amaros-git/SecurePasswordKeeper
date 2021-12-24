@@ -12,14 +12,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentAddPasswordBinding
+import lv.maros.keeper.models.Password
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
-import timber.log.Timber
-import java.sql.Time
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class PasswordAddEditFragment : Fragment() {
@@ -37,9 +35,7 @@ class PasswordAddEditFragment : Fragment() {
         binding.lifecycleOwner = this.viewLifecycleOwner
         binding.viewModel = viewModel
 
-
-
-        configureThisFragment()
+        configureThisFragment(getMode())
 
         setupViews()
 
@@ -47,16 +43,28 @@ class PasswordAddEditFragment : Fragment() {
     }
 
     private fun getMode(): Int {
-        arguments?.getInt("mode")
-            ?.let { receivedMode ->
-                currentMode = receivedMode
-                Timber.d("receivedMode = $receivedMode, Starting fragment with mode $currentMode")
-            }
+        return arguments?.getInt("mode") ?: MODE_UNSUPPORTED
+    }
+
+    //TODO blocking call, show Progress
+    private fun getPassword(passwordId: Int): Password? {
+        return viewModel.getPassword(passwordId)
     }
 
     private fun configureThisFragment(mode: Int) {
-        setTitle(getString(R.string.add_new_password))
         setDisplayHomeAsUpEnabled(true)
+
+        when (getMode()) {
+            MODE_EDIT_PASSWORD -> {
+                setTitle(getString(R.string.edit_password))
+            }
+            MODE_ADD_PASSWORD -> {
+                setTitle(getString(R.string.add_new_password))
+            }
+            else -> {
+                //TODO
+            }
+        }
     }
 
     private fun setupViews() {
@@ -138,6 +146,7 @@ class PasswordAddEditFragment : Fragment() {
     companion object {
         const val MODE_ADD_PASSWORD = 0
         const val MODE_EDIT_PASSWORD = 1
+        const val MODE_UNSUPPORTED = -1
     }
 
 }
