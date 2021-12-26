@@ -24,11 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_big"
             android:text="@string/cancel_button"
-            app:layout_constraintBaseline_toBaselineOf="@+id/save"
+            app:layout_constraintBaseline_toBaselineOf="@+id/apply"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/save"
+            android:id="@+id/apply"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -118,10 +118,10 @@ class PasswordListFragment : Fragment() {
         }
     }
 
-    private fun getPasswordId(swipedPos: Int) :Int {
+    private fun getPasswordId(swipedPos: Int): Int {
         val password = passwordListAdapter.getItem(swipedPos)
-        Timber.d("Swiped on ${password.website}")
-        return 0
+        Timber.d("passwordId = ${password.id}")
+        return password.id
     }
 
     private val passwordClickListener: PasswordClickListener = object : PasswordClickListener {
@@ -130,8 +130,10 @@ class PasswordListFragment : Fragment() {
         }
 
         override fun onEditClick(swipedPos: Int) {
-            getPasswordId(swipedPos)
-            navigateToAddEditFragment(PasswordAddEditFragment.MODE_EDIT_PASSWORD)
+            navigateToAddEditFragment(
+                PasswordAddEditFragment.MODE_EDIT_PASSWORD,
+                getPasswordId(swipedPos)
+            )
         }
     }
 

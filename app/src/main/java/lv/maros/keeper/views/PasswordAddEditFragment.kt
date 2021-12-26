@@ -33,9 +33,10 @@ class PasswordAddEditFragment : Fragment() {
 
         binding = FragmentAddPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
-        binding.viewModel = viewModel
 
-        configureThisFragment(getMode())
+        setDisplayHomeAsUpEnabled(true)
+
+        configureFragmentMode(getMode())
 
         setupViews()
 
@@ -51,9 +52,7 @@ class PasswordAddEditFragment : Fragment() {
         return viewModel.getPassword(passwordId)
     }
 
-    private fun configureThisFragment(mode: Int) {
-        setDisplayHomeAsUpEnabled(true)
-
+    private fun configureFragmentMode(mode: Int) {
         when (getMode()) {
             MODE_EDIT_PASSWORD -> {
                 setTitle(getString(R.string.edit_password))
@@ -67,12 +66,19 @@ class PasswordAddEditFragment : Fragment() {
         }
     }
 
-    private fun setupViews() {
-        binding.save.setOnClickListener {
-            resetAllTextInputLayouts(binding.addPasswordLayout)
+    private fun setupEditMode() {
 
+    }
+
+    private fun setupAddMode() {
+        binding.apply.setOnClickListener {
+            resetAllTextInputLayouts(binding.addPasswordLayout)
             collectVerifyAndSavePassword()
         }
+    }
+
+    private fun setupViews() {
+
 
         binding.cancel.setOnClickListener {
             //TODO
