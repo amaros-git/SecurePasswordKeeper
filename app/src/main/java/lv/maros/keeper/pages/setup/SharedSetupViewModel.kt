@@ -1,4 +1,4 @@
-package lv.maros.keeper.setup
+package lv.maros.keeper.pages.setup
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

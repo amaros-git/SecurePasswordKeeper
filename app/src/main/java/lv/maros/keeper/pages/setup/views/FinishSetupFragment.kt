@@ -1,4 +1,4 @@
-package lv.maros.keeper.setup.views
+package lv.maros.keeper.pages.setup.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import lv.maros.keeper.R
 import lv.maros.keeper.databinding.FragmentFinishSetupBinding
-import lv.maros.keeper.databinding.FragmentSelectAuthMethodBinding
-import lv.maros.keeper.setup.SharedSetupViewModel
+import lv.maros.keeper.pages.setup.SharedSetupViewModel
 
 class FinishSetupFragment : Fragment() {
 
@@ -30,7 +28,7 @@ class FinishSetupFragment : Fragment() {
     }
 
     private fun setupViews() {
-        binding.save.setOnClickListener {
+        binding.finishButton.setOnClickListener {
             viewModel.finishSetup()
         }
     }

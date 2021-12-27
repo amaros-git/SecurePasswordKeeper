@@ -1,4 +1,4 @@
-package lv.maros.keeper.views
+package lv.maros.keeper.pages.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,8 @@ import lv.maros.keeper.R
 import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentLoginBinding
 import lv.maros.keeper.models.KeeperUser
-import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
-import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {

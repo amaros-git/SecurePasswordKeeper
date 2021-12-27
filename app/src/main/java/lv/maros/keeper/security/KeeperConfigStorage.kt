@@ -6,6 +6,8 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.hilt.IoDispatcher
 import lv.maros.keeper.models.KeeperConfig
@@ -18,7 +20,7 @@ import javax.inject.Inject
  */
 class KeeperConfigStorage @Inject constructor(
     @ApplicationContext private val app: Context,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     private val sharedRef: SharedPreferences

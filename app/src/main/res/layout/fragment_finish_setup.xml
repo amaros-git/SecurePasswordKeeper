@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".setup.views.FinishSetupFragment">
+    tools:context=".pages.setup.views.FinishSetupFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,23 +18,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/cancel"
+            android:id="@+id/cancelButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_big"
             android:text="@string/cancel_button"
-            app:layout_constraintBaseline_toBaselineOf="@+id/apply"
+            app:layout_constraintBaseline_toBaselineOf="@+id/finishButton"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/apply"
+            android:id="@+id/finishButton"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_big"
             android:layout_marginBottom="@dimen/margin_big"
-            android:text="@string/save_button"
+            android:text="@string/finish_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,4 +1,4 @@
-package lv.maros.keeper.views
+package lv.maros.keeper.pages.addEdit
 
 import android.os.Bundle
 import android.view.LayoutInflater

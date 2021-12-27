@@ -1,4 +1,4 @@
-package lv.maros.keeper.views
+package lv.maros.keeper.pages.passwords
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,20 +11,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.SharedKeeperViewModel
-import lv.maros.keeper.databinding.FragmentPasswordListBinding
 import lv.maros.keeper.utils.*
 import timber.log.Timber
-
 import lv.maros.keeper.R
+import lv.maros.keeper.databinding.FragmentPasswordsBinding
 import lv.maros.keeper.helpers.geasture.PasswordClickListener
 import lv.maros.keeper.helpers.geasture.PasswordItemSwipeCallback
-import lv.maros.keeper.models.Password
+import lv.maros.keeper.pages.addEdit.PasswordAddEditFragment
 
 
 @AndroidEntryPoint
-class PasswordListFragment : Fragment() {
+class PasswordsFragment : Fragment() {
 
-    private lateinit var binding: FragmentPasswordListBinding
+    private lateinit var binding: FragmentPasswordsBinding
 
     private val viewModel: SharedKeeperViewModel by activityViewModels()
 
@@ -35,7 +34,7 @@ class PasswordListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentPasswordListBinding.inflate(inflater)
+        binding = FragmentPasswordsBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
 
@@ -78,12 +77,12 @@ class PasswordListFragment : Fragment() {
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
             PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
-                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
                     mode
                 )
             }
             PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
-                PasswordListFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
                     mode,
                     passwordId
                 )

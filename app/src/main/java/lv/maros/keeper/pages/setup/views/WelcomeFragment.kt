@@ -1,4 +1,4 @@
-package lv.maros.keeper.setup.views
+package lv.maros.keeper.pages.setup.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

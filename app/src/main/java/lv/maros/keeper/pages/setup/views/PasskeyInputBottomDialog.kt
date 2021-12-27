@@ -1,4 +1,4 @@
-package lv.maros.keeper.setup.views
+package lv.maros.keeper.pages.setup.views
 
 import android.os.Bundle
 import android.text.InputType
@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
 import lv.maros.keeper.databinding.DialogAuthMethodBinding
-import lv.maros.keeper.setup.SharedSetupViewModel
+import lv.maros.keeper.pages.setup.SharedSetupViewModel
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
@@ -46,11 +46,11 @@ class PasskeyInputBottomDialog(
             }
         }
 
-        binding.cancel.setOnClickListener {
+        binding.cancelButton.setOnClickListener {
             this.dismiss()
         }
 
-        binding.save.setOnClickListener {
+        binding.saveButton.setOnClickListener {
             processPasskeys()
         }
     }

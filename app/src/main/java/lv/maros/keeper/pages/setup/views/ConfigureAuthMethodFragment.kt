@@ -1,4 +1,4 @@
-package lv.maros.keeper.setup.views
+package lv.maros.keeper.pages.setup.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.databinding.FragmentSelectAuthMethodBinding
-import lv.maros.keeper.setup.SharedSetupViewModel
+import lv.maros.keeper.pages.setup.SharedSetupViewModel
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
@@ -25,6 +25,7 @@ class ConfigureAuthMethodFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentSelectAuthMethodBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 

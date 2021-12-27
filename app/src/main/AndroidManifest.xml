@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="lv.maros.keeper.setup.KeeperSetupActivity">
+        <activity android:name="lv.maros.keeper.pages.setup.KeeperSetupActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

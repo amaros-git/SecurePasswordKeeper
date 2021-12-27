@@ -1,4 +1,4 @@
-package lv.maros.keeper.setup
+package lv.maros.keeper.pages.setup
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +7,6 @@ import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.MainActivity
 import lv.maros.keeper.R
-import lv.maros.keeper.models.KeeperConfig
-import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
 
 @AndroidEntryPoint
 class KeeperSetupActivity : AppCompatActivity() {

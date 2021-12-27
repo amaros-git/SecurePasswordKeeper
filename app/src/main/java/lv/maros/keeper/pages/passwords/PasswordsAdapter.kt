@@ -1,4 +1,4 @@
-package lv.maros.keeper.views
+package lv.maros.keeper.pages.passwords
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.keeper.databinding.PasswordItemBinding
 import lv.maros.keeper.models.Password
-import timber.log.Timber
 
 class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
