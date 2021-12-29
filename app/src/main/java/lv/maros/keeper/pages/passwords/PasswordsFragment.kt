@@ -25,7 +25,7 @@ class PasswordsFragment : Fragment() {
 
     private lateinit var binding: FragmentPasswordsBinding
 
-    private val viewModel: SharedKeeperViewModel by activityViewModels()
+    private val viewModel: PasswordsViewModel by activityViewModels()
 
     private lateinit var passwordListAdapter: PasswordListAdapter
 
