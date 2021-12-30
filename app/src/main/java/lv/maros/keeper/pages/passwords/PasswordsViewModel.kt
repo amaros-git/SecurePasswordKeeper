@@ -8,18 +8,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import lv.maros.keeper.R
 import lv.maros.keeper.data.local.PasswordDatabase
 import lv.maros.keeper.data.dto.PasswordDTO
 import lv.maros.keeper.models.Password
-import lv.maros.keeper.models.PasswordInputData
-import lv.maros.keeper.security.KeeperConfigStorage
-import lv.maros.keeper.security.KeeperCryptor
-import lv.maros.keeper.utils.KeeperResult
-import lv.maros.keeper.utils.SingleLiveEvent
-import timber.log.Timber
+import lv.maros.keeper.utils.toPassword
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,28 +32,12 @@ class PasswordsViewModel @Inject constructor(
             val savedPasswords = passwordDb.passwordDao.getAllPasswords()
 
             if (savedPasswords.isNotEmpty()) {
-                val passwordToShow = ArrayList<Password>()
-                passwordToShow.addAll(savedPasswords.map { passwordDto ->
-                    passwordDtoToPassword(passwordDto)
-                })
-
-                _passwordList.value = passwordToShow
+                _passwordList.value = savedPasswords.map { it.toPassword() }
             }
 
-            //check if no data image has to be shown
             invalidateShowNoData()
         }
     }
-
-
-    private fun passwordDtoToPassword(passwordDto: PasswordDTO) =
-        Password(
-            passwordDto.website,
-            passwordDto.username,
-            passwordDto.encryptedPassword,
-            passwordDto.passwordLastModificationDate,
-            passwordDto.id
-        )
 
     /**
      * Inform the user that there's not any data if the remindersList is empty

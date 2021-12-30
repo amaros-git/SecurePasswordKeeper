@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
-import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentAddPasswordBinding
-import lv.maros.keeper.models.Password
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.KeeperResult
@@ -24,7 +22,7 @@ class PasswordAddEditFragment : Fragment() {
 
     private lateinit var binding: FragmentAddPasswordBinding
 
-    private val viewModel: SharedKeeperViewModel by activityViewModels()
+    private val viewModel: PasswordAddEditViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,18 +45,20 @@ class PasswordAddEditFragment : Fragment() {
         return arguments?.getInt("mode") ?: MODE_UNSUPPORTED
     }
 
-    //TODO blocking call, show Progress
+    /*//TODO blocking call, show Progress
     private fun getPassword(passwordId: Int): Password? {
         return viewModel.getPassword(passwordId)
-    }
+    }*/
 
     private fun configureFragmentMode(mode: Int) {
         when (getMode()) {
             MODE_EDIT_PASSWORD -> {
                 setTitle(getString(R.string.edit_password))
+                setupEditMode()
             }
             MODE_ADD_PASSWORD -> {
                 setTitle(getString(R.string.add_new_password))
+                setupAddMode()
             }
             else -> {
                 //TODO
@@ -89,7 +89,7 @@ class PasswordAddEditFragment : Fragment() {
         val passwordData = collectPasswordInputData()
 
         if (verifyPasswordInputData(passwordData)) {
-            viewModel.saveAndNavigateIfSuccess(passwordData)
+            viewModel.savePassword(passwordData)
         }
     }
 
@@ -110,6 +110,7 @@ class PasswordAddEditFragment : Fragment() {
         }
     }
 
+    //TODO move to ViewModel
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
         // 1. Check both password

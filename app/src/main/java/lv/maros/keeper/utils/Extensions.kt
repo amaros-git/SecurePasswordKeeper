@@ -7,12 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import lv.maros.keeper.data.dto.PasswordDTO
+import lv.maros.keeper.models.Password
+import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.pages.passwords.PasswordListAdapter
 
 
-/**
- * Extension function to setup the RecyclerView
- */
 fun RecyclerView.setup(
     adapter: PasswordListAdapter
 ) {
@@ -58,3 +58,21 @@ fun View.fadeOut() {
         }
     })
 }
+
+fun PasswordDTO.toPassword() =
+    Password(
+        this.website,
+        this.username,
+        this.encryptedPassword,
+        this.passwordLastModificationDate,
+        this.id
+    )
+
+fun PasswordInputData.toPasswordDTO(encryptedPassword: String) =
+    PasswordDTO(
+        this.website,
+        this.username,
+        encryptedPassword,
+        System.currentTimeMillis(),
+        0
+    )
