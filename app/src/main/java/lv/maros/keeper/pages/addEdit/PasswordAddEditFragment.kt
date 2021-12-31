@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
@@ -16,6 +17,7 @@ import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class PasswordAddEditFragment : Fragment() {
@@ -23,6 +25,8 @@ class PasswordAddEditFragment : Fragment() {
     private lateinit var binding: FragmentAddPasswordBinding
 
     private val viewModel: PasswordAddEditViewModel by viewModels()
+
+    private var currentMode by Delegates.notNull<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +40,22 @@ class PasswordAddEditFragment : Fragment() {
 
         configureFragmentMode(getMode())
 
-        setupViews()
+        setupCommonViews()
 
         return binding.root
     }
 
     private fun getMode(): Int {
-        return arguments?.getInt("mode") ?: MODE_UNSUPPORTED
+        currentMode = arguments?.getInt("mode") ?: MODE_UNSUPPORTED
+        return currentMode
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (currentMode == MODE_EDIT_PASSWORD) {
+            viewModel.loadPassword()
+        }
     }
 
     /*//TODO blocking call, show Progress
@@ -67,21 +80,29 @@ class PasswordAddEditFragment : Fragment() {
     }
 
     private fun setupEditMode() {
+        binding.applyButton.apply {
+            text = requireContext().getText(R.string.edit_password)
 
-    }
-
-    private fun setupAddMode() {
-        binding.apply.setOnClickListener {
-            resetAllTextInputLayouts(binding.addPasswordLayout)
-            collectVerifyAndSavePassword()
+            setOnClickListener {
+                resetTextInputLayoutsErrors(binding.addPasswordLayout)
+            }
         }
     }
 
-    private fun setupViews() {
+    private fun setupAddMode() {
+        binding.applyButton.apply {
+            text = requireContext().getText(R.string.add_new_password)
 
+            setOnClickListener {
+                resetTextInputLayoutsErrors(binding.addPasswordLayout)
+                collectVerifyAndSavePassword()
+            }
+        }
+    }
 
-        binding.cancel.setOnClickListener {
-            //TODO
+    private fun setupCommonViews() {
+        binding.cancelButton.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -100,7 +121,7 @@ class PasswordAddEditFragment : Fragment() {
         binding.repeatPassword.text.toString()
     )
 
-    private fun resetAllTextInputLayouts(passwordLayout: ViewGroup) {
+    private fun resetTextInputLayoutsErrors(passwordLayout: ViewGroup) {
         val childCount = passwordLayout.childCount
         for (i in 0..childCount) {
             val view = passwordLayout.getChildAt(i)
@@ -110,7 +131,7 @@ class PasswordAddEditFragment : Fragment() {
         }
     }
 
-    //TODO move to ViewModel
+    //TODO move to ViewModel. Rework, compare passwords etc
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
         // 1. Check both password
