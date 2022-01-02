@@ -68,9 +68,15 @@ class PasswordAddEditViewModel @Inject constructor(
         }
     }
 
-    fun getPassword(passwordId: Int): Password? {
-        return runBlocking {
-            passwordDb.passwordDao.getPassword(passwordId)?.toPassword()
+    fun loadPassword(passwordId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val passwordDTO = passwordDb.passwordDao.getPassword(passwordId)
+
+            if (null != passwordDTO) {
+                _password.postValue(passwordDTO.toPassword())
+            } else {
+                //TODO
+            }
         }
     }
 

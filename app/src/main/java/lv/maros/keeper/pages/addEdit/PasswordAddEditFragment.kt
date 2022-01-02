@@ -11,18 +11,19 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
-import lv.maros.keeper.databinding.FragmentAddPasswordBinding
+import lv.maros.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.keeper.utils.setTitle
+import timber.log.Timber
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class PasswordAddEditFragment : Fragment() {
 
-    private lateinit var binding: FragmentAddPasswordBinding
+    private lateinit var binding: FragmentAddEditPasswordBinding
 
     private val viewModel: PasswordAddEditViewModel by viewModels()
 
@@ -33,7 +34,7 @@ class PasswordAddEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentAddPasswordBinding.inflate(inflater)
+        binding = FragmentAddEditPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setDisplayHomeAsUpEnabled(true)
@@ -50,12 +51,26 @@ class PasswordAddEditFragment : Fragment() {
         return currentMode
     }
 
+    private fun getPasswordId(): Int {
+        return arguments?.getInt("passwordId") ?: -1
+    }
+
+    private fun loadPassword() {
+        if (currentMode == MODE_EDIT_PASSWORD) {
+            val passwordId = getPasswordId()
+            if (passwordId > 0) {
+                viewModel.loadPassword(passwordId)
+            } else {
+                //TODO
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
-        if (currentMode == MODE_EDIT_PASSWORD) {
-            viewModel.loadPassword()
-        }
+        loadPassword()
+
     }
 
     /*//TODO blocking call, show Progress
@@ -85,6 +100,12 @@ class PasswordAddEditFragment : Fragment() {
 
             setOnClickListener {
                 resetTextInputLayoutsErrors(binding.addPasswordLayout)
+            }
+        }
+
+        viewModel.password.observe(viewLifecycleOwner) {
+            it?.let {
+                Timber.d("Got password $it")
             }
         }
     }
