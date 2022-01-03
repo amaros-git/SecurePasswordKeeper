@@ -10,14 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.utils.*
 import timber.log.Timber
 import lv.maros.keeper.R
 import lv.maros.keeper.databinding.FragmentPasswordsBinding
 import lv.maros.keeper.helpers.geasture.PasswordClickListener
 import lv.maros.keeper.helpers.geasture.PasswordItemSwipeCallback
-import lv.maros.keeper.pages.addEdit.PasswordAddEditFragment
+import lv.maros.keeper.pages.addEdit.PasswordModifyFragment
 
 
 @AndroidEntryPoint
@@ -76,12 +75,12 @@ class PasswordsFragment : Fragment() {
 
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
-            PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
+            PasswordModifyFragment.MODE_ADD_PASSWORD -> {
                 PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
                     mode
                 )
             }
-            PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
+            PasswordModifyFragment.MODE_EDIT_PASSWORD -> {
                 PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
                     mode,
                     passwordId
@@ -103,7 +102,7 @@ class PasswordsFragment : Fragment() {
 
     private fun setupViews() {
         binding.addPassword.setOnClickListener {
-            navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
+            navigateToAddEditFragment(PasswordModifyFragment.MODE_ADD_PASSWORD)
         }
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
@@ -130,7 +129,7 @@ class PasswordsFragment : Fragment() {
 
         override fun onEditClick(swipedPos: Int) {
             navigateToAddEditFragment(
-                PasswordAddEditFragment.MODE_EDIT_PASSWORD,
+                PasswordModifyFragment.MODE_EDIT_PASSWORD,
                 getPasswordId(swipedPos)
             )
         }

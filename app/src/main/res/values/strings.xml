@@ -4,14 +4,19 @@
 
     <!-- Text Views text -->
     <string name="login_fragment">Login</string>
-    <string name="cancel_button">Cancel</string>
+    <string name="cancel_button_text">Cancel</string>
     <string name="save_button">Save</string>
     <string name="login_button">Login</string>
     <string name="password_radio_text">Password</string>
     <string name="pin_radio_text">PIN</string>
     <string name="disable_auth">Disable authentication</string>
-    <string name="add_new_password">Add new password</string>
-    <string name="edit_password">Edit password</string>
+    <string name="add_new_password_title">Add new password</string>
+    <string name="edit_password_title">Edit password</string>
+    <string name="password_label">Password</string>
+    <string name="finish_button">Finish</string>
+    <string name="update_password_button_text">Update</string>
+    <string name="add_password_button_text">Add</string>
+    <string name="back_button_text">Back</string>
 
 
     <!-- Text Views hints -->
@@ -39,6 +44,5 @@
     <string name="username_or_login_text">Username or login</string>
     <string name="password_dont_match_error">Passwords don\'t match</string>
     <string name="space_char_error">Password cannot contain space character</string>
-    <string name="password_label">Password</string>
-    <string name="finish_button">Finish</string>
+
 </resources>

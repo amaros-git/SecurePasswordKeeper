@@ -11,7 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
-import lv.maros.keeper.databinding.FragmentAddEditPasswordBinding
+import lv.maros.keeper.base.BaseFragment
+import lv.maros.keeper.base.BaseViewModel
+import lv.maros.keeper.databinding.FragmentModifyPasswordBinding
+import lv.maros.keeper.models.Password
 import lv.maros.keeper.models.PasswordInputData
 import lv.maros.keeper.security.KeeperPasswordManager
 import lv.maros.keeper.utils.KeeperResult
@@ -21,11 +24,11 @@ import timber.log.Timber
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class PasswordAddEditFragment : Fragment() {
+class PasswordModifyFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentAddEditPasswordBinding
+    private lateinit var binding: FragmentModifyPasswordBinding
 
-    private val viewModel: PasswordAddEditViewModel by viewModels()
+    override val viewModel: PasswordModifyViewModel by viewModels()
 
     private var currentMode by Delegates.notNull<Int>()
 
@@ -34,7 +37,7 @@ class PasswordAddEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentAddEditPasswordBinding.inflate(inflater)
+        binding = FragmentModifyPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setDisplayHomeAsUpEnabled(true)
@@ -51,14 +54,10 @@ class PasswordAddEditFragment : Fragment() {
         return currentMode
     }
 
-    private fun getPasswordId(): Int {
-        return arguments?.getInt("passwordId") ?: -1
-    }
-
     private fun loadPassword() {
-        if (currentMode == MODE_EDIT_PASSWORD) {
-            val passwordId = getPasswordId()
-            if (passwordId > 0) {
+        if (MODE_EDIT_PASSWORD == currentMode) {
+            val passwordId = arguments?.getInt("passwordId") ?: WRONG_PASSWORD_ID
+            if (passwordId >= 0) {
                 viewModel.loadPassword(passwordId)
             } else {
                 //TODO
@@ -73,19 +72,14 @@ class PasswordAddEditFragment : Fragment() {
 
     }
 
-    /*//TODO blocking call, show Progress
-    private fun getPassword(passwordId: Int): Password? {
-        return viewModel.getPassword(passwordId)
-    }*/
-
     private fun configureFragmentMode(mode: Int) {
         when (getMode()) {
             MODE_EDIT_PASSWORD -> {
-                setTitle(getString(R.string.edit_password))
+                setTitle(getString(R.string.edit_password_title))
                 setupEditMode()
             }
             MODE_ADD_PASSWORD -> {
-                setTitle(getString(R.string.add_new_password))
+                setTitle(getString(R.string.add_new_password_title))
                 setupAddMode()
             }
             else -> {
@@ -95,30 +89,34 @@ class PasswordAddEditFragment : Fragment() {
     }
 
     private fun setupEditMode() {
-        binding.applyButton.apply {
-            text = requireContext().getText(R.string.edit_password)
-
-            setOnClickListener {
-                resetTextInputLayoutsErrors(binding.addPasswordLayout)
-            }
-        }
-
         viewModel.password.observe(viewLifecycleOwner) {
             it?.let {
-                Timber.d("Got password $it")
+                showPassword(it)
             }
         }
+        binding.applyButton.apply {
+            text = requireContext().getText(R.string.update_password_button_text)
+
+            setOnClickListener {
+                resetTextInputLayoutsErrors(binding.passwordModificationLayout)
+
+                viewModel.updatePassword(collectPasswordInputData())
+            }
+        }
+        binding.cancelButton.text = requireContext().getText(R.string.back_button_text)
     }
 
     private fun setupAddMode() {
         binding.applyButton.apply {
-            text = requireContext().getText(R.string.add_new_password)
+            text = requireContext().getText(R.string.add_password_button_text)
 
             setOnClickListener {
-                resetTextInputLayoutsErrors(binding.addPasswordLayout)
-                collectVerifyAndSavePassword()
+                resetTextInputLayoutsErrors(binding.passwordModificationLayout)
+
+                viewModel.savePassword(collectPasswordInputData())
             }
         }
+        binding.cancelButton.text = requireContext().getText(R.string.cancel_button_text)
     }
 
     private fun setupCommonViews() {
@@ -127,13 +125,14 @@ class PasswordAddEditFragment : Fragment() {
         }
     }
 
-    private fun collectVerifyAndSavePassword() {
-        val passwordData = collectPasswordInputData()
+    private fun showPassword(password: Password) {
+        val (website, username, encryptedPassword) = password
 
-        if (verifyPasswordInputData(passwordData)) {
-            viewModel.savePassword(passwordData)
-        }
+        binding.websiteLayout.editText?.setText(website)
+        binding.usernameLayout.editText?.setText(username)
+        binding.passwordLayout.editText?.setText(encryptedPassword)
     }
+
 
     private fun collectPasswordInputData() = PasswordInputData(
         binding.website.text.toString(),
@@ -142,51 +141,15 @@ class PasswordAddEditFragment : Fragment() {
         binding.repeatPassword.text.toString()
     )
 
-    private fun resetTextInputLayoutsErrors(passwordLayout: ViewGroup) {
-        val childCount = passwordLayout.childCount
+    private fun resetTextInputLayoutsErrors(layout: ViewGroup) {
+        val childCount = layout.childCount
         for (i in 0..childCount) {
-            val view = passwordLayout.getChildAt(i)
+            val view = layout.getChildAt(i)
             if (view is TextInputLayout) {
                 view.error = null
             }
         }
     }
-
-    //TODO move to ViewModel. Rework, compare passwords etc
-    private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
-        val (website, username, password, repeatPassword) = passwordData
-        // 1. Check both password
-        val passwordResult = KeeperPasswordManager.verifyPassword(password)
-        if (passwordResult is KeeperResult.Error) {
-            binding.passwordLayout.error =
-                convertToUiErrorString(passwordResult.value)
-            return false
-        }
-
-        val repeatPasswordResult = KeeperPasswordManager.verifyPassword(repeatPassword)
-        if (repeatPasswordResult is KeeperResult.Error) {
-            binding.repeatPasswordLayout.error =
-                convertToUiErrorString(repeatPasswordResult.value)
-            return false
-        }
-
-        //2. Check username
-
-        return true
-    }
-
-    private fun convertToUiErrorString(passwordError: String): String =
-        when (passwordError) {
-            KeeperPasswordManager.PASSWORD_TOO_SHORT -> {
-                getString(R.string.password_min_len_error)
-            }
-            KeeperPasswordManager.PASSWORD_IS_BLANK -> {
-                getString(R.string.password_empty_error)
-            }
-
-            else -> getString(R.string.internal_error)
-        }
-
 
     private fun showToast(msg: String) { //TODO use error fields on TextView for errors
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
@@ -196,6 +159,8 @@ class PasswordAddEditFragment : Fragment() {
         const val MODE_ADD_PASSWORD = 0
         const val MODE_EDIT_PASSWORD = 1
         const val MODE_UNSUPPORTED = -1
+
+        const val WRONG_PASSWORD_ID = -1
     }
 
 }
