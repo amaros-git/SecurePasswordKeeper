@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.keeper.R
-import lv.maros.keeper.SharedKeeperViewModel
 import lv.maros.keeper.databinding.FragmentLoginBinding
 import lv.maros.keeper.models.KeeperUser
 import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled

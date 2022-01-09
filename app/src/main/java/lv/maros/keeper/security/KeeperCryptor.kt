@@ -40,11 +40,11 @@ class KeeperCryptor @Inject constructor() {
         return hashString.toString()
     }
 
-    fun encryptString(data: String, key: String, iv: String): KeeperResult<String> {
+    fun encryptString(data: String, key: String, iv: String): String {
         val encryptedBytes =
             encryptDecrypt(Cipher.ENCRYPT_MODE, data.encodeToByteArray(), key, iv)
 
-        return KeeperResult.Success(convertToSignedHexString(encryptedBytes))
+        return convertToSignedHexString(encryptedBytes)
     }
 
     fun decryptString(encryptedData: String, key: String, iv: String): KeeperResult<String> {

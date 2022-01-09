@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import lv.maros.keeper.R
 import lv.maros.keeper.base.BaseViewModel
 import lv.maros.keeper.data.local.PasswordDatabase
@@ -17,6 +18,7 @@ import lv.maros.keeper.utils.KeeperResult
 import lv.maros.keeper.utils.SingleLiveEvent
 import lv.maros.keeper.utils.toPassword
 import lv.maros.keeper.utils.toPasswordDTO
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,34 +42,45 @@ class PasswordModifyViewModel @Inject constructor(
 
     fun savePassword(passwordData: PasswordInputData) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val encryptionResult = encryptString(passwordData.password)) {
-                is KeeperResult.Success -> {
-                    passwordDb.passwordDao.insertPassword(
-                        passwordData.toPasswordDTO(encryptionResult.data)
-                    )
-                }
-
-                is KeeperResult.Error -> {
-                    showSnackBarInt.value = R.string.internal_error
-                }
+            val encryptedPassword = encryptString(passwordData.password)
+            if (null != encryptedPassword) {
+                passwordDb.passwordDao.insertPassword(
+                    passwordData.toPasswordDTO(encryptedPassword)
+                )
+            } else {
+                Timber.e("Encryption result is null")
+                showSnackBarInt.value = R.string.internal_error
             }
         }
     }
 
     fun updatePassword(passwordData: PasswordInputData) {
-        if (!verifyPasswordInputData(passwordData)) {
+        val encryptedPassword = encryptString(passwordData.password)
+
+        if (null != encryptedPassword &&
+            verifyPasswordInputData(passwordData) &&
+            isPasswordModified(passwordData, encryptedPassword)
+        ) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    passwordDb.passwordDao.updatePassword(
+                        passwordData.toPasswordDTO(
+                            encryptedPassword
+                        )
+                    )
+                }
+            }
+        } else {
             //TODO
         }
-            //isPasswordModified()
-
-
     }
 
     //TODO move to ViewModel. Rework, compare passwords etc
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
 
-        return  verifyPassword(password) &&
+        return password == repeatPassword &&
+                verifyPassword(password) &&
                 verifyPassword(repeatPassword)
 
 
@@ -83,15 +96,15 @@ class PasswordModifyViewModel @Inject constructor(
         }
     }
 
-    private fun encryptString(plainText: String): KeeperResult<String> {
+    private fun encryptString(plainText: String): String? {
         val key = configStorage.getEncryptionKey()
         val iv = configStorage.getEncryptionIV()
-        //Timber.d("encryption key = $encryptionKey")
 
         return if (null != key && null != iv) {
             cryptor.encryptString(plainText, key, iv)
         } else {
-            KeeperResult.Error("Encryption key or iv doesn't exist")
+            Timber.e("Critical error: missing encryption key or iv")
+            null
         }
     }
 
@@ -107,12 +120,16 @@ class PasswordModifyViewModel @Inject constructor(
         }
     }
 
-    fun isPasswordModified(passwordData: PasswordInputData, password: Password): Boolean {
-        val encryptedPassword = passwordData.password
+    private fun isPasswordModified(passwordData: PasswordInputData, encryptedPassword: String): Boolean {
+        val passwordToUpdate = _password.value
 
-        return (passwordData.website != password.website) ||
-                (passwordData.username != password.username) ||
-                (encryptedPassword != password.encryptedPassword)
+        return if ((null != passwordToUpdate)) {
+            (passwordData.website != passwordToUpdate.website) ||
+            (passwordData.username != passwordToUpdate.username) ||
+            (encryptedPassword != passwordToUpdate.encryptedPassword)
+        } else {
+            false
+        }
 
     }
 
