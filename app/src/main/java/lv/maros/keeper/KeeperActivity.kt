@@ -15,7 +15,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class KeeperActivity : AppCompatActivity() {
 
     private lateinit var keeperConfig: KeeperConfigStorage
 

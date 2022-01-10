@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.MainActivity
+import lv.maros.keeper.KeeperActivity
 import lv.maros.keeper.R
 
 @AndroidEntryPoint
@@ -33,7 +33,7 @@ class KeeperSetupActivity : AppCompatActivity() {
     }
 
     private fun finishSetup() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, KeeperActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()

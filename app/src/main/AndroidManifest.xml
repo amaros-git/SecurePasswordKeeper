@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name="lv.maros.keeper.MainActivity">
+        <activity android:name="lv.maros.keeper.KeeperActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
