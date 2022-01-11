@@ -2,18 +2,17 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
     id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdk 31
 
     defaultConfig {
-        applicationId "lv.maros.securedpasswordkeeper"
-        minSdkVersion 24
-        targetSdkVersion 30
+        applicationId "lv.maros.secured.password.keeper"
+        minSdk 21
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -34,6 +33,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
+        viewBinding true
         dataBinding true
     }
 }
@@ -53,10 +53,10 @@ dependencies {
 
     // Security
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
-  /*  // For Identity Credential APIs
-    implementation("androidx.security:security-identity-credential:1.0.0-alpha02")
-    // For App Authentication APIs
-    implementation("androidx.security:security-app-authenticator:1.0.0-alpha02")*/
+    /*  // For Identity Credential APIs
+      implementation("androidx.security:security-identity-credential:1.0.0-alpha02")
+      // For App Authentication APIs
+      implementation("androidx.security:security-app-authenticator:1.0.0-alpha02")*/
 
     // Layouts
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -75,8 +75,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Hilt and Dagger
-    implementation "com.google.dagger:hilt-android:2.32-alpha"
-    kapt "com.google.dagger:hilt-compiler:2.32-alpha"
+    implementation 'com.google.dagger:hilt-android:2.40.5'
+    kapt 'com.google.dagger:hilt-compiler:2.40.5'
 
     //Room
     implementation "androidx.room:room-runtime:2.3.0"
@@ -84,7 +84,7 @@ dependencies {
     kapt "androidx.room:room-compiler:2.3.0"
     implementation "androidx.room:room-ktx:2.3.0"
 
-    // TESTING
+    /*********************TESTS****************************/
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
@@ -119,4 +119,16 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
 
+    //Hilt
+    // For instrumentation tests
+    androidTestImplementation  'com.google.dagger:hilt-android-testing:2.40.5'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.40.5'
+
+    // For local unit tests
+    testImplementation 'com.google.dagger:hilt-android-testing:2.40.5'
+    kaptTest 'com.google.dagger:hilt-compiler:2.40.5'
+}
+
+kapt {
+    correctErrorTypes true
 }

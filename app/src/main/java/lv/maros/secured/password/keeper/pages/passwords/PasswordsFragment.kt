@@ -50,7 +50,7 @@ class PasswordsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.loadPassword()
+        viewModel.loadAllPasswords()
     }
 
     private fun setupBottomNavigation() {
@@ -101,7 +101,7 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun setupViews() {
-        binding.addPassword.setOnClickListener {
+        binding.addPasswordFab.setOnClickListener {
             navigateToAddEditFragment(PasswordModifyFragment.MODE_ADD_PASSWORD)
         }
 

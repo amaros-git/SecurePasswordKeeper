@@ -1,4 +1,4 @@
-package lv.maros.keeper
+package lv.maros.secured.password.keeper
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.keeper.R
 import lv.maros.keeper.pages.setup.KeeperSetupActivity
 import lv.maros.keeper.security.KeeperConfigStorage
 import timber.log.Timber
-import javax.crypto.SecretKey
-import javax.crypto.spec.SecretKeySpec
 
 @AndroidEntryPoint
 class KeeperActivity : AppCompatActivity() {

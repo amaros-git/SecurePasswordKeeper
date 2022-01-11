@@ -3,7 +3,7 @@
     package="lv.maros.keeper">
 
     <application
-        android:name="lv.maros.keeper.KeeperApplication"
+        android:name="lv.maros.secured.password.keeper.KeeperApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name="lv.maros.keeper.KeeperActivity">
+        <activity android:name="lv.maros.secured.password.keeper.KeeperActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

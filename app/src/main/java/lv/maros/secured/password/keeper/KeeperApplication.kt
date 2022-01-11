@@ -1,4 +1,4 @@
-package lv.maros.keeper
+package lv.maros.secured.password.keeper
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

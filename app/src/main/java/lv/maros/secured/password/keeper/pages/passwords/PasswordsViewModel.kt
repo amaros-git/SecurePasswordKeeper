@@ -27,7 +27,7 @@ class PasswordsViewModel @Inject constructor(
         get() = _passwordList
 
 
-    fun loadPassword() {
+    fun loadAllPasswords() {
         viewModelScope.launch(Dispatchers.Main) {
             val savedPasswords = passwordDb.passwordDao.getAllPasswords()
 
