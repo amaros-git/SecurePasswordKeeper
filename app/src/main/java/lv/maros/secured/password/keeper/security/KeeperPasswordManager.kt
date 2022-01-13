@@ -1,7 +1,6 @@
-package lv.maros.keeper.security
+package lv.maros.secured.password.keeper.security
 
-import androidx.annotation.Keep
-import lv.maros.keeper.utils.KeeperResult
+import lv.maros.secured.password.keeper.utils.KeeperResult
 
 
 object KeeperPasswordManager {

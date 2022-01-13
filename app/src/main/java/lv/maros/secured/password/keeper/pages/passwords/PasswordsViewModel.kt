@@ -1,4 +1,4 @@
-package lv.maros.keeper.pages.passwords
+package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -8,10 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import lv.maros.keeper.data.local.PasswordDatabase
-import lv.maros.keeper.data.dto.PasswordDTO
-import lv.maros.keeper.models.Password
-import lv.maros.keeper.utils.toPassword
+import lv.maros.secured.password.keeper.data.local.PasswordDatabase
+import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.utils.toPassword
 import javax.inject.Inject
 
 @HiltViewModel

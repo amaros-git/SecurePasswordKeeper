@@ -1,4 +1,4 @@
-package lv.maros.keeper.hilt
+package lv.maros.secured.password.keeper.hilt
 
 import dagger.Module
 import dagger.Provides

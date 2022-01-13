@@ -1,11 +1,10 @@
-package lv.maros.keeper.pages.login
+package lv.maros.secured.password.keeper.pages.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lv.maros.keeper.security.KeeperConfigStorage
-import lv.maros.keeper.utils.SingleLiveEvent
-import timber.log.Timber
+import lv.maros.secured.password.keeper.security.KeeperConfigStorage
+import lv.maros.secured.password.keeper.utils.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel

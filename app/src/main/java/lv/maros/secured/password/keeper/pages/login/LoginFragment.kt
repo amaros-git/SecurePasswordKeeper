@@ -1,4 +1,4 @@
-package lv.maros.keeper.pages.login
+package lv.maros.secured.password.keeper.pages.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.R
-import lv.maros.keeper.databinding.FragmentLoginBinding
-import lv.maros.keeper.models.KeeperUser
-import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
-import lv.maros.keeper.utils.setTitle
+import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.databinding.FragmentLoginBinding
+import lv.maros.secured.password.keeper.models.KeeperUser
+import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
+import lv.maros.secured.password.keeper.utils.setTitle
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {

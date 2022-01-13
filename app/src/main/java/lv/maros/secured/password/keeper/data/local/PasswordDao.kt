@@ -1,13 +1,12 @@
-package lv.maros.keeper.data.local
+package lv.maros.secured.password.keeper.data.local
 
 import androidx.room.*
-import android.database.sqlite.SQLiteConstraintException
-import lv.maros.keeper.data.dto.PasswordDTO
+import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 
 @Dao
 interface PasswordDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertPassword(password: PasswordDTO)
+    suspend fun savePassword(password: PasswordDTO)
 
     @Query("SELECT * FROM password_table")
     suspend fun getAllPasswords(): List<PasswordDTO>

@@ -1,4 +1,4 @@
-package lv.maros.keeper.pages.setup.views
+package lv.maros.secured.password.keeper.pages.setup.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.R
+import lv.maros.secured.password.keeper.R
 
 @AndroidEntryPoint
 class WelcomeFragment : Fragment() {

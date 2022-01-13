@@ -1,4 +1,4 @@
-package lv.maros.keeper.pages.passwords
+package lv.maros.secured.password.keeper.pages.passwords
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,13 +10,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.utils.*
+import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
 import timber.log.Timber
-import lv.maros.keeper.R
-import lv.maros.keeper.databinding.FragmentPasswordsBinding
-import lv.maros.keeper.helpers.geasture.PasswordClickListener
-import lv.maros.keeper.helpers.geasture.PasswordItemSwipeCallback
-import lv.maros.keeper.pages.addEdit.PasswordModifyFragment
+
+import lv.maros.secured.password.keeper.helpers.geasture.PasswordClickListener
+import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
+import lv.maros.secured.password.keeper.pages.modify.PasswordModifyFragment
+import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
+import lv.maros.secured.password.keeper.utils.setTitle
+import lv.maros.secured.password.keeper.utils.setup
 
 
 @AndroidEntryPoint

@@ -1,9 +1,8 @@
-package lv.maros.keeper.base
+package lv.maros.secured.password.keeper.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.udacity.location_reminder.base.NavigationCommand
-import lv.maros.keeper.utils.SingleLiveEvent
+import lv.maros.secured.password.keeper.utils.SingleLiveEvent
 
 /**
  * Base class for View Models to declare the common LiveData objects in one place

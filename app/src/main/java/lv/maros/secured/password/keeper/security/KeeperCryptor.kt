@@ -1,6 +1,6 @@
-package lv.maros.keeper.security
+package lv.maros.secured.password.keeper.security
 
-import lv.maros.keeper.utils.KeeperResult
+import lv.maros.secured.password.keeper.utils.KeeperResult
 import timber.log.Timber
 import java.security.MessageDigest
 import javax.crypto.Cipher

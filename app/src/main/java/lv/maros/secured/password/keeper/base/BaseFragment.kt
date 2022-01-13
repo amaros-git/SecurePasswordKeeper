@@ -1,11 +1,10 @@
-package lv.maros.keeper.base
+package lv.maros.secured.password.keeper.base
 
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.udacity.location_reminder.base.NavigationCommand
 
 /**
  * Base Fragment to observe on the common LiveData objects

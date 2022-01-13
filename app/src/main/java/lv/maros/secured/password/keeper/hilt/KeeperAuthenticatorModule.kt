@@ -1,11 +1,11 @@
-package lv.maros.keeper.hilt
+package lv.maros.secured.password.keeper.hilt
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import lv.maros.keeper.authentication.KeeperAuthenticator
-import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.secured.password.keeper.authentication.KeeperAuthenticator
+import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import javax.inject.Singleton
 
 @Module

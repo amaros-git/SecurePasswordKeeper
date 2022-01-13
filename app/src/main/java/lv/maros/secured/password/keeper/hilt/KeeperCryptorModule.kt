@@ -1,10 +1,10 @@
-package lv.maros.keeper.hilt
+package lv.maros.secured.password.keeper.hilt
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import lv.maros.keeper.security.KeeperCryptor
+import lv.maros.secured.password.keeper.security.KeeperCryptor
 import javax.inject.Named
 
 

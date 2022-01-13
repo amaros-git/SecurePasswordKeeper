@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package lv.maros.keeper.utils
+package lv.maros.secured.password.keeper.utils
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

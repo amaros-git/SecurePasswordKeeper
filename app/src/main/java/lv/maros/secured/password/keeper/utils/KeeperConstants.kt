@@ -1,4 +1,4 @@
-package lv.maros.keeper.utils
+package lv.maros.secured.password.keeper.utils
 
 const val KEEPER_AUTH_TYPE_PIN = "pin"
 const val KEEPER_AUTH_TYPE_PASSKEY = "passkey"

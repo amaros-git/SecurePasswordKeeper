@@ -1,4 +1,4 @@
-package lv.maros.keeper.security
+package lv.maros.secured.password.keeper.security
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,12 +7,11 @@ import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.withContext
-import lv.maros.keeper.hilt.IoDispatcher
-import lv.maros.keeper.models.KeeperConfig
-import lv.maros.keeper.utils.KEEPER_AUTH_TYPE_NONE
-import lv.maros.keeper.utils.isNotBlankOrEmpty
+import lv.maros.secured.password.keeper.hilt.IoDispatcher
+import lv.maros.secured.password.keeper.models.KeeperConfig
+import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_NONE
+import lv.maros.secured.password.keeper.utils.isNotBlankOrEmpty
 import javax.inject.Inject
 
 /**

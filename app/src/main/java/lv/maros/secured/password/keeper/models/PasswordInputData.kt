@@ -1,4 +1,4 @@
-package lv.maros.keeper.models
+package lv.maros.secured.password.keeper.models
 
 /**
  * I use this data class to store data entered in UI and verify them before I save them in database

@@ -1,10 +1,10 @@
-package lv.maros.keeper.data.local
+package lv.maros.secured.password.keeper.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import lv.maros.keeper.data.dto.PasswordDTO
+import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 
 @Database(entities = [PasswordDTO::class], version = 1, exportSchema = false)
 abstract class PasswordDatabase : RoomDatabase() {
@@ -13,7 +13,7 @@ abstract class PasswordDatabase : RoomDatabase() {
 
     companion object {
 
-        private const val DATABASE_NAME = "password_database"
+        private const val DATABASE_NAME = "passwords.db"
 
         @Volatile
         private var INSTANCE: PasswordDatabase? = null

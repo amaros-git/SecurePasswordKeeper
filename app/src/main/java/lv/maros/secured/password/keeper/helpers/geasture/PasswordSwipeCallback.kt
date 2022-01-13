@@ -1,9 +1,8 @@
-package lv.maros.keeper.helpers.geasture
+package lv.maros.secured.password.keeper.helpers.geasture
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.drawable.Drawable
@@ -12,8 +11,7 @@ import android.view.MotionEvent
 
 import android.view.View
 import androidx.core.content.ContextCompat
-import lv.maros.keeper.R
-import timber.log.Timber
+import lv.maros.secured.password.keeper.R
 
 class PasswordItemSwipeCallback(
     private val context: Context,

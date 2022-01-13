@@ -1,4 +1,4 @@
-package lv.maros.keeper.pages.setup
+package lv.maros.secured.password.keeper.pages.setup
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.secured.password.keeper.KeeperActivity
-import lv.maros.keeper.R
+import lv.maros.secured.password.keeper.R
 
 @AndroidEntryPoint
 class KeeperSetupActivity : AppCompatActivity() {

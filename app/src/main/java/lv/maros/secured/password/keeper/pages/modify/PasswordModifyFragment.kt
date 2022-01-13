@@ -1,26 +1,21 @@
-package lv.maros.keeper.pages.addEdit
+package lv.maros.secured.password.keeper.pages.modify
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.R
-import lv.maros.keeper.base.BaseFragment
-import lv.maros.keeper.base.BaseViewModel
-import lv.maros.keeper.databinding.FragmentModifyPasswordBinding
-import lv.maros.keeper.models.Password
-import lv.maros.keeper.models.PasswordInputData
-import lv.maros.keeper.security.KeeperPasswordManager
-import lv.maros.keeper.utils.KeeperResult
-import lv.maros.keeper.utils.setDisplayHomeAsUpEnabled
-import lv.maros.keeper.utils.setTitle
-import timber.log.Timber
+import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.base.BaseFragment
+import lv.maros.secured.password.keeper.databinding.FragmentModifyPasswordBinding
+import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
+import lv.maros.secured.password.keeper.utils.setTitle
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint

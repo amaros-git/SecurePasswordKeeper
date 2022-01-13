@@ -1,4 +1,4 @@
-package lv.maros.keeper.utils
+package lv.maros.secured.password.keeper.utils
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import lv.maros.keeper.data.dto.PasswordDTO
-import lv.maros.keeper.models.Password
-import lv.maros.keeper.models.PasswordInputData
-import lv.maros.keeper.pages.passwords.PasswordListAdapter
+import lv.maros.secured.password.keeper.data.dto.PasswordDTO
+import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.pages.passwords.PasswordListAdapter
 
 
 fun RecyclerView.setup(

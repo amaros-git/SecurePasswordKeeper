@@ -1,4 +1,4 @@
-package lv.maros.keeper.pages.addEdit
+package lv.maros.secured.password.keeper.pages.modify
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -6,18 +6,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lv.maros.keeper.R
-import lv.maros.keeper.base.BaseViewModel
-import lv.maros.keeper.data.local.PasswordDatabase
-import lv.maros.keeper.models.Password
-import lv.maros.keeper.models.PasswordInputData
-import lv.maros.keeper.security.KeeperConfigStorage
-import lv.maros.keeper.security.KeeperCryptor
-import lv.maros.keeper.security.KeeperPasswordManager
-import lv.maros.keeper.utils.KeeperResult
-import lv.maros.keeper.utils.SingleLiveEvent
-import lv.maros.keeper.utils.toPassword
-import lv.maros.keeper.utils.toPasswordDTO
+import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.base.BaseViewModel
+import lv.maros.secured.password.keeper.data.local.PasswordDatabase
+import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.security.KeeperConfigStorage
+import lv.maros.secured.password.keeper.security.KeeperCryptor
+import lv.maros.secured.password.keeper.security.KeeperPasswordManager
+import lv.maros.secured.password.keeper.utils.KeeperResult
+import lv.maros.secured.password.keeper.utils.SingleLiveEvent
+import lv.maros.secured.password.keeper.utils.toPassword
+import lv.maros.secured.password.keeper.utils.toPasswordDTO
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ class PasswordModifyViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val encryptedPassword = encryptString(passwordData.password)
             if (null != encryptedPassword) {
-                passwordDb.passwordDao.insertPassword(
+                passwordDb.passwordDao.savePassword(
                     passwordData.toPasswordDTO(encryptedPassword)
                 )
             } else {

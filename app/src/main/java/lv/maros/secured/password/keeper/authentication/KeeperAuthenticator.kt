@@ -1,11 +1,9 @@
-package lv.maros.keeper.authentication
+package lv.maros.secured.password.keeper.authentication
 
 import androidx.biometric.BiometricPrompt
-import lv.maros.keeper.security.KeeperConfigStorage
-import lv.maros.keeper.utils.KeeperResult
+import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import java.util.concurrent.Executor
 import javax.inject.Inject
-import kotlin.coroutines.suspendCoroutine
 
 class KeeperAuthenticator @Inject constructor(
     private val configStorage: KeeperConfigStorage

@@ -1,4 +1,4 @@
-package lv.maros.keeper.data.dto
+package lv.maros.secured.password.keeper.data.dto
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

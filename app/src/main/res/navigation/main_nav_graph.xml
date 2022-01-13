@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="lv.maros.keeper.pages.login.LoginFragment"
+        android:name="lv.maros.secured.password.keeper.pages.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/passwordListFragment"
-        android:name="lv.maros.keeper.pages.passwords.PasswordsFragment"
+        android:name="lv.maros.secured.password.keeper.pages.passwords.PasswordsFragment"
         android:label="password_list_fragment"
         tools:layout="@layout/fragment_passwords">
         <action
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/passwordAddEditFragment"
-        android:name="lv.maros.keeper.pages.addEdit.PasswordModifyFragment"
+        android:name="lv.maros.secured.password.keeper.pages.modify.PasswordModifyFragment"
         android:label="AddPasswordFragment">
         <action
             android:id="@+id/action_addPasswordFragment_to_passwordListFragment"

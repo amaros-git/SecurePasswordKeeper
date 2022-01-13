@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import lv.maros.keeper.R
-import lv.maros.keeper.pages.setup.KeeperSetupActivity
-import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.secured.password.keeper.pages.setup.KeeperSetupActivity
+import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import timber.log.Timber
 
 @AndroidEntryPoint

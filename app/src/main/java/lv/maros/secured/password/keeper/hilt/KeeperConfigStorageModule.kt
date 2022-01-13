@@ -1,4 +1,4 @@
-package lv.maros.keeper.hilt
+package lv.maros.secured.password.keeper.hilt
 
 import android.content.Context
 import dagger.Module
@@ -7,7 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import lv.maros.keeper.security.KeeperConfigStorage
+import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import javax.inject.Singleton
 
 @Module

@@ -1,4 +1,4 @@
-package com.udacity.location_reminder.base
+package lv.maros.secured.password.keeper.base
 
 import androidx.navigation.NavDirections
 

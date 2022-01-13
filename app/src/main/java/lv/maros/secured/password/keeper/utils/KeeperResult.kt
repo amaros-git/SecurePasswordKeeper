@@ -1,4 +1,4 @@
-package lv.maros.keeper.utils
+package lv.maros.secured.password.keeper.utils
 
 /**
  * General purpose class.
