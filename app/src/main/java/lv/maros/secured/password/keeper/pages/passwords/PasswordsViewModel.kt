@@ -9,13 +9,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.data.local.PasswordDatabase
+import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.utils.toPassword
 import javax.inject.Inject
 
 @HiltViewModel
 class PasswordsViewModel @Inject constructor(
-    private val passwordDb: PasswordDatabase,
+    private val repository: PasswordsLocalRepository,
     app: Application
 ) : AndroidViewModel(app) {
 
@@ -28,7 +29,7 @@ class PasswordsViewModel @Inject constructor(
 
     fun loadAllPasswords() {
         viewModelScope.launch(Dispatchers.Main) {
-            val savedPasswords = passwordDb.passwordDao.getAllPasswords()
+            val savedPasswords = repository.getAllPasswords()
 
             if (savedPasswords.isNotEmpty()) {
                 _passwordList.value = savedPasswords.map { it.toPassword() }
