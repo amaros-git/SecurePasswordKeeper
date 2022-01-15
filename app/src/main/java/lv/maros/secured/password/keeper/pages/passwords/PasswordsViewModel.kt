@@ -1,14 +1,12 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import lv.maros.secured.password.keeper.data.local.PasswordDatabase
+import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.utils.toPassword
@@ -18,7 +16,7 @@ import javax.inject.Inject
 class PasswordsViewModel @Inject constructor(
     private val repository: PasswordsLocalRepository,
     app: Application
-) : AndroidViewModel(app) {
+) : BaseViewModel(app) {
 
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -28,11 +26,11 @@ class PasswordsViewModel @Inject constructor(
 
 
     fun loadAllPasswords() {
-        viewModelScope.launch(Dispatchers.Main) {
-            val savedPasswords = repository.getAllPasswords()
+        viewModelScope.launch {
+            val passwords = repository.getAllPasswords()
 
-            if (savedPasswords.isNotEmpty()) {
-                _passwordList.value = savedPasswords.map { it.toPassword() }
+            if (passwords.isNotEmpty()) {
+                _passwordList.value = passwords.map { it.toPassword() }
             }
 
             invalidateShowNoData()

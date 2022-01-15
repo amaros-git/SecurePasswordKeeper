@@ -23,7 +23,7 @@ class PasswordModifyFragment : BaseFragment() {
 
     private lateinit var binding: FragmentModifyPasswordBinding
 
-    override val viewModel: PasswordModifyViewModel by viewModels()
+    override val _viewModel: PasswordModifyViewModel by viewModels()
 
     private var currentMode by Delegates.notNull<Int>()
 
@@ -53,7 +53,7 @@ class PasswordModifyFragment : BaseFragment() {
         if (MODE_EDIT_PASSWORD == currentMode) {
             val passwordId = arguments?.getInt("passwordId") ?: WRONG_PASSWORD_ID
             if (passwordId >= 0) {
-                viewModel.loadPassword(passwordId)
+                _viewModel.loadPassword(passwordId)
             } else {
                 //TODO
             }
@@ -84,7 +84,7 @@ class PasswordModifyFragment : BaseFragment() {
     }
 
     private fun setupEditMode() {
-        viewModel.password.observe(viewLifecycleOwner) {
+        _viewModel.password.observe(viewLifecycleOwner) {
             it?.let {
                 showPassword(it)
             }
@@ -95,7 +95,7 @@ class PasswordModifyFragment : BaseFragment() {
             setOnClickListener {
                 resetTextInputLayoutsErrors(binding.passwordModificationLayout)
 
-                viewModel.updatePassword(collectPasswordInputData())
+                _viewModel.updatePassword(collectPasswordInputData())
             }
         }
         binding.cancelButton.text = requireContext().getText(R.string.back_button_text)
@@ -108,7 +108,7 @@ class PasswordModifyFragment : BaseFragment() {
             setOnClickListener {
                 resetTextInputLayoutsErrors(binding.passwordModificationLayout)
 
-                viewModel.savePassword(collectPasswordInputData())
+                _viewModel.savePassword(collectPasswordInputData())
             }
         }
         binding.cancelButton.text = requireContext().getText(R.string.cancel_button_text)

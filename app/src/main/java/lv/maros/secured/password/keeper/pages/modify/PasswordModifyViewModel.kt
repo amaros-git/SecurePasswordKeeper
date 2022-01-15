@@ -8,27 +8,25 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
-import lv.maros.secured.password.keeper.data.local.PasswordDatabase
+import lv.maros.secured.password.keeper.base.NavigationCommand
+import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.security.KeeperPasswordManager
-import lv.maros.secured.password.keeper.utils.KeeperResult
-import lv.maros.secured.password.keeper.utils.SingleLiveEvent
-import lv.maros.secured.password.keeper.utils.toPassword
-import lv.maros.secured.password.keeper.utils.toPasswordDTO
-import timber.log.Timber
+import lv.maros.secured.password.keeper.utils.*
 import javax.inject.Inject
 
 @HiltViewModel
 class PasswordModifyViewModel @Inject constructor(
+    private val repository: PasswordsLocalRepository,
     private val configStorage: KeeperConfigStorage,
-    private val passwordDb: PasswordDatabase,
     private val cryptor: KeeperCryptor,
     private val app: Application
 ) : BaseViewModel(app) {
 
+    //val _navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
 
     private val _password = MutableLiveData<Password>()
     val password: LiveData<Password>
@@ -41,37 +39,31 @@ class PasswordModifyViewModel @Inject constructor(
 
 
     fun savePassword(passwordData: PasswordInputData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val encryptedPassword = encryptString(passwordData.password)
-            if (null != encryptedPassword) {
-                passwordDb.passwordDao.savePassword(
-                    passwordData.toPasswordDTO(encryptedPassword)
-                )
-            } else {
-                Timber.e("Encryption result is null")
-                showSnackBarInt.value = R.string.internal_error
+
+        if (verifyPasswordInputData(passwordData)) {
+            viewModelScope.launch {
+                val encryptedPassword = encryptString(passwordData.password)
+                repository.savePassword(passwordData.toPasswordDTO(encryptedPassword))
             }
+        } else {
+            //TODO
         }
     }
 
     fun updatePassword(passwordData: PasswordInputData) {
-        val encryptedPassword = encryptString(passwordData.password)
+        if (!verifyPasswordInputData(passwordData)) {
+            showErrorMessage.value = "Wrong data"
+            return
+        }
 
-        if (null != encryptedPassword &&
-            verifyPasswordInputData(passwordData) &&
-            isPasswordModified(passwordData, encryptedPassword)
-        ) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    passwordDb.passwordDao.updatePassword(
-                        passwordData.toPasswordDTO(
-                            encryptedPassword
-                        )
-                    )
-                }
-            }
-        } else {
-            //TODO
+        viewModelScope.launch {
+            repository.updatePassword(
+                passwordData.toPasswordDTO(
+                    encryptString(passwordData.password)
+                )
+            )
+
+            navigationCommand.value = NavigationCommand.Back
         }
     }
 
@@ -81,9 +73,9 @@ class PasswordModifyViewModel @Inject constructor(
 
         return password == repeatPassword &&
                 verifyPassword(password) &&
-                verifyPassword(repeatPassword)
-
-
+                verifyPassword(repeatPassword) &&
+                website.isNotBlankOrEmpty() &&
+                username.isNotBlankOrEmpty()
     }
 
     private fun verifyPassword(password: String): Boolean {
@@ -96,21 +88,17 @@ class PasswordModifyViewModel @Inject constructor(
         }
     }
 
-    private fun encryptString(plainText: String): String? {
+    //TODO if key and iv doesn't exist this is a critical issue. It doesn't make return null. REWROK !!!
+    private fun encryptString(plainText: String): String {
         val key = configStorage.getEncryptionKey()
         val iv = configStorage.getEncryptionIV()
 
-        return if (null != key && null != iv) {
-            cryptor.encryptString(plainText, key, iv)
-        } else {
-            Timber.e("Critical error: missing encryption key or iv")
-            null
-        }
+        return cryptor.encryptString(plainText, key!!, iv!!)
     }
 
     fun loadPassword(passwordId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val passwordDTO = passwordDb.passwordDao.getPassword(passwordId)
+        viewModelScope.launch {
+            val passwordDTO = repository.getPassword(passwordId)
 
             if (null != passwordDTO) {
                 _password.postValue(passwordDTO.toPassword())
@@ -118,19 +106,6 @@ class PasswordModifyViewModel @Inject constructor(
                 //TODO
             }
         }
-    }
-
-    private fun isPasswordModified(passwordData: PasswordInputData, encryptedPassword: String): Boolean {
-        val passwordToUpdate = _password.value
-
-        return if ((null != passwordToUpdate)) {
-            (passwordData.website != passwordToUpdate.website) ||
-            (passwordData.username != passwordToUpdate.username) ||
-            (encryptedPassword != passwordToUpdate.encryptedPassword)
-        } else {
-            false
-        }
-
     }
 
 }

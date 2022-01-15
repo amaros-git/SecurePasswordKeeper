@@ -9,7 +9,7 @@ interface PasswordDataSource {
 
     suspend fun savePassword(password: PasswordDTO)
 
-    suspend fun updatePassword(newPassword: PasswordDTO)
+    suspend fun updatePassword(password: PasswordDTO)
 
     suspend fun deletePassword(password: PasswordDTO)
 }

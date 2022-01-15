@@ -1,7 +1,6 @@
 package lv.maros.secured.password.keeper.security
 
 import lv.maros.secured.password.keeper.utils.KeeperResult
-import timber.log.Timber
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -72,9 +71,7 @@ class KeeperCryptor @Inject constructor() {
 
 
     private fun getSecretKey(key: String): SecretKey {
-        val secretKey = SecretKeySpec(key.encodeToByteArray(), SECRET_KEY_ALGO)
-        Timber.d("secret key hash = ${secretKey.hashCode()}")
-        return secretKey
+        return SecretKeySpec(key.encodeToByteArray(), SECRET_KEY_ALGO)
     }
 
     private fun convertToSignedHexString(
