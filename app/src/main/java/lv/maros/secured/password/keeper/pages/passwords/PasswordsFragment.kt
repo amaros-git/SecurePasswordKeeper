@@ -16,7 +16,7 @@ import timber.log.Timber
 
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
-import lv.maros.secured.password.keeper.pages.modify.PasswordModifyFragment
+import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
@@ -78,12 +78,12 @@ class PasswordsFragment : Fragment() {
 
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
-            PasswordModifyFragment.MODE_ADD_PASSWORD -> {
+            PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
                 PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
                     mode
                 )
             }
-            PasswordModifyFragment.MODE_EDIT_PASSWORD -> {
+            PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
                 PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
                     mode,
                     passwordId
@@ -105,7 +105,7 @@ class PasswordsFragment : Fragment() {
 
     private fun setupViews() {
         binding.addPasswordFab.setOnClickListener {
-            navigateToAddEditFragment(PasswordModifyFragment.MODE_ADD_PASSWORD)
+            navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
         }
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
@@ -132,7 +132,7 @@ class PasswordsFragment : Fragment() {
 
         override fun onEditClick(swipedPos: Int) {
             navigateToAddEditFragment(
-                PasswordModifyFragment.MODE_EDIT_PASSWORD,
+                PasswordAddEditFragment.MODE_EDIT_PASSWORD,
                 getPasswordId(swipedPos)
             )
         }

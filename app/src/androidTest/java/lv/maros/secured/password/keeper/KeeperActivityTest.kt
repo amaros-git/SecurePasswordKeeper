@@ -11,7 +11,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.android.material.textfield.TextInputLayout
-import lv.maros.secured.password.keeper.models.PasswordInputData
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -38,7 +37,7 @@ class KeeperActivityTest {
 
         fillPasswordModifyView(TestPasswordInputDataProvider.INPUT_DATA_ALL_GOOD)
 
-        onView(withId(R.id.applyButton)).perform(click())
+        onView(withId(R.id.addEdit_apply_button)).perform(click())
 
         onView(withId(R.id.passwordLayout)).check(
             matches(

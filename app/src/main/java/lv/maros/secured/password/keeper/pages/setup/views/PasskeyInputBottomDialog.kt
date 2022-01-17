@@ -46,11 +46,11 @@ class PasskeyInputBottomDialog(
             }
         }
 
-        binding.cancelButton.setOnClickListener {
+        binding.authMethodCancelButton.setOnClickListener {
             this.dismiss()
         }
 
-        binding.saveButton.setOnClickListener {
+        binding.authMethodSaveButton.setOnClickListener {
             processPasskeys()
         }
     }

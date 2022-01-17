@@ -1,11 +1,9 @@
-package lv.maros.secured.password.keeper.pages.modify
+package lv.maros.secured.password.keeper.pages.addEdit
 
 import android.app.Application
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.base.NavigationCommand
@@ -14,12 +12,11 @@ import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
-import lv.maros.secured.password.keeper.security.KeeperPasswordManager
 import lv.maros.secured.password.keeper.utils.*
 import javax.inject.Inject
 
 @HiltViewModel
-class PasswordModifyViewModel @Inject constructor(
+class PasswordAddEditViewModel @Inject constructor(
     private val repository: PasswordsLocalRepository,
     private val configStorage: KeeperConfigStorage,
     private val cryptor: KeeperCryptor,

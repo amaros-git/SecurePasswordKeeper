@@ -1,4 +1,4 @@
-package lv.maros.secured.password.keeper.pages.modify
+package lv.maros.secured.password.keeper.pages.addEdit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseFragment
-import lv.maros.secured.password.keeper.databinding.FragmentModifyPasswordBinding
+import lv.maros.secured.password.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
@@ -19,11 +19,11 @@ import lv.maros.secured.password.keeper.utils.setTitle
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class PasswordModifyFragment : BaseFragment() {
+class PasswordAddEditFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentModifyPasswordBinding
+    private lateinit var binding: FragmentAddEditPasswordBinding
 
-    override val _viewModel: PasswordModifyViewModel by viewModels()
+    override val _viewModel: PasswordAddEditViewModel by viewModels()
 
     private var currentMode by Delegates.notNull<Int>()
 
@@ -32,7 +32,7 @@ class PasswordModifyFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentModifyPasswordBinding.inflate(inflater)
+        binding = FragmentAddEditPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setDisplayHomeAsUpEnabled(true)
@@ -102,7 +102,7 @@ class PasswordModifyFragment : BaseFragment() {
             }
         }
 
-        binding.applyButton.apply {
+        binding.addEditApplyButton.apply {
             text = requireContext().getText(R.string.update_password_button_text)
 
             setOnClickListener {
@@ -112,11 +112,11 @@ class PasswordModifyFragment : BaseFragment() {
             }
         }
 
-        binding.cancelButton.text = requireContext().getText(R.string.back_button_text)
+        binding.addEditCancelButton.text = requireContext().getText(R.string.back_button_text)
     }
 
     private fun setupAddMode() {
-        binding.applyButton.apply {
+        binding.addEditApplyButton.apply {
             text = requireContext().getText(R.string.add_password_button_text)
 
             setOnClickListener {
@@ -125,11 +125,11 @@ class PasswordModifyFragment : BaseFragment() {
                 _viewModel.savePassword(collectPasswordInputData())
             }
         }
-        binding.cancelButton.text = requireContext().getText(R.string.cancel_button_text)
+        binding.addEditCancelButton.text = requireContext().getText(R.string.cancel_button_text)
     }
 
     private fun setupCommonViews() {
-        binding.cancelButton.setOnClickListener {
+        binding.addEditCancelButton.setOnClickListener {
             findNavController().popBackStack()
         }
     }

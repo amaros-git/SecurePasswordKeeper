@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/passwordAddEditFragment"
-        android:name="lv.maros.secured.password.keeper.pages.modify.PasswordModifyFragment"
+        android:name="lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment"
         android:label="AddPasswordFragment">
         <action
             android:id="@+id/action_addPasswordFragment_to_passwordListFragment"
