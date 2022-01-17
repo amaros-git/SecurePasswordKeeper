@@ -34,7 +34,7 @@ class SharedSetupViewModel @Inject constructor(
     fun verifyPasskeys(passkey1: String, passkey2: String): Boolean {
         return when {
             passkey1.isEmpty() || passkey2.isEmpty() -> {
-                showToastEvent.value = app.getString(R.string.password_empty_error)
+                showToastEvent.value = app.getString(R.string.password_blank_or_empty_error)
                 false
             }
             passkey1.length < KEEPER_PASSKEY_PIN_MIN_LENGTH ||

@@ -41,6 +41,8 @@ class PasswordModifyFragment : BaseFragment() {
 
         setupCommonViews()
 
+        observeTextInoutErrors()
+
         return binding.root
     }
 
@@ -67,6 +69,16 @@ class PasswordModifyFragment : BaseFragment() {
 
     }
 
+    private fun observeTextInoutErrors() {
+        _viewModel.passwordError.observe(viewLifecycleOwner) {
+            binding.passwordLayout.error = it
+        }
+
+        _viewModel.repeatPasswordError.observe(viewLifecycleOwner) {
+            binding.repeatPasswordLayout.error = it
+        }
+    }
+
     private fun configureFragmentMode(mode: Int) {
         when (getMode()) {
             MODE_EDIT_PASSWORD -> {
@@ -89,6 +101,7 @@ class PasswordModifyFragment : BaseFragment() {
                 showPassword(it)
             }
         }
+
         binding.applyButton.apply {
             text = requireContext().getText(R.string.update_password_button_text)
 
@@ -98,6 +111,7 @@ class PasswordModifyFragment : BaseFragment() {
                 _viewModel.updatePassword(collectPasswordInputData())
             }
         }
+
         binding.cancelButton.text = requireContext().getText(R.string.back_button_text)
     }
 
@@ -130,10 +144,10 @@ class PasswordModifyFragment : BaseFragment() {
 
 
     private fun collectPasswordInputData() = PasswordInputData(
-        binding.website.text.toString(),
-        binding.username.text.toString(),
-        binding.password.text.toString(),
-        binding.repeatPassword.text.toString()
+        binding.websiteEditText.text.toString(),
+        binding.usernameEditText.text.toString(),
+        binding.passwordEditText.text.toString(),
+        binding.repeatPasswordEditText.text.toString()
     )
 
     private fun resetTextInputLayoutsErrors(layout: ViewGroup) {

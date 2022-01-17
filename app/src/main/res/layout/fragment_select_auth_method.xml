@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
-                android:id="@+id/password"
+                android:id="@+id/passwordRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/password_radio_text"
@@ -29,7 +29,7 @@
                 android:padding="@dimen/margin_small"/>
 
             <RadioButton
-                android:id="@+id/pin"
+                android:id="@+id/pinRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/pin_radio_text"
@@ -39,7 +39,7 @@
                 android:padding="@dimen/margin_small"/>
 
             <RadioButton
-                android:id="@+id/disableAuth"
+                android:id="@+id/disableAuthRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/disable_auth"

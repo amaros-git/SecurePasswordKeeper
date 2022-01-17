@@ -38,6 +38,8 @@ fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
 
 fun CharSequence.isNotBlankOrEmpty(): Boolean = !isBlank() && !isEmpty()
 
+fun CharSequence.isBlankOrEmpty(): Boolean = isBlank() || isEmpty()
+
 //animate changing the view visibility
 fun View.fadeIn() {
     this.visibility = View.VISIBLE

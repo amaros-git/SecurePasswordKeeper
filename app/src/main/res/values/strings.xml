@@ -33,7 +33,6 @@
 
 
     <!-- Text messages, errors -->
-    <string name="password_empty_error">Password is empty</string>
     <string name="password_min_len_error">Minimal length is 4 symbols</string>
     <string name="password_do_not_match_error">Passwords don\'t match</string>
     <string name="internal_error">Internal error, please try again. Or restart application</string>
@@ -42,7 +41,7 @@
     <string name="no_data">No Data</string>
     <string name="website_label">Website</string>
     <string name="username_or_login_text">Username or login</string>
-    <string name="password_dont_match_error">Passwords don\'t match</string>
     <string name="space_char_error">Password cannot contain space character</string>
+    <string name="password_blank_or_empty_error">Password contains spaces or is empty</string>
 
 </resources>

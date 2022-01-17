@@ -39,7 +39,6 @@ class PasswordModifyViewModel @Inject constructor(
 
 
     fun savePassword(passwordData: PasswordInputData) {
-
         if (verifyPasswordInputData(passwordData)) {
             viewModelScope.launch {
                 val encryptedPassword = encryptString(passwordData.password)
@@ -51,19 +50,18 @@ class PasswordModifyViewModel @Inject constructor(
     }
 
     fun updatePassword(passwordData: PasswordInputData) {
-        if (!verifyPasswordInputData(passwordData)) {
-            showErrorMessage.value = "Wrong data"
-            return
-        }
-
-        viewModelScope.launch {
-            repository.updatePassword(
-                passwordData.toPasswordDTO(
-                    encryptString(passwordData.password)
+        if (verifyPasswordInputData(passwordData)) {
+            viewModelScope.launch {
+                repository.updatePassword(
+                    passwordData.toPasswordDTO(
+                        encryptString(passwordData.password)
+                    )
                 )
-            )
 
-            navigationCommand.value = NavigationCommand.Back
+                navigationCommand.value = NavigationCommand.Back
+            }
+        } else {
+            //TODO
         }
     }
 
@@ -71,21 +69,16 @@ class PasswordModifyViewModel @Inject constructor(
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
 
-        return password == repeatPassword &&
-                verifyPassword(password) &&
-                verifyPassword(repeatPassword) &&
-                website.isNotBlankOrEmpty() &&
-                username.isNotBlankOrEmpty()
-    }
-
-    private fun verifyPassword(password: String): Boolean {
-        val passwordResult = KeeperPasswordManager.verifyPassword(password)
-        return if (passwordResult is KeeperResult.Error) {
-            passwordError.value = passwordResult.value
-            false
-        } else {
-            true
+        if (password.isBlankOrEmpty()) {
+            passwordError.value = app.getString(R.string.password_blank_or_empty_error)
+        } else if (repeatPassword.isBlankOrEmpty()){
+            repeatPasswordError.value = app.getString(R.string.password_blank_or_empty_error)
+        } else if (password != repeatPassword) {
+            passwordError.value = app.getString(R.string.password_do_not_match_error)
+            repeatPasswordError.value = app.getString(R.string.password_do_not_match_error)
         }
+
+        return false
     }
 
     //TODO if key and iv doesn't exist this is a critical issue. It doesn't make return null. REWROK !!!

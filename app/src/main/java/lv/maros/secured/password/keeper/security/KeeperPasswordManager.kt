@@ -17,7 +17,7 @@ object KeeperPasswordManager {
         return "fbBMmGE2Z6GtKvEs"
     }
 
-    fun verifyPassword(password: String): KeeperResult<String> {
+   /* fun verifyPassword(password: String): KeeperResult<String> {
         return when {
             password.length < PASSWORD_MIN_LENGTH -> {
                 KeeperResult.Error(PASSWORD_TOO_SHORT)
@@ -31,7 +31,7 @@ object KeeperPasswordManager {
 
             else -> KeeperResult.Success(PASSWORD_IS_VALID)
         }
-    }
+    }*/
 
 
     const val PASSWORD_MIN_LENGTH = 4 //TODO CHANGE For production ) 4 just to input faster

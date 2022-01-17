@@ -35,15 +35,15 @@ class ConfigureAuthMethodFragment : Fragment() {
     }
 
     private fun setupViews() {
-        binding.pin.setOnClickListener {
+        binding.pinRadioButton.setOnClickListener {
             showPasskeyInputDialog(KEEPER_AUTH_TYPE_PIN)
         }
 
-        binding.password.setOnClickListener {
+        binding.passwordRadioButton.setOnClickListener {
             showPasskeyInputDialog(KEEPER_AUTH_TYPE_PASSKEY)
         }
 
-        binding.disableAuth.setOnClickListener {
+        binding.disableAuthRadioButton.setOnClickListener {
             //TODO show snackbar with Yes NO
         }
 
