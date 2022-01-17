@@ -43,6 +43,8 @@ class PasswordModifyViewModel @Inject constructor(
             viewModelScope.launch {
                 val encryptedPassword = encryptString(passwordData.password)
                 repository.savePassword(passwordData.toPasswordDTO(encryptedPassword))
+
+                navigationCommand.value = NavigationCommand.Back
             }
         } else {
             //TODO
