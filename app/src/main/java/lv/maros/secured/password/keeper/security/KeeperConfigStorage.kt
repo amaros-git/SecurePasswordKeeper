@@ -4,42 +4,34 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import lv.maros.secured.password.keeper.hilt.IoDispatcher
 import lv.maros.secured.password.keeper.models.KeeperConfig
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import lv.maros.secured.password.keeper.utils.isNotBlankOrEmpty
-import javax.inject.Inject
 
 /**
  * May throw on instantiation. TODO
  */
-class KeeperConfigStorage @Inject constructor(
-    @ApplicationContext private val app: Context,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+class KeeperConfigStorage private constructor(
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    private val sharedRef: SharedPreferences
+    private lateinit var sharedRef: SharedPreferences
 
-    init {
-        sharedRef = createEncryptedSharedRef()
-    }
-
-    private fun createEncryptedSharedRef(): SharedPreferences {
-        return EncryptedSharedPreferences.create(
-            app,
+    private fun createEncryptedSharedRef(context: Context) {
+        sharedRef = EncryptedSharedPreferences.create(
+            context,
             ENC_SHARED_REF_NAME,
-            getMasterKey(),
+            getMasterKey(context),
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
     }
 
-    private fun getMasterKey(): MasterKey {
-        return MasterKey.Builder(app)
+    private fun getMasterKey(context: Context): MasterKey {
+        return MasterKey.Builder(context)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
     }
@@ -179,11 +171,24 @@ class KeeperConfigStorage @Inject constructor(
     companion object {
         private const val ENC_SHARED_REF_NAME = "keeper_shared_prefs"
 
-        private const val KEEPER_CONFIG_STRING_AUTH_TYPE =
-            "keeper_auth_type" // see Keeper Constants
+        private const val KEEPER_CONFIG_STRING_AUTH_TYPE = "keeper_auth_type"
         private const val KEEPER_CONFIG_STRING_PASSKEY_HASH = "keeper_passkey_hash"
         private const val KEEPER_CONFIG_STRING_ENCRYPTION_KEY = "keeper_encryption_key"
         private const val KEEPER_CONFIG_STRING_ENCRYPTION_IV = "keeper_encryption_iv"
         private const val KEEPER_CONFIG_BOOL_USE_LOGIN = "keeper_use_login"
+
+        inline fun build(context: Context, block: Builder.() -> Unit) =
+            Builder().apply(block).build(context)
+    }
+
+    class Builder {
+        var context: Context? = null
+
+        fun build(context: Context): KeeperConfigStorage {
+            val configStorage = KeeperConfigStorage()
+            configStorage.createEncryptedSharedRef(context)
+
+            return configStorage
+        }
     }
 }

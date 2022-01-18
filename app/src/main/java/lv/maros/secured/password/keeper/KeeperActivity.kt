@@ -5,21 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.navigation.findNavController
-import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.secured.password.keeper.pages.setup.KeeperSetupActivity
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import timber.log.Timber
 
-@AndroidEntryPoint
 class KeeperActivity : AppCompatActivity() {
-
-    private lateinit var keeperConfig: KeeperConfigStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        keeperConfig = KeeperConfigStorage(this)
 
         if (!isKeeperConfigured()) {
             Timber.d("Keeper is not configured")
@@ -37,6 +31,7 @@ class KeeperActivity : AppCompatActivity() {
     }
 
     private fun isKeeperConfigured(): Boolean {
+        val keeperConfig = (applicationContext as KeeperApplication).configStorage
         return keeperConfig.isKeeperConfigured()
     }
 

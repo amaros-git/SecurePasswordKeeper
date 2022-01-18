@@ -1,20 +1,16 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.base.BaseViewModel
+import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.utils.toPassword
-import javax.inject.Inject
 
-@HiltViewModel
-class PasswordsViewModel @Inject constructor(
-    private val repository: PasswordsLocalRepository,
+class PasswordsViewModel (
+    private val repository: PasswordDataSource,
     app: Application
 ) : BaseViewModel(app) {
 
@@ -43,5 +39,15 @@ class PasswordsViewModel @Inject constructor(
     private fun invalidateShowNoData() {
         showNoData.value = passwordList.value == null || passwordList.value!!.isEmpty()
     }
+
+}
+
+@Suppress("UNCHECKED_CAST")
+class PasswordsViewModelFactory(
+    private val repository: PasswordDataSource,
+    private val app: Application
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (PasswordsViewModel(repository, app) as T)
 
 }

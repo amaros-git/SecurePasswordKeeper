@@ -5,12 +5,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.data.dto.PasswordDTO
-import lv.maros.secured.password.keeper.hilt.IoDispatcher
-import javax.inject.Inject
 
-class PasswordsLocalRepository @Inject constructor(
+class PasswordsLocalRepository (
     private val passwordDb: PasswordDatabase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PasswordDataSource {
     override suspend fun getPassword(passwordId: Int): PasswordDTO? {
         return withContext(ioDispatcher) {

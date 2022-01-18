@@ -2,25 +2,25 @@ package lv.maros.secured.password.keeper.pages.setup
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.KeeperConfig
+import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModel
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.security.KeeperPasswordManager
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import lv.maros.secured.password.keeper.utils.KEEPER_PASSKEY_PIN_MIN_LENGTH
 import lv.maros.secured.password.keeper.utils.SingleLiveEvent
-import javax.inject.Inject
 
-@HiltViewModel
-class SharedSetupViewModel @Inject constructor(
-    private val app: Application,
+class SharedSetupViewModel (
     private val configStorage: KeeperConfigStorage,
-    private val cryptor: KeeperCryptor
+    private val cryptor: KeeperCryptor,
+    private val app: Application
 ) : ViewModel() {
 
 
@@ -88,4 +88,16 @@ class SharedSetupViewModel @Inject constructor(
             }
         }
     }
+
+}
+
+@Suppress("UNCHECKED_CAST")
+class SharedSetupViewModelFactory(
+    private val configStorage: KeeperConfigStorage,
+    private val cryptor: KeeperCryptor,
+    private val app: Application
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (SharedSetupViewModel(configStorage, cryptor, app) as T)
+
 }

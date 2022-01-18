@@ -3,9 +3,8 @@ package lv.maros.secured.password.keeper.authentication
 import androidx.biometric.BiometricPrompt
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import java.util.concurrent.Executor
-import javax.inject.Inject
 
-class KeeperAuthenticator @Inject constructor(
+class KeeperAuthenticator constructor(
     private val configStorage: KeeperConfigStorage
 ) {
 

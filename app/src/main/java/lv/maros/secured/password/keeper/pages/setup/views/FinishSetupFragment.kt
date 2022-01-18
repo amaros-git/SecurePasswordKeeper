@@ -6,14 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.databinding.FragmentFinishSetupBinding
 import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModel
+import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModelFactory
 
 class FinishSetupFragment : Fragment() {
 
     private lateinit var binding: FragmentFinishSetupBinding
 
-    private val viewModel: SharedSetupViewModel by activityViewModels()
+    private val viewModel: SharedSetupViewModel by activityViewModels {
+        SharedSetupViewModelFactory(
+            (requireContext().applicationContext as KeeperApplication).configStorage,
+            (requireContext().applicationContext as KeeperApplication).cryptor,
+            (requireContext().applicationContext as KeeperApplication)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

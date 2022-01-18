@@ -2,22 +2,21 @@ package lv.maros.secured.password.keeper.pages.addEdit
 
 import android.app.Application
 import androidx.lifecycle.*
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.base.NavigationCommand
+import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.pages.login.LoginViewModel
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.*
-import javax.inject.Inject
 
-@HiltViewModel
-class PasswordAddEditViewModel @Inject constructor(
-    private val repository: PasswordsLocalRepository,
+class PasswordAddEditViewModel (
+    private val repository: PasswordDataSource,
     private val configStorage: KeeperConfigStorage,
     private val cryptor: KeeperCryptor,
     private val app: Application
@@ -99,5 +98,17 @@ class PasswordAddEditViewModel @Inject constructor(
             }
         }
     }
+
+}
+
+@Suppress("UNCHECKED_CAST")
+class PasswordAddEditViewModelFactory(
+    private val repository: PasswordDataSource,
+    private val configStorage: KeeperConfigStorage,
+    private val cryptor: KeeperCryptor,
+    private val app: Application
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (PasswordAddEditViewModel(repository, configStorage, cryptor, app) as T)
 
 }

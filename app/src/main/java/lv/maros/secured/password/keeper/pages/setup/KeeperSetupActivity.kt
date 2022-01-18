@@ -4,11 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
 import lv.maros.secured.password.keeper.KeeperActivity
 import lv.maros.secured.password.keeper.R
 
-@AndroidEntryPoint
 class KeeperSetupActivity : AppCompatActivity() {
 
     // Create viewModel to share it in Fragments

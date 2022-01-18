@@ -2,13 +2,14 @@ package lv.maros.secured.password.keeper.pages.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
+import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModel
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.utils.SingleLiveEvent
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel (
     private val configStorage: KeeperConfigStorage,
     app: Application
 ) : AndroidViewModel(app) {
@@ -20,5 +21,15 @@ class LoginViewModel @Inject constructor(
     }
 
     fun isLoginEnabled() = configStorage.isLoginEnabled()
+
+}
+
+@Suppress("UNCHECKED_CAST")
+class LoginViewModelFactory(
+    private val configStorage: KeeperConfigStorage,
+    private val app: Application
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (LoginViewModel(configStorage, app) as T)
 
 }

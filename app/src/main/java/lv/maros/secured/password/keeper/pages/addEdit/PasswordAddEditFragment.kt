@@ -8,22 +8,29 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
-import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModelFactory
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import kotlin.properties.Delegates
 
-@AndroidEntryPoint
 class PasswordAddEditFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddEditPasswordBinding
 
-    override val _viewModel: PasswordAddEditViewModel by viewModels()
+    override val _viewModel: PasswordAddEditViewModel by viewModels {
+        PasswordAddEditViewModelFactory(
+            (requireContext().applicationContext as KeeperApplication).localPasswordsRepository,
+            (requireContext().applicationContext as KeeperApplication).configStorage,
+            (requireContext().applicationContext as KeeperApplication).cryptor,
+            (requireContext().applicationContext as KeeperApplication)
+        )
+    }
 
     private var currentMode by Delegates.notNull<Int>()
 
