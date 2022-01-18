@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.architecture.blueprints.todoapp
+package lv.maros.secured.password.keeper.utils
 
 import android.content.ComponentName
 import android.content.Intent
@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import lv.maros.secured.password.keeper.KeeperActivity
+import lv.maros.secured.password.keeper.R
 
 /**
  * launchFragmentInContainer from the androidx.fragment:fragment-testing library
