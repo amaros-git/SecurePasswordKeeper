@@ -8,18 +8,24 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.databinding.FragmentSelectAuthMethodBinding
 import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModel
+import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModelFactory
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
-@AndroidEntryPoint
 class ConfigureAuthMethodFragment : Fragment() {
 
-    private lateinit var binding: FragmentSelectAuthMethodBinding
+    private val viewModel: SharedSetupViewModel by activityViewModels {
+        SharedSetupViewModelFactory(
+            (requireContext().applicationContext as KeeperApplication).configStorage,
+            (requireContext().applicationContext as KeeperApplication).cryptor,
+            (requireContext().applicationContext as KeeperApplication)
+        )
+    }
 
-    private val viewModel: SharedSetupViewModel by activityViewModels()
+    private lateinit var binding: FragmentSelectAuthMethodBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

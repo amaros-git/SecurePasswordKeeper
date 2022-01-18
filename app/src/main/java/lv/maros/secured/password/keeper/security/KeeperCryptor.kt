@@ -6,7 +6,6 @@ import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import javax.inject.Inject
 
 /**
  * @throws java.security.NoSuchAlgorithmException if no Provider supports a
@@ -14,7 +13,7 @@ import javax.inject.Inject
  * @throws javax.crypto.NoSuchPaddingException if <code>transformation</code>
  * contains a padding scheme that is not available.
  */
-class KeeperCryptor @Inject constructor() {
+class KeeperCryptor {
 
     // TODO REWORK to newInstance()
     private val messageDigest: MessageDigest =

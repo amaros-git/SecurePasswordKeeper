@@ -2,8 +2,8 @@ package lv.maros.secured.password.keeper.pages.setup
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.R
@@ -14,13 +14,11 @@ import lv.maros.secured.password.keeper.security.KeeperPasswordManager
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import lv.maros.secured.password.keeper.utils.KEEPER_PASSKEY_PIN_MIN_LENGTH
 import lv.maros.secured.password.keeper.utils.SingleLiveEvent
-import javax.inject.Inject
 
-@HiltViewModel
-class SharedSetupViewModel @Inject constructor(
-    private val app: Application,
+class SharedSetupViewModel (
     private val configStorage: KeeperConfigStorage,
-    private val cryptor: KeeperCryptor
+    private val cryptor: KeeperCryptor,
+    private val app: Application
 ) : ViewModel() {
 
 
@@ -39,7 +37,7 @@ class SharedSetupViewModel @Inject constructor(
             }
             passkey1.length < KEEPER_PASSKEY_PIN_MIN_LENGTH ||
                     passkey2.length < KEEPER_PASSKEY_PIN_MIN_LENGTH -> {
-                showToastEvent.value = app.getString(R.string.password_min_len_error)
+                showToastEvent.value = app.getString(R.string.password_too_short)
                 false
             }
             passkey1 != passkey2 -> {
@@ -88,4 +86,16 @@ class SharedSetupViewModel @Inject constructor(
             }
         }
     }
+
+}
+
+@Suppress("UNCHECKED_CAST")
+class SharedSetupViewModelFactory(
+    private val configStorage: KeeperConfigStorage,
+    private val cryptor: KeeperCryptor,
+    private val app: Application
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (SharedSetupViewModel(configStorage, cryptor, app) as T)
+
 }

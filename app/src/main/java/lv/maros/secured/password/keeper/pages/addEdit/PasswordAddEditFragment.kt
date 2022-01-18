@@ -8,22 +8,29 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
-import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModelFactory
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import kotlin.properties.Delegates
 
-@AndroidEntryPoint
 class PasswordAddEditFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddEditPasswordBinding
 
-    override val _viewModel: PasswordAddEditViewModel by viewModels()
+    override val _viewModel: PasswordAddEditViewModel by viewModels {
+        PasswordAddEditViewModelFactory(
+            (requireContext().applicationContext as KeeperApplication).localPasswordsRepository,
+            (requireContext().applicationContext as KeeperApplication).configStorage,
+            (requireContext().applicationContext as KeeperApplication).cryptor,
+            (requireContext().applicationContext as KeeperApplication)
+        )
+    }
 
     private var currentMode by Delegates.notNull<Int>()
 
@@ -46,14 +53,21 @@ class PasswordAddEditFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        loadPassword()
+
+    }
+
     private fun getMode(): Int {
-        currentMode = arguments?.getInt("mode") ?: MODE_UNSUPPORTED
+        currentMode = arguments?.getInt(ARGUMENTS_MODE_KEY) ?: MODE_UNSUPPORTED
         return currentMode
     }
 
     private fun loadPassword() {
         if (MODE_EDIT_PASSWORD == currentMode) {
-            val passwordId = arguments?.getInt("passwordId") ?: WRONG_PASSWORD_ID
+            val passwordId = arguments?.getInt(ARGUMENTS_PASSWORD_ID_KEY) ?: WRONG_PASSWORD_ID
             if (passwordId >= 0) {
                 _viewModel.loadPassword(passwordId)
             } else {
@@ -62,14 +76,16 @@ class PasswordAddEditFragment : BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        loadPassword()
-
-    }
 
     private fun observeTextInoutErrors() {
+        _viewModel.websiteError.observe(viewLifecycleOwner) {
+            binding.websiteLayout.error = it
+        }
+
+        _viewModel.usernameError.observe(viewLifecycleOwner) {
+            binding.usernameLayout.error = it
+        }
+
         _viewModel.passwordError.observe(viewLifecycleOwner) {
             binding.passwordLayout.error = it
         }
@@ -90,7 +106,7 @@ class PasswordAddEditFragment : BaseFragment() {
                 setupAddMode()
             }
             else -> {
-                //TODO
+                setTitle("OPAAA")
             }
         }
     }
@@ -130,7 +146,7 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private fun setupCommonViews() {
         binding.addEditCancelButton.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(PasswordAddEditFragmentDirections.actionAddPasswordFragmentToPasswordListFragment())
         }
     }
 
@@ -160,11 +176,10 @@ class PasswordAddEditFragment : BaseFragment() {
         }
     }
 
-    private fun showToast(msg: String) { //TODO use error fields on TextView for errors
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-    }
-
     companion object {
+        const val ARGUMENTS_MODE_KEY = "mode"
+        const val ARGUMENTS_PASSWORD_ID_KEY = "passwordId"
+
         const val MODE_ADD_PASSWORD = 0
         const val MODE_EDIT_PASSWORD = 1
         const val MODE_UNSUPPORTED = -1

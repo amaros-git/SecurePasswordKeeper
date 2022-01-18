@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
 import timber.log.Timber
@@ -22,12 +23,16 @@ import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
 
 
-@AndroidEntryPoint
 class PasswordsFragment : Fragment() {
 
     private lateinit var binding: FragmentPasswordsBinding
 
-    private val viewModel: PasswordsViewModel by activityViewModels()
+    private val viewModel: PasswordsViewModel by viewModels {
+        PasswordsViewModelFactory(
+            (requireContext().applicationContext as KeeperApplication).localPasswordsRepository,
+            (requireContext().applicationContext as KeeperApplication)
+        )
+    }
 
     private lateinit var passwordListAdapter: PasswordListAdapter
 

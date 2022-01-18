@@ -7,21 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.DialogAuthMethodBinding
 import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModel
+import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModelFactory
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
-@AndroidEntryPoint
 class PasskeyInputBottomDialog(
     private val keeperAuthType: String
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogAuthMethodBinding
 
-    private val viewModel: SharedSetupViewModel by activityViewModels()
+    private val viewModel: SharedSetupViewModel by activityViewModels {
+        SharedSetupViewModelFactory(
+            (requireContext().applicationContext as KeeperApplication).configStorage,
+            (requireContext().applicationContext as KeeperApplication).cryptor,
+            (requireContext().applicationContext as KeeperApplication)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

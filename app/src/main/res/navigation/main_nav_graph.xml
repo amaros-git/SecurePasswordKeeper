@@ -42,7 +42,9 @@
         android:label="AddPasswordFragment">
         <action
             android:id="@+id/action_addPasswordFragment_to_passwordListFragment"
-            app:destination="@id/passwordListFragment">
+            app:destination="@id/passwordListFragment"
+            app:popUpTo="@id/passwordListFragment"
+            app:popUpToInclusive="true">
         </action>
     </fragment>
 
