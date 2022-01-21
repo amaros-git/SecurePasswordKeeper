@@ -11,19 +11,19 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_passwordListFragment"
-            app:destination="@id/passwordListFragment"
+            android:id="@+id/action_loginFragment_to_passwordsFragment"
+            app:destination="@id/passwordsFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
-        android:id="@+id/passwordListFragment"
+        android:id="@+id/passwordsFragment"
         android:name="lv.maros.secured.password.keeper.pages.passwords.PasswordsFragment"
-        android:label="password_list_fragment"
+        android:label="passwords_fragment"
         tools:layout="@layout/fragment_passwords">
         <action
-            android:id="@+id/action_passwordListFragment_to_addPasswordFragment"
+            android:id="@+id/action_passwordsFragment_to_passwordAddEditFragment"
             app:destination="@id/passwordAddEditFragment">
             <argument
                 android:name="mode"
@@ -41,9 +41,9 @@
         android:name="lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment"
         android:label="AddPasswordFragment">
         <action
-            android:id="@+id/action_addPasswordFragment_to_passwordListFragment"
-            app:destination="@id/passwordListFragment"
-            app:popUpTo="@id/passwordListFragment"
+            android:id="@+id/action_passwordAddEditFragment_to_passwordsFragment"
+            app:destination="@id/passwordsFragment"
+            app:popUpTo="@id/passwordsFragment"
             app:popUpToInclusive="true">
         </action>
     </fragment>

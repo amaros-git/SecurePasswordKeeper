@@ -146,7 +146,7 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private fun setupCommonViews() {
         binding.addEditCancelButton.setOnClickListener {
-            findNavController().navigate(PasswordAddEditFragmentDirections.actionAddPasswordFragmentToPasswordListFragment())
+            findNavController().navigate(PasswordAddEditFragmentDirections.actionPasswordAddEditFragmentToPasswordsFragment())
         }
     }
 

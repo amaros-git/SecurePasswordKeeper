@@ -84,12 +84,12 @@ class PasswordsFragment : Fragment() {
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
             PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
-                PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                PasswordsFragmentDirections.actionPasswordsFragmentToPasswordAddEditFragment(
                     mode
                 )
             }
             PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
-                PasswordsFragmentDirections.actionPasswordListFragmentToAddPasswordFragment(
+                PasswordsFragmentDirections.actionPasswordsFragmentToPasswordAddEditFragment(
                     mode,
                     passwordId
                 )

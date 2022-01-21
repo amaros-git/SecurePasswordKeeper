@@ -32,7 +32,7 @@ class LoginFragment : Fragment() {
         // if login is not enabled, navigate to Password List
         if(!viewModel.isLoginEnabled()) {
             findNavController().navigate(
-                LoginFragmentDirections.actionLoginFragmentToPasswordListFragment()
+                LoginFragmentDirections.actionLoginFragmentToPasswordsFragment()
             )
         }
     }
