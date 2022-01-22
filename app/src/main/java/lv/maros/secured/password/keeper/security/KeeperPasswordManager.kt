@@ -1,8 +1,5 @@
 package lv.maros.secured.password.keeper.security
 
-import lv.maros.secured.password.keeper.utils.KeeperResult
-
-
 object KeeperPasswordManager {
 
     private var useLetters: Boolean = true
@@ -17,26 +14,11 @@ object KeeperPasswordManager {
         return "fbBMmGE2Z6GtKvEs"
     }
 
-   /* fun verifyPassword(password: String): KeeperResult<String> {
-        return when {
-            password.length < PASSWORD_MIN_LENGTH -> {
-                KeeperResult.Error(PASSWORD_TOO_SHORT)
-            }
+    fun generatePassword(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
 
-            password.isBlank() -> {
-                KeeperResult.Error(PASSWORD_IS_BLANK)
-            }
-
-            //TODO check if contains any space or whitespace
-
-            else -> KeeperResult.Success(PASSWORD_IS_VALID)
-        }
-    }*/
-
-
-    const val PASSWORD_MIN_LENGTH = 4 //TODO CHANGE For production ) 4 just to input faster
-
-    const val PASSWORD_TOO_SHORT = "Password too short"
-    const val PASSWORD_IS_BLANK = "Password is blank"
-    const val PASSWORD_IS_VALID = "Password is valid"
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
 }

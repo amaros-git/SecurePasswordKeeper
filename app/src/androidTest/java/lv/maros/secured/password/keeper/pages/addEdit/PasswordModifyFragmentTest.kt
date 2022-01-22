@@ -9,9 +9,12 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import fillPasswordAddEditFragmentWithTestData
+import hasTextInputLayoutErrorText
 import lv.maros.secured.password.keeper.R
 import org.junit.Assert
 import org.junit.Before
@@ -49,15 +52,31 @@ class PasswordModifyFragmentTest {
     @Test
     fun addPassword_passwordsDoNotMatch() {
         val navController = TestNavHostController(appContext)
-
         val fragment = launchFragment(navController)
 
-        fillPasswordModifyView(TestPasswordInputDataProvider.INPUT_DATA_PASSWORDS_DO_NOT_MATCH)
+        fillPasswordAddEditFragmentWithTestData(TestPasswordInputDataProvider.INPUT_DATA_PASSWORDS_DO_NOT_MATCH)
 
-        //Click Cancel button
-        onView(withId(R.id.addEdit_cancel_button)).perform(click())
+        //Click Save button
+        onView(withId(R.id.addEdit_apply_button)).perform(click())
 
-        //Check errors
+        //Check password error
+        onView(withId(R.id.passwordLayout)).check(
+            ViewAssertions.matches(
+                hasTextInputLayoutErrorText(
+                    appContext.getString(R.string.password_do_not_match_error)
+                )
+            )
+        )
+        //Check password error
+        onView(withId(R.id.repeatPasswordLayout)).check(
+            ViewAssertions.matches(
+                hasTextInputLayoutErrorText(
+                    appContext.getString(R.string.password_do_not_match_error)
+                )
+            )
+        )
+
+        fragment.close()
 
     }
 
@@ -76,20 +95,6 @@ class PasswordModifyFragmentTest {
         return scenario
     }
 
-
-    private fun fillPasswordModifyView(testDataType: Int) {
-        val (website, username, password, repeatPassword) =
-            TestPasswordInputDataProvider.provide(testDataType)
-
-        onView(withId(R.id.websiteEditText)).perform(clearText(), typeText(website))
-        onView(withId(R.id.usernameEditText)).perform(clearText(), typeText(username))
-        onView(withId(R.id.passwordEditText)).perform(clearText(), typeText(password))
-        onView(withId(R.id.repeatPasswordEditText)).perform(
-            clearText(),
-            typeText(repeatPassword),
-            closeSoftKeyboard()
-        )
-    }
 
     private fun getArgumentsBundle(mode: Int): Bundle {
         val args = Bundle().apply {

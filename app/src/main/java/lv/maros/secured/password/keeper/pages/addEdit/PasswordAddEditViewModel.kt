@@ -76,11 +76,11 @@ class PasswordAddEditViewModel (
                 repeatPasswordError.value = app.getString(R.string.password_blank_or_empty_error)
                 false
             }
-            password.length <= PASSWORD_MIN_LENGTH -> {
+            password.length < PASSWORD_MIN_LENGTH -> {
                 passwordError.value = app.getString(R.string.password_too_short)
                 false
             }
-            repeatPassword.length <= PASSWORD_MIN_LENGTH -> {
+            repeatPassword.length < PASSWORD_MIN_LENGTH -> {
                 repeatPasswordError.value = app.getString(R.string.password_too_short)
                 false
             }

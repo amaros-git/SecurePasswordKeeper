@@ -10,7 +10,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.google.android.material.textfield.TextInputLayout
+import fillPasswordAddEditFragmentWithTestData
+import hasTextInputLayoutErrorText
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -35,42 +36,13 @@ class KeeperActivityTest {
 
         onView(withId(R.id.addPassword_Fab)).perform(click())
 
-        fillPasswordModifyView(TestPasswordInputDataProvider.INPUT_DATA_ALL_GOOD)
+        fillPasswordAddEditFragmentWithTestData(TestPasswordInputDataProvider.INPUT_DATA_ALL_GOOD)
 
         onView(withId(R.id.addEdit_apply_button)).perform(click())
 
-        onView(withId(R.id.passwordLayout)).check(
-            matches(
-                hasTextInputLayoutErrorText(
-                    appContext.getString(R.string.password_do_not_match_error)
-                )
-            )
-        )
+
 
         activityScenario.close()
     }
 
-    private fun fillPasswordModifyView(testDataType: Int) {
-        val (website, username, password, repeatPassword) =
-            TestPasswordInputDataProvider.provide(testDataType)
-
-        onView(withId(R.id.websiteEditText)).perform(clearText(), typeText(website))
-        onView(withId(R.id.usernameEditText)).perform(clearText(), typeText(username))
-        onView(withId(R.id.passwordEditText)).perform(clearText(), typeText(password))
-        onView(withId(R.id.repeatPasswordEditText)).perform(clearText(), typeText(repeatPassword),
-            closeSoftKeyboard()
-        )
-    }
-
-
-    private fun hasTextInputLayoutErrorText(expectedErrorText: String): Matcher<View> =
-        object : TypeSafeMatcher<View>() {
-            override fun matchesSafely(item: View?): Boolean {
-                if (item !is TextInputLayout) return false
-                val error = item.error ?: return false
-                return expectedErrorText == error.toString()
-            }
-
-            override fun describeTo(description: Description?) {}
-        }
 }
