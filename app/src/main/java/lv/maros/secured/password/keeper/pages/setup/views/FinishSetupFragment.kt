@@ -15,13 +15,7 @@ class FinishSetupFragment : Fragment() {
 
     private lateinit var binding: FragmentFinishSetupBinding
 
-    private val viewModel: SharedSetupViewModel by activityViewModels {
-        SharedSetupViewModelFactory(
-            (requireContext().applicationContext as KeeperApplication).configStorage,
-            (requireContext().applicationContext as KeeperApplication).cryptor,
-            (requireContext().applicationContext as KeeperApplication)
-        )
-    }
+    private val viewModel: SharedSetupViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

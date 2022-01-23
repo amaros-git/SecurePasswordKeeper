@@ -5,12 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import lv.maros.secured.password.keeper.KeeperActivity
+import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 
 class KeeperSetupActivity : AppCompatActivity() {
 
     // Create viewModel to share it in Fragments
-    private val viewModel: SharedSetupViewModel by viewModels()
+    private val viewModel: SharedSetupViewModel by viewModels {
+        SharedSetupViewModelFactory(
+            (applicationContext as KeeperApplication).configStorage,
+            (applicationContext as KeeperApplication).cryptor,
+            (applicationContext as KeeperApplication)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

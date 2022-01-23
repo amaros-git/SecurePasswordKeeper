@@ -17,13 +17,7 @@ import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
 class ConfigureAuthMethodFragment : Fragment() {
 
-    private val viewModel: SharedSetupViewModel by activityViewModels {
-        SharedSetupViewModelFactory(
-            (requireContext().applicationContext as KeeperApplication).configStorage,
-            (requireContext().applicationContext as KeeperApplication).cryptor,
-            (requireContext().applicationContext as KeeperApplication)
-        )
-    }
+    private val viewModel: SharedSetupViewModel by activityViewModels()
 
     private lateinit var binding: FragmentSelectAuthMethodBinding
 

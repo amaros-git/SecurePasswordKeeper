@@ -21,13 +21,7 @@ class PasskeyInputBottomDialog(
 
     private lateinit var binding: DialogAuthMethodBinding
 
-    private val viewModel: SharedSetupViewModel by activityViewModels {
-        SharedSetupViewModelFactory(
-            (requireContext().applicationContext as KeeperApplication).configStorage,
-            (requireContext().applicationContext as KeeperApplication).cryptor,
-            (requireContext().applicationContext as KeeperApplication)
-        )
-    }
+    private val viewModel: SharedSetupViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
