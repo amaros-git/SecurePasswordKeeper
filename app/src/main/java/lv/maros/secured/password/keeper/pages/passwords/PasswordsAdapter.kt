@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
+import timber.log.Timber
 
 class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)

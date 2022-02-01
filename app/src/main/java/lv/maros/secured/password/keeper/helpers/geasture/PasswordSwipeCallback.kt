@@ -111,7 +111,6 @@ class PasswordItemSwipeCallback(
         return false
     }
 
-
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
         when {
             dX > 0 -> { //swipe right
