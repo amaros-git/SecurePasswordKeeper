@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import lv.maros.secured.password.keeper.R
@@ -22,6 +21,8 @@ class PasswordTextView @JvmOverloads constructor(
 
     @Volatile
     private var isPasswordVisible = true
+
+    private var clickListener: OnPasswordVisibilityClickListener? = null
 
     //TODO rework drawables to attributes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private val iconVisibleOff: Drawable =
@@ -60,7 +61,7 @@ class PasswordTextView @JvmOverloads constructor(
         }
 
     init {
-        isClickable = true //TODO
+        isClickable = false
         isSingleLine = true
 
         gestureDetector = GestureDetector(context, gestureListener)
@@ -116,13 +117,17 @@ class PasswordTextView @JvmOverloads constructor(
 
         iconVisible.draw(canvas)
         iconVisible.draw(canvas)
-
     }
 
-    override fun setText(text: CharSequence?, type: BufferType?) {
-        val newText = "************************************************************************"
+    fun setOnPasswordVisibilityClickListener(listener: OnPasswordVisibilityClickListener) {
+        isClickable = true
 
-        super.setText(newText, type)
+        clickListener = listener
+
     }
+}
 
+interface OnPasswordVisibilityClickListener {
+
+    fun onClick(isVisible: Boolean)
 }
