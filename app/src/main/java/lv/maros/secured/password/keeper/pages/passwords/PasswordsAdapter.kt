@@ -55,6 +55,11 @@ class PasswordViewHolder(private val binding: PasswordItemBinding) :
     fun bind(item: Password) {
         binding.password = item
         binding.executePendingBindings()
+
+
+        binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener {
+            Timber.d("visibility status = $it")
+        }
     }
 
     companion object {

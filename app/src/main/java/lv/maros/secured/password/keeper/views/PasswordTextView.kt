@@ -20,9 +20,11 @@ class PasswordTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs) {
 
     @Volatile
-    private var isPasswordVisible = true
+    private var isPasswordVisible = false
 
     private var clickListener: OnPasswordVisibilityClickListener? = null
+
+    var listener: ((Boolean) -> Unit)? = null
 
     //TODO rework drawables to attributes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private val iconVisibleOff: Drawable =
@@ -32,24 +34,24 @@ class PasswordTextView @JvmOverloads constructor(
 
     private var iconVisibleOffBounds: Rect? = null
 
-    private var widthSize = 0
-    private var heightSize = 0
-
     private val onPasswordTouchListener: OnTouchListener =
-        View.OnTouchListener { v, e ->
+        OnTouchListener { v, e ->
             v.performClick()
             processOnTouch(v, e)
         }
 
-    private lateinit var gestureDetector: GestureDetector
+    private val gestureDetector: GestureDetector
 
     private val gestureListener: GestureDetector.SimpleOnGestureListener =
         object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 iconVisibleOffBounds?.let {
                     return if (it.contains(e.x.toInt(), e.y.toInt())) {
-                        //passwordClickListener.onDeleteClick(swipedPos)
                         Timber.d("onSingleTapConfirmed")
+                        changeVisibility()
+                        //clickListener?.onClick(isPasswordVisible)
+                        listener?.let { status -> status(isPasswordVisible) }
+                        invalidate()
                         true
                     } else {
                         false
@@ -61,13 +63,11 @@ class PasswordTextView @JvmOverloads constructor(
         }
 
     init {
-        isClickable = false
+        isClickable = true
         isSingleLine = true
+        isPasswordVisible = false
 
         gestureDetector = GestureDetector(context, gestureListener)
-
-        Timber.d("measuredWidth = $measuredWidth, measuredHeight = $measuredHeight")
-
         setOnTouchListener(onPasswordTouchListener)
     }
 
@@ -93,37 +93,46 @@ class PasswordTextView @JvmOverloads constructor(
         }
     }
 
+    private fun changeVisibility() {
+        isPasswordVisible = !isPasswordVisible
+    }
+
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val viewWidth = measuredWidth
-        val viewHeight = measuredHeight
-        /*println("viewWidth = $viewWidth, viewHeight = $viewHeight")
-        println("paddingStart = $paddingStart, paddingTop = $paddingTop")
-        println("intrinsicWidth = ${visibleOff.intrinsicWidth}")*/
-
-
-        val bounds = Rect(
-            measuredWidth - iconVisible.intrinsicWidth,
+        val icon = if (isPasswordVisible) {
+            iconVisible
+        } else {
+            iconVisibleOff
+        }
+        icon.bounds = Rect(
+            measuredWidth - icon.intrinsicWidth,
             paddingTop,
             measuredWidth,
             measuredHeight
         )
 
-        iconVisibleOffBounds = bounds
+        iconVisibleOffBounds = icon.bounds
 
-        iconVisible.bounds = bounds
-
-        iconVisible.draw(canvas)
-        iconVisible.draw(canvas)
+        icon.draw(canvas)
     }
 
-    fun setOnPasswordVisibilityClickListener(listener: OnPasswordVisibilityClickListener) {
+    /*fun setOnPasswordVisibilityClickListener(listener: OnPasswordVisibilityClickListener) {
         isClickable = true
 
         clickListener = listener
 
+    }*/
+
+    inline fun setOnPasswordVisibilityClickListener(block:(status: Boolean) -> Unit) {
+        isClickable = true
+
+        listener = block
+    }
+
+    fun runTransformation(f: (String, Int) -> String): String {
+        return f("hello", 3)
     }
 }
 
