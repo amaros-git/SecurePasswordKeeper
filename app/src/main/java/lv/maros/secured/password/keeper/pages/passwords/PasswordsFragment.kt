@@ -144,7 +144,11 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun configurePasswordRecyclerView() {
-        passwordListAdapter = PasswordListAdapter()
+        passwordListAdapter = PasswordListAdapter { isVisible, data ->
+            Timber.d("isVisible = $isVisible, data = $data")
+
+            return@PasswordListAdapter "Hello"
+        }
 
         binding.passwordList.setup(passwordListAdapter)
 

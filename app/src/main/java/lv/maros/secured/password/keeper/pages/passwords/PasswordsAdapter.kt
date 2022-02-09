@@ -17,7 +17,7 @@ import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.utils.ClickListener
 import timber.log.Timber
 
-class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordListAdapter (private val listener: ((Boolean, String) -> String?)) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -26,9 +26,8 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
-        holder.binding.
+        holder.binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener(listener)
         holder.bind(password)
-
     }
 
     public override fun getItem(position: Int): Password {
@@ -42,11 +41,6 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
             }
         }
     }
-
-    fun setCopyPasteClickListener(l: View.OnClickListener) {
-
-    }
-
 }
 
 class PasswordViewHolder(val binding: PasswordItemBinding) :
@@ -64,9 +58,9 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
 
         //TODO REFACTOR ALL BELOW
 
-        binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener {
+        /*binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener {
             Timber.d("visibility status = $it")
-        }
+        }*/
     }
 
     companion object {
