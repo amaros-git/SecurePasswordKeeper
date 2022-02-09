@@ -50,7 +50,7 @@ class PasswordTextView @JvmOverloads constructor(
                         Timber.d("onSingleTapConfirmed")
                         changeVisibility()
                         //clickListener?.onClick(isPasswordVisible)
-                        listener?.let { status -> status(isPasswordVisible) }
+                        listener?.invoke(isPasswordVisible)
                         invalidate()
                         true
                     } else {
@@ -125,7 +125,7 @@ class PasswordTextView @JvmOverloads constructor(
 
     }*/
 
-    inline fun setOnPasswordVisibilityClickListener(block:(status: Boolean) -> Unit) {
+    fun setOnPasswordVisibilityClickListener(block:(status: Boolean) -> Unit) {
         isClickable = true
 
         listener = block

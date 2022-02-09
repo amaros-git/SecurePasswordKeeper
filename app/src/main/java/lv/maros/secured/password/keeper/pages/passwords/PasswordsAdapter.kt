@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.utils.ClickListener
 import timber.log.Timber
 
 class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
@@ -25,6 +26,7 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
+        holder.binding.
         holder.bind(password)
 
     }
@@ -41,9 +43,13 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
         }
     }
 
+    fun setCopyPasteClickListener(l: View.OnClickListener) {
+
+    }
+
 }
 
-class PasswordViewHolder(private val binding: PasswordItemBinding) :
+class PasswordViewHolder(val binding: PasswordItemBinding) :
     RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
 
     val container: ConstraintLayout = binding.passwordItemLayout //TODO must not depend on ConstrainLayout. Use custom view for password
@@ -56,6 +62,7 @@ class PasswordViewHolder(private val binding: PasswordItemBinding) :
         binding.password = item
         binding.executePendingBindings()
 
+        //TODO REFACTOR ALL BELOW
 
         binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener {
             Timber.d("visibility status = $it")
@@ -78,6 +85,7 @@ class PasswordViewHolder(private val binding: PasswordItemBinding) :
 
         return true
     }
+
 }
 
 class PasswordDiffCallback : DiffUtil.ItemCallback<Password>() {
