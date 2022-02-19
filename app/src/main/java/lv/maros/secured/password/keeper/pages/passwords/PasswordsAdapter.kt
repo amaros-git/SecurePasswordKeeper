@@ -26,7 +26,7 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
-        holder.binding.
+        holder.binding.passwordItemPasswordText.
         holder.bind(password)
 
     }
@@ -47,12 +47,14 @@ class PasswordListAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDi
 
     }
 
+    fun setOnPasswordVisibilityClickListener(l: View.OnClickListener) {
+
+    }
+
 }
 
 class PasswordViewHolder(val binding: PasswordItemBinding) :
     RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
-
-    val container: ConstraintLayout = binding.passwordItemLayout //TODO must not depend on ConstrainLayout. Use custom view for password
 
     init {
         binding.root.setOnLongClickListener(this)
@@ -61,8 +63,6 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
     fun bind(item: Password) {
         binding.password = item
         binding.executePendingBindings()
-
-        //TODO REFACTOR ALL BELOW
 
         binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener {
             Timber.d("visibility status = $it")
@@ -76,6 +76,7 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
                 parent,
                 false
             )
+
             return PasswordViewHolder(binding)
         }
     }
