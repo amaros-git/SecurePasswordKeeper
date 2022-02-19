@@ -22,7 +22,7 @@ class PasswordTextView @JvmOverloads constructor(
     @Volatile
     private var isPasswordVisible = false
 
-    var listener: ((Boolean, String) -> String?)? = null
+    var listener: OnPasswordVisibilityClockListener? = null
 
     //TODO rework drawables to attributes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private val iconVisibleOff: Drawable =
@@ -124,3 +124,7 @@ class PasswordTextView @JvmOverloads constructor(
     }
 
 }
+
+
+typealias OnPasswordVisibilityClockListener = (Boolean, String) -> String?
+

@@ -21,6 +21,7 @@ import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
+import lv.maros.secured.password.keeper.views.OnPasswordVisibilityClockListener
 
 
 class PasswordsFragment : Fragment() {
@@ -144,11 +145,15 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun configurePasswordRecyclerView() {
-        passwordListAdapter = PasswordListAdapter { isVisible, data ->
-            Timber.d("isVisible = $isVisible, data = $data")
-
-            return@PasswordListAdapter "Hello"
+        val copyClickListener = View.OnClickListener {
+            Timber.d("Copy clicked")
         }
+
+        val passwordVisibilityClickListener: OnPasswordVisibilityClockListener = {
+                b: Boolean, s: String -> handlePasswordVisibility(b, s)
+        }
+
+        passwordListAdapter = PasswordListAdapter(passwordVisibilityClickListener, copyClickListener)
 
         binding.passwordList.setup(passwordListAdapter)
 
@@ -161,6 +166,11 @@ class PasswordsFragment : Fragment() {
         ).attachToRecyclerView(
             binding.passwordList
         )
+    }
+
+    private fun handlePasswordVisibility (va: Boolean, cs: String): String? {
+        Timber.d("Password clicked")
+        return null
     }
 
 }

@@ -15,9 +15,14 @@ import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.utils.ClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordVisibilityClockListener
 import timber.log.Timber
 
-class PasswordListAdapter (private val listener: ((Boolean, String) -> String?)) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordListAdapter(
+    private val passwordVisibilityClickListener: OnPasswordVisibilityClockListener,
+    private val copyClickListener: View.OnClickListener
+) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -26,7 +31,9 @@ class PasswordListAdapter (private val listener: ((Boolean, String) -> String?))
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
-        holder.binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener(listener)
+        holder.binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener(
+            passwordVisibilityClickListener
+        )
         holder.bind(password)
     }
 
@@ -36,18 +43,10 @@ class PasswordListAdapter (private val listener: ((Boolean, String) -> String?))
 
     fun submitMyList(list: List<Password>) {
         adapterScope.launch {
-            withContext(Dispatchers.Main) { // runs on Main thread because it updates Recycler View
+            withContext(Dispatchers.Main) {
                 submitList(list)
             }
         }
-    }
-
-    fun setCopyPasteClickListener(l: View.OnClickListener) {
-
-    }
-
-    fun setOnPasswordVisibilityClickListener(l: View.OnClickListener) {
-
     }
 }
 
