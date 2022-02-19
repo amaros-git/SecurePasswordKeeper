@@ -22,9 +22,7 @@ class PasswordTextView @JvmOverloads constructor(
     @Volatile
     private var isPasswordVisible = false
 
-    private var clickListener: OnPasswordVisibilityClickListener? = null
-
-    var listener: ((Boolean) -> Unit)? = null
+    var listener: ((Boolean, String) -> String?)? = null
 
     //TODO rework drawables to attributes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private val iconVisibleOff: Drawable =
@@ -47,11 +45,12 @@ class PasswordTextView @JvmOverloads constructor(
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 iconVisibleOffBounds?.let {
                     return if (it.contains(e.x.toInt(), e.y.toInt())) {
-                        Timber.d("onSingleTapConfirmed")
+                        //Timber.d("onSingleTapConfirmed")
                         changeVisibility()
                         //clickListener?.onClick(isPasswordVisible)
-                        listener?.invoke(isPasswordVisible)
-                        invalidate()
+                        val data: String? = listener?.invoke(isPasswordVisible, text.toString())
+                        Timber.d("received data = $data")
+                        invalidate() //TODO MOVE UP ?
                         true
                     } else {
                         false
@@ -118,25 +117,10 @@ class PasswordTextView @JvmOverloads constructor(
         icon.draw(canvas)
     }
 
-    /*fun setOnPasswordVisibilityClickListener(listener: OnPasswordVisibilityClickListener) {
-        isClickable = true
-
-        clickListener = listener
-
-    }*/
-
-    fun setOnPasswordVisibilityClickListener(block:(status: Boolean) -> Unit) {
+    fun setOnPasswordVisibilityClickListener(block:(status: Boolean, data: String) -> String?) {
         isClickable = true
 
         listener = block
     }
 
-    fun runTransformation(f: (String, Int) -> String): String {
-        return f("hello", 3)
-    }
-}
-
-interface OnPasswordVisibilityClickListener {
-
-    fun onClick(isVisible: Boolean)
 }
