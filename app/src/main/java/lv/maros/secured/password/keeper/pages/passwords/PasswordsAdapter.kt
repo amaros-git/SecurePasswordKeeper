@@ -25,15 +25,23 @@ class PasswordListAdapter(
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
+    private fun setClickListeners(binding: PasswordItemBinding) {
+        binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener(
+            passwordVisibilityClickListener
+        )
+
+        binding.passwordItemWebsiteCopyButton.setOnClickListener(copyClickListener)
+        binding.passwordItemUsernameCopyButton.setOnClickListener(copyClickListener)
+        binding.passwordItemPasswordCopyButton.setOnClickListener(copyClickListener)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PasswordViewHolder.from(parent)
 
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
-        holder.binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener(
-            passwordVisibilityClickListener
-        )
+        setClickListeners(holder.binding)
         holder.bind(password)
     }
 
