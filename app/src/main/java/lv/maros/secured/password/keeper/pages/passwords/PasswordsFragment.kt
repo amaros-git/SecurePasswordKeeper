@@ -1,5 +1,9 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -146,7 +151,7 @@ class PasswordsFragment : Fragment() {
 
     private fun configurePasswordRecyclerView() {
         val copyClickListener = View.OnClickListener {
-            Timber.d("text = ${getClickedViewText(it)}")
+            processCopyClick(it)
         }
 
         val passwordVisibilityClickListener: OnPasswordVisibilityClockListener =
@@ -170,12 +175,18 @@ class PasswordsFragment : Fragment() {
         )
     }
 
-    /**
-     * return text from the related view
-     */
-    private fun getClickedViewText(view: View): String {
-        //return (getView()?.findViewById(view.id) as TextView).text.toString()
-        return when (view.id) {
+    private fun processCopyClick(view: View) {
+        val clipboard = activity!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(
+            ClipData.newPlainText(
+                "SecurePasswordKeeper",
+                getClickedPasswordItemViewText(view)
+            )
+        )
+    }
+
+    private fun getClickedPasswordItemViewText(view: View): String =
+        when (view.id) {
             R.id.passwordItem_website_copy_button ->
                 (getView()?.findViewById(R.id.passwordItem_website_text) as TextView).text.toString()
             R.id.passwordItem_username_copy_button ->
@@ -184,7 +195,6 @@ class PasswordsFragment : Fragment() {
                 (getView()?.findViewById(R.id.passwordItem_password_text) as TextView).text.toString()
             else -> ""
         }
-    }
 
     private fun processPasswordVisibilityClick(va: Boolean, cs: String): String? {
         Timber.d("Password clicked")
