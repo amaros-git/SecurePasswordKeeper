@@ -176,7 +176,7 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun processCopyClick(view: View) {
-        val clipboard = activity!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.setPrimaryClip(
             ClipData.newPlainText(
                 "SecurePasswordKeeper",
@@ -196,7 +196,7 @@ class PasswordsFragment : Fragment() {
             else -> ""
         }
 
-    private fun processPasswordVisibilityClick(va: Boolean, cs: String): String? {
+    private fun processPasswordVisibilityClick(status: Boolean, data: String): String? {
         Timber.d("Password clicked")
         return null
     }

@@ -105,6 +105,7 @@ class PasswordTextView @JvmOverloads constructor(
         } else {
             iconVisibleOff
         }
+        //TODO remove object creation
         icon.bounds = Rect(
             measuredWidth - icon.intrinsicWidth,
             paddingTop,
@@ -117,7 +118,8 @@ class PasswordTextView @JvmOverloads constructor(
         icon.draw(canvas)
     }
 
-    fun setOnPasswordVisibilityClickListener(block:(status: Boolean, data: String) -> String?) {
+    //TODO rework argument ?
+    fun setOnPasswordVisibilityClickListener(block: (status: Boolean, data: String) -> String?) {
         isClickable = true
 
         listener = block
