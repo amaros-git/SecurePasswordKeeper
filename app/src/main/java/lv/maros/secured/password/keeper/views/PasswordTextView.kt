@@ -22,6 +22,8 @@ class PasswordTextView @JvmOverloads constructor(
     @Volatile
     private var isPasswordVisible = false
 
+    private lateinit var encryptedPassword: String
+
     var listener: OnPasswordVisibilityClockListener? = null
 
     //TODO rework drawables to attributes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -67,6 +69,18 @@ class PasswordTextView @JvmOverloads constructor(
         setOnTouchListener(onPasswordTouchListener)
     }
 
+    override fun setText(text: CharSequence?, type: BufferType?) {
+        val newText = if (!isPasswordVisible) {
+            encryptedPassword = text.toString() //"cache" encrypted password
+            "********"
+        } else {
+            text
+        }
+        //Timber.d("text = ${text.toString()}")
+
+        super.setText(newText, type)
+    }
+
     private fun processOnTouch(view: View, e: MotionEvent): Boolean {
         val point = Point(e.rawX.toInt(), e.rawY.toInt())
 
@@ -89,9 +103,15 @@ class PasswordTextView @JvmOverloads constructor(
     }
 
     private fun processVisibilityClick() {
-        val data: String? = listener?.invoke(isPasswordVisible, text.toString())
-        Timber.d("received data = $data")
-
+        listener?.let {
+            val data = if (isPasswordVisible) {
+                it.invoke(isPasswordVisible, encryptedPassword)
+            } else {
+                encryptedPassword
+            }
+            Timber.d("received data = $data")
+            text = data
+        }
     }
 
     private fun changeVisibility() {
@@ -121,7 +141,7 @@ class PasswordTextView @JvmOverloads constructor(
     }
 
     //TODO rework argument ?
-    fun setOnPasswordVisibilityClickListener(block: (isVisible: Boolean, data: String) -> String?) {
+    fun setOnPasswordVisibilityClickListener(block: (isVisible: Boolean, data: String) -> String) {
         isClickable = true
 
         listener = block
@@ -130,5 +150,5 @@ class PasswordTextView @JvmOverloads constructor(
 }
 
 
-typealias OnPasswordVisibilityClockListener = (Boolean, String) -> String?
+typealias OnPasswordVisibilityClockListener = (Boolean, String) -> String
 
