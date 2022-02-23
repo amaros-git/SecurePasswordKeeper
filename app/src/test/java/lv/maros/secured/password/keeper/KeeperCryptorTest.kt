@@ -6,7 +6,7 @@ import org.junit.Test
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 
-//TODO does not work at the moment )
+//TODO does not work at the moment :)
 class KeeperCryptorTest {
 
     private val logTag = KeeperCryptorTest::class.java.simpleName
@@ -28,7 +28,7 @@ class KeeperCryptorTest {
 
         testPasswordMap.forEach { entry ->
             //Encrypt password and check if success is returned
-            val encryptionResult = cryptor.encryptString(entry.key, key, iv)
+            val encryptionResult = cryptor.encryptString(entry.key)
             assertThat(encryptionResult, `is`(notNullValue()))
         }
     }
@@ -40,7 +40,7 @@ class KeeperCryptorTest {
 
         testPasswordMap.forEach { entry ->
             //Encrypt password and check if success is returned
-            val decryptionResult = cryptor.decryptString(entry.value, key, iv)
+            val decryptionResult = cryptor.decryptString(entry.value)
             assertThat(decryptionResult, `is`(instanceOf(KeeperResult.Success::class.java)))
 
             //Check is a new encrypted password is equal to the reference value.

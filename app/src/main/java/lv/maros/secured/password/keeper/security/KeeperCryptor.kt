@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.utils.KeeperResult
+import timber.log.Timber
 import java.lang.NullPointerException
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -59,7 +60,7 @@ class KeeperCryptor(private val app: Application) {
         return convertToSignedHexString(encryptedBytes)
     }
 
-    fun decryptString(encryptedData: String): KeeperResult<String> {
+    fun decryptString(encryptedData: String): String? {
         val encryptedByteList = encryptedData.split(ENCRYPTED_HEX_PASSWORD_DELIMITER)
 
         return if (encryptedByteList.size.rem(ENCRYPTED_PASSWORD_BLOCK_LENGTH) == 0) {
@@ -68,9 +69,10 @@ class KeeperCryptor(private val app: Application) {
                 convertToByteArray(encryptedByteList),
                 key, iv
             )
-            KeeperResult.Success(decryptedBytes.decodeToString())
+            decryptedBytes.decodeToString()
         } else {
-            KeeperResult.Error("Wrong length or format")
+            Timber.e("Wrong length or format")
+            null
         }
     }
 

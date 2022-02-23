@@ -3,15 +3,18 @@ package lv.maros.secured.password.keeper.pages.passwords
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
 
 class PasswordsViewModel (
     private val repository: PasswordDataSource,
-    app: Application
+    private val cryptor: KeeperCryptor,
+    private val app: Application
 ) : BaseViewModel(app) {
 
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
@@ -40,14 +43,29 @@ class PasswordsViewModel (
         showNoData.value = passwordList.value == null || passwordList.value!!.isEmpty()
     }
 
+    fun decryptString(data: String): String {
+        val result = cryptor.decryptString(data)
+        return if (null != result) {
+            result
+        } else {
+            showErrorMessage.value = (app.getString(R.string.internal_error))
+            ""
+        }
+    }
+
+    fun encryptString(data: String): String {
+        return cryptor.encryptString(data)
+    }
+
 }
 
 @Suppress("UNCHECKED_CAST")
 class PasswordsViewModelFactory(
     private val repository: PasswordDataSource,
+    private val cryptor: KeeperCryptor,
     private val app: Application
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (PasswordsViewModel(repository, app) as T)
+        (PasswordsViewModel(repository, cryptor, app) as T)
 
 }

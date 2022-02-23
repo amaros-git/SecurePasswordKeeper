@@ -89,10 +89,9 @@ class PasswordTextView @JvmOverloads constructor(
     }
 
     private fun processVisibilityClick() {
-        if (isPasswordVisible) {
-            val data: String? = listener?.invoke(isPasswordVisible, text.toString())
-            Timber.d("received data = $data")
-        }
+        val data: String? = listener?.invoke(isPasswordVisible, text.toString())
+        Timber.d("received data = $data")
+
     }
 
     private fun changeVisibility() {

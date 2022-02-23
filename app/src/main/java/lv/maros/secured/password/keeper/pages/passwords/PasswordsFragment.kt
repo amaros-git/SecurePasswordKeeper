@@ -2,7 +2,6 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -36,6 +34,7 @@ class PasswordsFragment : Fragment() {
     private val viewModel: PasswordsViewModel by viewModels {
         PasswordsViewModelFactory(
             (requireContext().applicationContext as KeeperApplication).localPasswordsRepository,
+            (requireContext().applicationContext as KeeperApplication).cryptor,
             (requireContext().applicationContext as KeeperApplication)
         )
     }
@@ -196,11 +195,11 @@ class PasswordsFragment : Fragment() {
             else -> ""
         }
 
-    private fun processPasswordVisibilityClick(isVisible: Boolean, data: String): String? {
+    private fun processPasswordVisibilityClick(isVisible: Boolean, data: String): String {
         return if (isVisible) {
-            ""
+            viewModel.decryptString(data)
         } else {
-""
+            viewModel.encryptString(data)
         }
 
     }
