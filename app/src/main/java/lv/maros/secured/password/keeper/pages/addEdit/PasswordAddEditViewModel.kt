@@ -103,12 +103,8 @@ class PasswordAddEditViewModel (
         }
     }
 
-    //TODO if key and iv doesn't exist this is a critical issue. It doesn't make return null. REWROK !!!
     private fun encryptString(plainText: String): String {
-        val key = configStorage.getEncryptionKey()
-        val iv = configStorage.getEncryptionIV()
-
-        return cryptor.encryptString(plainText, key!!, iv!!)
+        return cryptor.encryptString(plainText)
     }
 
     fun loadPassword(passwordId: Int) {
@@ -122,7 +118,6 @@ class PasswordAddEditViewModel (
             }
         }
     }
-
 }
 
 @Suppress("UNCHECKED_CAST")

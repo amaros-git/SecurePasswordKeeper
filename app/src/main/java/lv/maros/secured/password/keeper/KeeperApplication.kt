@@ -13,7 +13,7 @@ class KeeperApplication : Application() {
         get() = ServiceLocator.provideLocalRepository(this)
 
     val cryptor: KeeperCryptor
-        get() = ServiceLocator.provideKeeperCrypto()
+        get() = ServiceLocator.provideKeeperCrypto(this)
 
     val configStorage: KeeperConfigStorage
         get() = ServiceLocator.provideKeeperConfigStorage(this)

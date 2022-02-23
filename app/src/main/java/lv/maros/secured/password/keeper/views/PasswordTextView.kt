@@ -45,11 +45,8 @@ class PasswordTextView @JvmOverloads constructor(
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 iconVisibleOffBounds?.let {
                     return if (it.contains(e.x.toInt(), e.y.toInt())) {
-                        //Timber.d("onSingleTapConfirmed")
                         changeVisibility()
-                        //clickListener?.onClick(isPasswordVisible)
-                        val data: String? = listener?.invoke(isPasswordVisible, text.toString())
-                        Timber.d("received data = $data")
+                        processVisibilityClick()
                         invalidate() //TODO MOVE UP ?
                         true
                     } else {
@@ -70,7 +67,6 @@ class PasswordTextView @JvmOverloads constructor(
         setOnTouchListener(onPasswordTouchListener)
     }
 
-
     private fun processOnTouch(view: View, e: MotionEvent): Boolean {
         val point = Point(e.rawX.toInt(), e.rawY.toInt())
 
@@ -89,6 +85,13 @@ class PasswordTextView @JvmOverloads constructor(
             }
         } else {
             false
+        }
+    }
+
+    private fun processVisibilityClick() {
+        if (isPasswordVisible) {
+            val data: String? = listener?.invoke(isPasswordVisible, text.toString())
+            Timber.d("received data = $data")
         }
     }
 
@@ -119,7 +122,7 @@ class PasswordTextView @JvmOverloads constructor(
     }
 
     //TODO rework argument ?
-    fun setOnPasswordVisibilityClickListener(block: (status: Boolean, data: String) -> String?) {
+    fun setOnPasswordVisibilityClickListener(block: (isVisible: Boolean, data: String) -> String?) {
         isClickable = true
 
         listener = block

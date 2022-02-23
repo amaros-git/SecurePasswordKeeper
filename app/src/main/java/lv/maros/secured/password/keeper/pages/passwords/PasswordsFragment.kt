@@ -196,9 +196,13 @@ class PasswordsFragment : Fragment() {
             else -> ""
         }
 
-    private fun processPasswordVisibilityClick(status: Boolean, data: String): String? {
-        Timber.d("Password clicked")
-        return null
+    private fun processPasswordVisibilityClick(isVisible: Boolean, data: String): String? {
+        return if (isVisible) {
+            ""
+        } else {
+""
+        }
+
     }
 
 }
