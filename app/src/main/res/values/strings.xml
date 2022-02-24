@@ -18,7 +18,7 @@
     <string name="add_password_button_text">Add</string>
     <string name="back_button_text">Back</string>
     <string name="website_label">Website</string>
-    <string name="username_or_login_text">Username or login</string>
+    <string name="username_label">Username</string>
 
 
     <!-- Text Views hints -->
