@@ -11,54 +11,44 @@ class PasswordTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs), View.OnClickListener {
 
     @Volatile
-    var isPasswordVisible = false
+    private var isPasswordVisible = false
 
+    lateinit var encryptedPassword: String
 
-
-    private lateinit var encryptedPassword: String
-
-    var listener: OnPasswordClickListener? = null
+    private var passwordClickListener: OnPasswordClickListener? = null
 
     init {
-        isPasswordVisible = false
-
         setOnClickListener(this)
     }
-
-    override fun setText(text: CharSequence?, type: BufferType?) {
-        val newText = if (!isPasswordVisible) {
-            encryptedPassword = text.toString() //"cache" encrypted password
-            "********"
-        } else {
-            text
-        }
-        //Timber.d("text = ${text.toString()}")
-
-        super.setText(newText, type)
-    }
-
-    /*private fun processVisibilityClick() {
-        listener?.let {
-            val data = if (isPasswordVisible) {
-                it.invoke(isPasswordVisible, encryptedPassword)
-            } else {
-                encryptedPassword
-            }
-            Timber.d("received data = $data")
-            text = data
-        }
-    }*/
 
     private fun changeVisibility() {
         isPasswordVisible = !isPasswordVisible
     }
 
-    fun setOnPasswordClickListener(listener: OnPasswordClickListener) {
-        this.listener = listener
+    /**
+     * we call OnPasswordClickListener only when is clicked on the hidden password
+     */
+    override fun onClick(v: View?) {
+        changeVisibility()
+
+        if (isPasswordVisible) {
+            passwordClickListener?.let {
+                val decryptedPassword = it.invoke(isPasswordVisible, encryptedPassword)
+                Timber.d("decryptedPassword = $decryptedPassword")
+                text = decryptedPassword
+            }
+        } else {
+            text = PASSWORD_TEXT_VIEW_MASK
+        }
     }
 
-    override fun onClick(v: View?) {
-        Timber.d("Click")
+
+    fun setOnPasswordClickListener(clickListener: OnPasswordClickListener) {
+        passwordClickListener = clickListener
+    }
+
+    companion object {
+        const val PASSWORD_TEXT_VIEW_MASK = "********"
     }
 }
 

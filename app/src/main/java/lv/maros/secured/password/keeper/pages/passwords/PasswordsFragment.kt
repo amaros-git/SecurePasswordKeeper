@@ -25,6 +25,7 @@ import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
+import lv.maros.secured.password.keeper.views.PasswordTextView
 
 
 class PasswordsFragment : Fragment() {
@@ -176,10 +177,12 @@ class PasswordsFragment : Fragment() {
 
     private fun processCopyClick(view: View) {
         val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val text = getClickedPasswordItemViewText(view)
+        Timber.d("copy text = $text")
         clipboard.setPrimaryClip(
             ClipData.newPlainText(
                 "SecurePasswordKeeper",
-                getClickedPasswordItemViewText(view)
+                text
             )
         )
     }
@@ -191,7 +194,7 @@ class PasswordsFragment : Fragment() {
             R.id.passwordItem_username_copy_button ->
                 (getView()?.findViewById(R.id.passwordItem_username_text) as TextView).text.toString()
             R.id.passwordItem_password_copy_button ->
-                (getView()?.findViewById(R.id.passwordItem_password_text) as TextView).text.toString()
+                (getView()?.findViewById(R.id.passwordItem_password_text) as PasswordTextView).text.toString()
             else -> ""
         }
 

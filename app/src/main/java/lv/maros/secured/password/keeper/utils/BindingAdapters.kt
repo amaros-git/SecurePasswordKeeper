@@ -2,7 +2,8 @@ package lv.maros.secured.password.keeper.utils
 
 import android.view.View
 import androidx.databinding.BindingAdapter
-import timber.log.Timber
+import lv.maros.secured.password.keeper.views.PasswordTextView
+import lv.maros.secured.password.keeper.views.PasswordTextView.Companion.PASSWORD_TEXT_VIEW_MASK
 
 object BindingAdapters {
 
@@ -25,5 +26,12 @@ object BindingAdapters {
                     view.fadeOut()
             }
         }
+    }
+
+    @BindingAdapter("password")
+    @JvmStatic
+    fun setPassword(view: PasswordTextView, password: String) {
+        view.encryptedPassword = password
+        view.text = PASSWORD_TEXT_VIEW_MASK
     }
 }
