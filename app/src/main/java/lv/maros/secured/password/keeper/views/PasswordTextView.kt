@@ -2,22 +2,27 @@ package lv.maros.secured.password.keeper.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
+import timber.log.Timber
 
 class PasswordTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : AppCompatTextView(context, attrs) {
+) : AppCompatTextView(context, attrs), View.OnClickListener {
 
     @Volatile
-    private var isPasswordVisible = false
+    var isPasswordVisible = false
+
+
 
     private lateinit var encryptedPassword: String
 
+    var listener: OnPasswordClickListener? = null
 
     init {
-        isClickable = true
         isPasswordVisible = false
 
+        setOnClickListener(this)
     }
 
     override fun setText(text: CharSequence?, type: BufferType?) {
@@ -48,6 +53,15 @@ class PasswordTextView @JvmOverloads constructor(
         isPasswordVisible = !isPasswordVisible
     }
 
+    fun setOnPasswordClickListener(listener: OnPasswordClickListener) {
+        this.listener = listener
+    }
+
+    override fun onClick(v: View?) {
+        Timber.d("Click")
+    }
 }
+
+typealias OnPasswordClickListener = (Boolean, String) -> String
 
 

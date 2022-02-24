@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,21 +13,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
-import lv.maros.secured.password.keeper.utils.ClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordVisibilityClockListener
-import timber.log.Timber
+import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 
 class PasswordListAdapter(
-    private val passwordVisibilityClickListener: OnPasswordVisibilityClockListener,
+    private val passwordClickListener: OnPasswordClickListener,
     private val copyClickListener: View.OnClickListener
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     private fun setClickListeners(binding: PasswordItemBinding) {
-        binding.passwordItemPasswordText.setOnPasswordVisibilityClickListener(
-            passwordVisibilityClickListener
-        )
+        binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
 
         binding.passwordItemWebsiteCopyButton.setOnClickListener(copyClickListener)
         binding.passwordItemUsernameCopyButton.setOnClickListener(copyClickListener)
@@ -37,7 +32,6 @@ class PasswordListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PasswordViewHolder.from(parent)
-
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
@@ -87,7 +81,6 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
 
         return true
     }
-
 }
 
 class PasswordDiffCallback : DiffUtil.ItemCallback<Password>() {

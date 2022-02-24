@@ -24,7 +24,7 @@ import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
-import lv.maros.secured.password.keeper.views.OnPasswordVisibilityClockListener
+import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 
 
 class PasswordsFragment : Fragment() {
@@ -153,7 +153,7 @@ class PasswordsFragment : Fragment() {
             processCopyClick(it)
         }
 
-        val passwordVisibilityClickListener: OnPasswordVisibilityClockListener =
+        val passwordVisibilityClickListener: OnPasswordClickListener =
             { b: Boolean, s: String ->
                 processPasswordVisibilityClick(b, s)
             }
