@@ -16,7 +16,7 @@ import lv.maros.secured.password.keeper.R
 class PasswordItemSwipeCallback(
     private val context: Context,
     private val recyclerView: RecyclerView,
-    private val passwordClickListener: PasswordClickListener,
+    private val passwordItemItemClickListener: PasswordItemClickListener,
     dragDirs: Int = 0,
     swipeDirs: Int = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) : ItemTouchHelper.SimpleCallback(
@@ -47,14 +47,14 @@ class PasswordItemSwipeCallback(
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 deleteClickRegion?.let {
                     if (it.contains(e.x, e.y)) {
-                        passwordClickListener.onDeleteClick(swipedPos)
+                        passwordItemItemClickListener.onDeleteClick(swipedPos)
                         return true;
                     }
                 }
 
                 editClickRegion?.let {
                     if (it.contains(e.x, e.y)) {
-                        passwordClickListener.onEditClick(swipedPos)
+                        passwordItemItemClickListener.onEditClick(swipedPos)
                         return true;
                     }
                 }
@@ -214,7 +214,7 @@ class PasswordItemSwipeCallback(
 
 }
 
-interface PasswordClickListener {
+interface PasswordItemClickListener {
     fun onDeleteClick(swipedPos: Int)
 
     fun onEditClick(swipedPos: Int)

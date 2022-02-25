@@ -13,7 +13,7 @@ class PasswordTextView @JvmOverloads constructor(
     @Volatile
     private var isPasswordVisible = false
 
-    lateinit var encryptedPassword: String
+    lateinit var encryptedPassword: String //is set in binding adapter
 
     private var passwordClickListener: OnPasswordClickListener? = null
 
@@ -21,15 +21,15 @@ class PasswordTextView @JvmOverloads constructor(
         setOnClickListener(this)
     }
 
-    private fun changeVisibility() {
+    private fun toggleVisibility() {
         isPasswordVisible = !isPasswordVisible
     }
 
     /**
      * we call OnPasswordClickListener only when is clicked on the hidden password
      */
-    override fun onClick(v: View?) {
-        changeVisibility()
+    override fun onClick(v: View) {
+        toggleVisibility()
 
         if (isPasswordVisible) {
             passwordClickListener?.let {
@@ -52,6 +52,8 @@ class PasswordTextView @JvmOverloads constructor(
     }
 }
 
+
+//TODO remove Boolean because we call it only for decryption.
 typealias OnPasswordClickListener = (Boolean, String) -> String
 
 

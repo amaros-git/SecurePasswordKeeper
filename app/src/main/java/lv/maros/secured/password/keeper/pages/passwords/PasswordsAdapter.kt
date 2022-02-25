@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
+import timber.log.Timber
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
@@ -35,7 +36,8 @@ class PasswordListAdapter(
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
-        setClickListeners(holder.binding)
+        Timber.d("Setting clickers for position $position")
+        setClickListeners(holder.binding) //TODO replace with customer listener and send position into each copy button
         holder.bind(password)
     }
 

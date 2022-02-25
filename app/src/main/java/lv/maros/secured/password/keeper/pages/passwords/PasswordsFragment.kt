@@ -16,9 +16,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
+import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import timber.log.Timber
 
-import lv.maros.secured.password.keeper.helpers.geasture.PasswordClickListener
+import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
@@ -136,7 +137,7 @@ class PasswordsFragment : Fragment() {
         return password.id
     }
 
-    private val passwordClickListener: PasswordClickListener = object : PasswordClickListener {
+    private val passwordItemClickListener: PasswordItemClickListener = object : PasswordItemClickListener {
         override fun onDeleteClick(swipedPos: Int) {
             Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
         }
@@ -168,7 +169,7 @@ class PasswordsFragment : Fragment() {
             PasswordItemSwipeCallback(
                 requireContext(),
                 binding.passwordList,
-                passwordClickListener
+                passwordItemClickListener
             )
         ).attachToRecyclerView(
             binding.passwordList
@@ -198,13 +199,9 @@ class PasswordsFragment : Fragment() {
             else -> ""
         }
 
-    private fun processPasswordVisibilityClick(isVisible: Boolean, data: String): String {
-        return if (isVisible) {
-            viewModel.decryptString(data)
-        } else {
-            viewModel.encryptString(data)
-        }
+    //TODO remove unused isVisible
+    private fun processPasswordVisibilityClick(isVisible: Boolean, data: String) =
+        viewModel.decryptString(data)
 
-    }
 
 }
