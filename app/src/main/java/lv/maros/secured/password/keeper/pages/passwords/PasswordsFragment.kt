@@ -1,8 +1,5 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,15 +13,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
-import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import timber.log.Timber
 
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
+import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
+import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import lv.maros.secured.password.keeper.views.PasswordTextView
 
@@ -137,23 +135,25 @@ class PasswordsFragment : Fragment() {
         return password.id
     }
 
-    private val passwordItemClickListener: PasswordItemClickListener = object : PasswordItemClickListener {
-        override fun onDeleteClick(swipedPos: Int) {
-            Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
-        }
+    private val passwordItemClickListener: PasswordItemClickListener =
+        object : PasswordItemClickListener {
+            override fun onDeleteClick(swipedPos: Int) {
+                Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
+            }
 
-        override fun onEditClick(swipedPos: Int) {
-            navigateToAddEditFragment(
-                PasswordAddEditFragment.MODE_EDIT_PASSWORD,
-                getPasswordId(swipedPos)
-            )
+            override fun onEditClick(swipedPos: Int) {
+                navigateToAddEditFragment(
+                    PasswordAddEditFragment.MODE_EDIT_PASSWORD,
+                    getPasswordId(swipedPos)
+                )
+            }
         }
-    }
 
     private fun configurePasswordRecyclerView() {
-        val copyClickListener = View.OnClickListener {
-            processCopyClick(it)
-        }
+        val copyClickListener: OnCopyClickListener =
+            { view, position ->
+                processCopyClick(view, position)
+            }
 
         val passwordVisibilityClickListener: OnPasswordClickListener =
             { b: Boolean, s: String ->
@@ -176,8 +176,12 @@ class PasswordsFragment : Fragment() {
         )
     }
 
-    private fun processCopyClick(view: View) {
-        val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+    private fun processCopyClick(view: View, position: Int) {
+        val passwordItem = passwordListAdapter.getItem(position)
+        val textToCopy = getClickedPasswordItemViewText(view.id, passwordItem)
+        Timber.d("textToCopy = $textToCopy")
+
+        /*val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         val text = getClickedPasswordItemViewText(view)
         Timber.d("copy text = $text")
         clipboard.setPrimaryClip(
@@ -185,17 +189,14 @@ class PasswordsFragment : Fragment() {
                 "SecurePasswordKeeper",
                 text
             )
-        )
+        )*/
     }
 
-    private fun getClickedPasswordItemViewText(view: View): String =
-        when (view.id) {
-            R.id.passwordItem_website_copy_button ->
-                (getView()?.findViewById(R.id.passwordItem_website_text) as TextView).text.toString()
-            R.id.passwordItem_username_copy_button ->
-                (getView()?.findViewById(R.id.passwordItem_username_text) as TextView).text.toString()
-            R.id.passwordItem_password_copy_button ->
-                (getView()?.findViewById(R.id.passwordItem_password_text) as PasswordTextView).text.toString()
+    private fun getClickedPasswordItemViewText(viewId: Int, password: Password): String =
+        when (viewId) {
+            R.id.passwordItem_website_copy_button -> password.website
+            R.id.passwordItem_username_copy_button -> password.username
+            R.id.passwordItem_password_copy_button -> password.encryptedPassword
             else -> ""
         }
 

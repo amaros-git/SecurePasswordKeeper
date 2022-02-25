@@ -10,7 +10,7 @@ class PasswordItemCopyButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ): AppCompatImageButton(context, attrs), View.OnClickListener {
 
-    val position = -1 //holder view position in recycler view
+    private var position = -1
 
     private var copyOnClickListener: OnCopyClickListener? = null
 
@@ -26,12 +26,13 @@ class PasswordItemCopyButton @JvmOverloads constructor(
         }
     }
 
-    fun setOnCopyClickListener(clickListener: OnCopyClickListener) {
+    fun setOnCopyClickListener(position: Int, clickListener: OnCopyClickListener) {
+        this.position = position
         copyOnClickListener = clickListener
     }
 }
 
 /**
- * int is a position
+ * Int is a view holder position in recycler view
  */
-typealias OnCopyClickListener = (View, Int) -> String
+typealias OnCopyClickListener = (View, Int) -> Unit

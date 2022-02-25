@@ -13,22 +13,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
-    private val copyClickListener: View.OnClickListener
+    private val copyClickListener: OnCopyClickListener
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    private fun setClickListeners(binding: PasswordItemBinding) {
+    private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
         binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
 
-        binding.passwordItemWebsiteCopyButton.setOnClickListener(copyClickListener)
-        binding.passwordItemUsernameCopyButton.setOnClickListener(copyClickListener)
-        binding.passwordItemPasswordCopyButton.setOnClickListener(copyClickListener)
+        binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
+        binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
+        binding.passwordItemPasswordCopyButton.setOnCopyClickListener(position, copyClickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -36,8 +37,7 @@ class PasswordListAdapter(
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val password: Password = getItem(position)
-        Timber.d("Setting clickers for position $position")
-        setClickListeners(holder.binding) //TODO replace with customer listener and send position into each copy button
+        setClickListeners(holder.binding, position)
         holder.bind(password)
     }
 
