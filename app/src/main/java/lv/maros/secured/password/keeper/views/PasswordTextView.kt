@@ -33,7 +33,7 @@ class PasswordTextView @JvmOverloads constructor(
 
         if (isPasswordVisible) {
             passwordClickListener?.let {
-                val decryptedPassword = it.invoke(isPasswordVisible, encryptedPassword)
+                val decryptedPassword = it.invoke(encryptedPassword)
                 Timber.d("decryptedPassword = $decryptedPassword")
                 text = decryptedPassword
             }
@@ -52,8 +52,6 @@ class PasswordTextView @JvmOverloads constructor(
     }
 }
 
-
-//TODO remove Boolean because we call it only for decryption.
-typealias OnPasswordClickListener = (Boolean, String) -> String
+typealias OnPasswordClickListener = (String) -> String
 
 

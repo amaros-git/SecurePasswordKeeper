@@ -1,20 +1,20 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
-import timber.log.Timber
-
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
 import lv.maros.secured.password.keeper.models.Password
@@ -24,7 +24,7 @@ import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
-import lv.maros.secured.password.keeper.views.PasswordTextView
+import timber.log.Timber
 
 
 class PasswordsFragment : Fragment() {
@@ -156,8 +156,8 @@ class PasswordsFragment : Fragment() {
             }
 
         val passwordVisibilityClickListener: OnPasswordClickListener =
-            { b: Boolean, s: String ->
-                processPasswordVisibilityClick(b, s)
+            {s: String ->
+                processPasswordVisibilityClick(s)
             }
 
         passwordListAdapter =
@@ -177,32 +177,29 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun processCopyClick(view: View, position: Int) {
-        val passwordItem = passwordListAdapter.getItem(position)
-        val textToCopy = getClickedPasswordItemViewText(view.id, passwordItem)
-        Timber.d("textToCopy = $textToCopy")
+        val textToCopy =
+            getClickedPasswordItemViewText(view.id, passwordListAdapter.getItem(position))
 
-        /*val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        val text = getClickedPasswordItemViewText(view)
-        Timber.d("copy text = $text")
+        val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.setPrimaryClip(
             ClipData.newPlainText(
                 "SecurePasswordKeeper",
-                text
+                textToCopy
             )
-        )*/
+        )
     }
 
     private fun getClickedPasswordItemViewText(viewId: Int, password: Password): String =
         when (viewId) {
             R.id.passwordItem_website_copy_button -> password.website
             R.id.passwordItem_username_copy_button -> password.username
-            R.id.passwordItem_password_copy_button -> password.encryptedPassword
+            R.id.passwordItem_password_copy_button ->
+                viewModel.decryptString(password.encryptedPassword)
             else -> ""
         }
 
-    //TODO remove unused isVisible
-    private fun processPasswordVisibilityClick(isVisible: Boolean, data: String) =
-        viewModel.decryptString(data)
 
+    private fun processPasswordVisibilityClick(data: String) =
+        viewModel.decryptString(data)
 
 }

@@ -6,12 +6,11 @@ import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
-import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
 
-class PasswordsViewModel (
+class PasswordsViewModel(
     private val repository: PasswordDataSource,
     private val cryptor: KeeperCryptor,
     private val app: Application
@@ -44,9 +43,9 @@ class PasswordsViewModel (
     }
 
     fun decryptString(data: String): String {
-        val result = cryptor.decryptString(data)
-        return if (null != result) {
-            result
+        val decryptedData = cryptor.decryptString(data)
+        return if (null != decryptedData) {
+            decryptedData
         } else {
             showErrorMessage.value = (app.getString(R.string.internal_error))
             ""
@@ -65,6 +64,7 @@ class PasswordsViewModelFactory(
     private val cryptor: KeeperCryptor,
     private val app: Application
 ) : ViewModelProvider.NewInstanceFactory() {
+
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         (PasswordsViewModel(repository, cryptor, app) as T)
 

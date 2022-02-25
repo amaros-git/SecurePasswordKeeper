@@ -2,15 +2,17 @@ package lv.maros.secured.password.keeper.helpers.geasture
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import android.graphics.Canvas
+import android.graphics.Point
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.view.GestureDetector
 import android.view.MotionEvent
-
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import lv.maros.secured.password.keeper.R
 
 class PasswordItemSwipeCallback(
