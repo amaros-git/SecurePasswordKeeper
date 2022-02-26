@@ -11,5 +11,5 @@ interface PasswordDataSource {
 
     suspend fun updatePassword(password: PasswordDTO)
 
-    suspend fun deletePassword(password: PasswordDTO)
+    suspend fun deletePassword(passwordId: Int)
 }

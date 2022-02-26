@@ -105,12 +105,7 @@ class PasswordsFragment : Fragment() {
             }
         }
 
-        if (null != action) {
-            findNavController().navigate(action)
-        } else {
-            //TODO
-        }
-
+        action?.let { findNavController().navigate(action) }
     }
 
     private fun setupViews() {
@@ -129,16 +124,13 @@ class PasswordsFragment : Fragment() {
         }
     }
 
-    private fun getPasswordId(swipedPos: Int): Int {
-        val password = passwordListAdapter.getItem(swipedPos)
-        Timber.d("passwordId = ${password.id}")
-        return password.id
-    }
+    private fun getPasswordId(swipedPos: Int) = passwordListAdapter.getItem(swipedPos).id
 
     private val passwordItemClickListener: PasswordItemClickListener =
         object : PasswordItemClickListener {
+
             override fun onDeleteClick(swipedPos: Int) {
-                Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
+                viewModel.deletePassword(getPasswordId(swipedPos))
             }
 
             override fun onEditClick(swipedPos: Int) {

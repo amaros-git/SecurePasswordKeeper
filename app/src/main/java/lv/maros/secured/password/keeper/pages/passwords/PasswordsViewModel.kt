@@ -52,8 +52,10 @@ class PasswordsViewModel(
         }
     }
 
-    fun encryptString(data: String): String {
-        return cryptor.encryptString(data)
+    fun deletePassword(passwordId: Int) {
+        viewModelScope.launch {
+            repository.deletePassword(passwordId)
+        }
     }
 
 }

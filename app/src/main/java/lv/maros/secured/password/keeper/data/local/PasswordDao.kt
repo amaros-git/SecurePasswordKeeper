@@ -17,6 +17,6 @@ interface PasswordDao {
     @Query("SELECT * FROM password_table WHERE password_id = :passwordId")
     suspend fun getPassword(passwordId: Int): PasswordDTO?
 
-    @Delete
-    suspend fun deletePassword(password: PasswordDTO)
+    @Query("DELETE FROM password_table WHERE password_id = :passwordId")
+    suspend fun deletePassword(passwordId: Int)
 }

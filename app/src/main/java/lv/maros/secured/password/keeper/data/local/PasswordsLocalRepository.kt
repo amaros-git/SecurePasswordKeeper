@@ -34,7 +34,9 @@ class PasswordsLocalRepository (
         }
     }
 
-    override suspend fun deletePassword(password: PasswordDTO) {
-        TODO("Not yet implemented")
+    override suspend fun deletePassword(passwordId: Int) {
+        withContext(ioDispatcher) {
+            passwordDb.passwordDao.deletePassword(passwordId)
+        }
     }
 }
