@@ -78,8 +78,9 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
         }
     }
 
+    //At the moment isn't implemented.
     override fun onLongClick(v: View): Boolean {
-        Toast.makeText(v.context, "long click", Toast.LENGTH_SHORT).show()
+        Timber.d("PasswordItem long click")
 
         return true
     }
