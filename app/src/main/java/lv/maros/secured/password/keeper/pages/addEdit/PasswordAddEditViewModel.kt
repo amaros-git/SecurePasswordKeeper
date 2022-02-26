@@ -7,63 +7,32 @@ import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.base.NavigationCommand
 import lv.maros.secured.password.keeper.data.PasswordDataSource
-import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
-import lv.maros.secured.password.keeper.pages.login.LoginViewModel
-import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.*
+import timber.log.Timber
+import kotlin.properties.Delegates
 
-class PasswordAddEditViewModel (
+class PasswordAddEditViewModel(
     private val repository: PasswordDataSource,
-    private val configStorage: KeeperConfigStorage,
     private val cryptor: KeeperCryptor,
     private val app: Application
 ) : BaseViewModel(app) {
 
-    //val _navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
-
-    private val _password = MutableLiveData<Password>()
-    val password: LiveData<Password>
-        get() = _password
+    private val _passwordToEdit = MutableLiveData<Password>()
+    val passwordToEdit: LiveData<Password>
+        get() = _passwordToEdit
 
     val websiteError: SingleLiveEvent<String> = SingleLiveEvent()
     val usernameError: SingleLiveEvent<String> = SingleLiveEvent()
     val passwordError: SingleLiveEvent<String> = SingleLiveEvent()
     val repeatPasswordError: SingleLiveEvent<String> = SingleLiveEvent()
 
+    /*//during conversion PasswordDTO->Password->PasswordInputData a real ID of
+    //updated password is lost. So we save it here. Is there better way tp handle this ?
+    private var passwordToEditId: Int by Delegates.notNull()*/
 
-    fun savePassword(passwordData: PasswordInputData) {
-        if (verifyPasswordInputData(passwordData)) {
-            viewModelScope.launch {
-                val encryptedPassword = encryptString(passwordData.password)
-                repository.savePassword(passwordData.toPasswordDTO(encryptedPassword))
-
-                navigationCommand.value = NavigationCommand.Back
-            }
-        } else {
-            //TODO
-        }
-    }
-
-    fun updatePassword(passwordData: PasswordInputData) {
-        if (verifyPasswordInputData(passwordData)) {
-            viewModelScope.launch {
-                repository.updatePassword(
-                    passwordData.toPasswordDTO(
-                        encryptString(passwordData.password)
-                    )
-                )
-
-                navigationCommand.value = NavigationCommand.Back
-            }
-        } else {
-            //TODO
-        }
-    }
-
-    //TODO move to ViewModel. Rework, compare passwords etc
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
 
@@ -103,8 +72,38 @@ class PasswordAddEditViewModel (
         }
     }
 
-    private fun encryptString(plainText: String): String {
-        return cryptor.encryptString(plainText)
+    private fun encryptString(data: String): String {
+        return cryptor.encryptString(data)
+    }
+
+    fun savePassword(passwordData: PasswordInputData) {
+        if (verifyPasswordInputData(passwordData)) {
+            viewModelScope.launch {
+                val encryptedPassword = encryptString(passwordData.password)
+                repository.savePassword(passwordData.toPasswordDTO(encryptedPassword))
+
+                navigationCommand.value = NavigationCommand.Back
+            }
+        } else {
+            //TODO
+        }
+    }
+
+    fun updatePassword(passwordData: PasswordInputData, passwordId: Int) {
+        if (verifyPasswordInputData(passwordData)) {
+            viewModelScope.launch {
+                val passwordDTO = passwordData.toPasswordDTO(encryptString(passwordData.password))
+                    .apply { id = passwordId }
+
+                repository.updatePassword(passwordDTO)
+
+                navigationCommand.value = NavigationCommand.Back
+            }
+        }
+    }
+
+    fun decryptString(data: String): String? {
+        return cryptor.decryptString(data)
     }
 
     fun loadPassword(passwordId: Int) {
@@ -112,9 +111,9 @@ class PasswordAddEditViewModel (
             val passwordDTO = repository.getPassword(passwordId)
 
             if (null != passwordDTO) {
-                _password.postValue(passwordDTO.toPassword())
+                _passwordToEdit.postValue(passwordDTO.toPassword())
             } else {
-                //TODO
+                Timber.e("Password with id $passwordId doesn't exist")
             }
         }
     }
@@ -123,11 +122,11 @@ class PasswordAddEditViewModel (
 @Suppress("UNCHECKED_CAST")
 class PasswordAddEditViewModelFactory(
     private val repository: PasswordDataSource,
-    private val configStorage: KeeperConfigStorage,
     private val cryptor: KeeperCryptor,
     private val app: Application
 ) : ViewModelProvider.NewInstanceFactory() {
+
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (PasswordAddEditViewModel(repository, configStorage, cryptor, app) as T)
+        (PasswordAddEditViewModel(repository, cryptor, app) as T)
 
 }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
@@ -14,19 +13,20 @@ import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
-import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModelFactory
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
+import timber.log.Timber
 import kotlin.properties.Delegates
 
 class PasswordAddEditFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddEditPasswordBinding
 
+    private var passwordId: Int by Delegates.notNull()
+
     override val _viewModel: PasswordAddEditViewModel by viewModels {
         PasswordAddEditViewModelFactory(
             (requireContext().applicationContext as KeeperApplication).localPasswordsRepository,
-            (requireContext().applicationContext as KeeperApplication).configStorage,
             (requireContext().applicationContext as KeeperApplication).cryptor,
             (requireContext().applicationContext as KeeperApplication)
         )
@@ -44,7 +44,7 @@ class PasswordAddEditFragment : BaseFragment() {
 
         setDisplayHomeAsUpEnabled(true)
 
-        configureFragmentMode(getMode())
+        configureFragmentMode()
 
         setupCommonViews()
 
@@ -67,11 +67,11 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private fun loadPassword() {
         if (MODE_EDIT_PASSWORD == currentMode) {
-            val passwordId = arguments?.getInt(ARGUMENTS_PASSWORD_ID_KEY) ?: WRONG_PASSWORD_ID
+            passwordId = arguments?.getInt(ARGUMENTS_PASSWORD_ID_KEY) ?: WRONG_PASSWORD_ID
             if (passwordId >= 0) {
                 _viewModel.loadPassword(passwordId)
             } else {
-                //TODO
+                Timber.e("Fragment args don't contain a valid password id")
             }
         }
     }
@@ -95,7 +95,7 @@ class PasswordAddEditFragment : BaseFragment() {
         }
     }
 
-    private fun configureFragmentMode(mode: Int) {
+    private fun configureFragmentMode() {
         when (getMode()) {
             MODE_EDIT_PASSWORD -> {
                 setTitle(getString(R.string.edit_password_title))
@@ -105,14 +105,14 @@ class PasswordAddEditFragment : BaseFragment() {
                 setTitle(getString(R.string.add_new_password_title))
                 setupAddMode()
             }
-            else -> {
-                setTitle("OPAAA")
+            else -> { //TODO
+                setTitle("SecurePasswordKeeper")
             }
         }
     }
 
     private fun setupEditMode() {
-        _viewModel.password.observe(viewLifecycleOwner) {
+        _viewModel.passwordToEdit.observe(viewLifecycleOwner) {
             it?.let {
                 showPassword(it)
             }
@@ -123,8 +123,7 @@ class PasswordAddEditFragment : BaseFragment() {
 
             setOnClickListener {
                 resetTextInputLayoutsErrors(binding.passwordModificationLayout)
-
-                _viewModel.updatePassword(collectPasswordInputData())
+                _viewModel.updatePassword(collectPasswordInputData(), passwordId)
             }
         }
 
@@ -137,7 +136,6 @@ class PasswordAddEditFragment : BaseFragment() {
 
             setOnClickListener {
                 resetTextInputLayoutsErrors(binding.passwordModificationLayout)
-
                 _viewModel.savePassword(collectPasswordInputData())
             }
         }
@@ -155,7 +153,7 @@ class PasswordAddEditFragment : BaseFragment() {
 
         binding.websiteLayout.editText?.setText(website)
         binding.usernameLayout.editText?.setText(username)
-        binding.passwordLayout.editText?.setText(encryptedPassword)
+        binding.passwordLayout.editText?.setText(_viewModel.decryptString(encryptedPassword))
     }
 
 

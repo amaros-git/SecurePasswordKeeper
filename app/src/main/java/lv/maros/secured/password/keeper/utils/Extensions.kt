@@ -76,5 +76,5 @@ fun PasswordInputData.toPasswordDTO(encryptedPassword: String) =
         this.username,
         encryptedPassword,
         System.currentTimeMillis(),
-        0
+        0 //Restore a real iD in case of Editing.
     )

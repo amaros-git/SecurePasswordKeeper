@@ -55,10 +55,10 @@ class PasswordListAdapter(
 }
 
 class PasswordViewHolder(val binding: PasswordItemBinding) :
-    RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
+    RecyclerView.ViewHolder(binding.root)/*, View.OnLongClickListener*/ {
 
     init {
-        binding.root.setOnLongClickListener(this)
+        //binding.root.setOnLongClickListener(this)
     }
 
     fun bind(item: Password) {
@@ -79,11 +79,11 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
     }
 
     //At the moment isn't implemented.
-    override fun onLongClick(v: View): Boolean {
+    /*override fun onLongClick(v: View): Boolean {
         Timber.d("PasswordItem long click")
 
         return true
-    }
+    }*/
 }
 
 class PasswordDiffCallback : DiffUtil.ItemCallback<Password>() {

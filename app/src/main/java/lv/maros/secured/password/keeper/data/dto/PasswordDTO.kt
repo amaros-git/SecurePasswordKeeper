@@ -20,5 +20,5 @@ data class PasswordDTO(
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "encrypted_password") val encryptedPassword: String,
     @ColumnInfo(name = "password_last_modification_date") val passwordLastModificationDate: Long,
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "password_id") val id: Int
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "password_id") var id: Int
 )
