@@ -18,8 +18,8 @@ class PasswordsViewModel(
 
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val _passwordList = MutableLiveData<List<Password>>()
-    val passwordList: LiveData<List<Password>>
+    private val _passwordList = MutableLiveData<MutableList<Password>>()
+    val passwordList: LiveData<MutableList<Password>>
         get() = _passwordList
 
 
@@ -28,7 +28,7 @@ class PasswordsViewModel(
             val passwords = repository.getAllPasswords()
 
             if (passwords.isNotEmpty()) {
-                _passwordList.value = passwords.map { it.toPassword() }
+                _passwordList.value = passwords.map { it.toPassword() }.toMutableList()
             }
 
             invalidateShowNoData()
@@ -52,9 +52,11 @@ class PasswordsViewModel(
         }
     }
 
-    fun deletePassword(passwordId: Int) {
+    fun deletePassword(passwordId: Int, position: Int) {
         viewModelScope.launch {
             repository.deletePassword(passwordId)
+
+            _passwordList.value?.removeAt(position)
         }
     }
 

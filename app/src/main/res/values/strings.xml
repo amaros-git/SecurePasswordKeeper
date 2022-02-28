@@ -44,5 +44,7 @@
     <string name="no_data">No Data</string>
     <string name="space_char_error">Password cannot contain space character</string>
     <string name="password_blank_or_empty_error">Password is empty or contains spaces</string>
+    <string name="undo_password_removal">Undo</string>
+    <string name="password_is_removed">Password is removed. You still can undo this</string>
 
 </resources>

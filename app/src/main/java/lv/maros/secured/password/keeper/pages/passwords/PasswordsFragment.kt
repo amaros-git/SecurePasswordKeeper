@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
@@ -54,8 +55,9 @@ class PasswordsFragment : Fragment() {
         setDisplayHomeAsUpEnabled(false)
 
         configurePasswordRecyclerView()
+
         setupViews()
-        setupBottomNavigation()
+        //setupBottomNavigation()
 
         return binding.root
     }
@@ -66,7 +68,7 @@ class PasswordsFragment : Fragment() {
         viewModel.loadAllPasswords()
     }
 
-    private fun setupBottomNavigation() {
+    /*private fun setupBottomNavigation() {
         //I don't need to check any item. This just like a button.
         binding.bottomNavigation.menu.setGroupCheckable(0, false, false)
 
@@ -84,7 +86,7 @@ class PasswordsFragment : Fragment() {
             }
         }
 
-    }
+    }*/
 
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
@@ -114,10 +116,6 @@ class PasswordsFragment : Fragment() {
         }
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
-            it.forEach { password ->
-                Timber.d(password.toString())
-            }
-
             it?.let {
                 passwordListAdapter.submitMyList(it)
             }
@@ -130,7 +128,7 @@ class PasswordsFragment : Fragment() {
         object : PasswordItemClickListener {
 
             override fun onDeleteClick(swipedPos: Int) {
-                viewModel.deletePassword(getPasswordId(swipedPos))
+                processPasswordRemoval(swipedPos)
             }
 
             override fun onEditClick(swipedPos: Int) {
@@ -193,5 +191,26 @@ class PasswordsFragment : Fragment() {
 
     private fun processPasswordVisibilityClick(data: String) =
         viewModel.decryptString(data)
+
+
+    private fun processPasswordRemoval(swipedPos: Int) {
+        val passwordId = getPasswordId(swipedPos)
+        viewModel.deletePassword(passwordId, swipedPos)
+        passwordListAdapter.notifyItemRemoved(swipedPos)
+        showUndoPasswordRemoval(passwordId)
+    }
+
+    private fun showUndoPasswordRemoval(passwordId: Int) {
+        Snackbar.make(
+            binding.root,
+            getString(R.string.password_is_removed), Snackbar.LENGTH_LONG
+        ).setAction(getString(R.string.undo_password_removal)) {
+            undoPasswordRemoval(passwordId)
+        }.show()
+    }
+
+    private fun undoPasswordRemoval(passwordId: Int) {
+
+    }
 
 }
