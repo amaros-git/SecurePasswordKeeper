@@ -65,7 +65,7 @@ class PasswordsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.loadAllPasswords()
+        viewModel.loadAllPasswords() //TODO should it be here ?
     }
 
     /*private fun setupBottomNavigation() {
@@ -188,28 +188,28 @@ class PasswordsFragment : Fragment() {
             else -> ""
         }
 
-
     private fun processPasswordVisibilityClick(data: String) =
         viewModel.decryptString(data)
 
-
     private fun processPasswordRemoval(swipedPos: Int) {
         val passwordId = getPasswordId(swipedPos)
+        val passwordSaved = passwordListAdapter.getItem(swipedPos)
+
         viewModel.deletePassword(passwordId, swipedPos)
         passwordListAdapter.notifyItemRemoved(swipedPos)
-        showUndoPasswordRemoval(passwordId)
+        showUndoPasswordRemoval(passwordSaved)
     }
 
-    private fun showUndoPasswordRemoval(passwordId: Int) {
+    private fun showUndoPasswordRemoval(password: Password) {
         Snackbar.make(
             binding.root,
             getString(R.string.password_is_removed), Snackbar.LENGTH_LONG
         ).setAction(getString(R.string.undo_password_removal)) {
-            undoPasswordRemoval(passwordId)
+            undoPasswordRemoval(password)
         }.show()
     }
 
-    private fun undoPasswordRemoval(passwordId: Int) {
+    private fun undoPasswordRemoval(password: Password) {
 
     }
 
