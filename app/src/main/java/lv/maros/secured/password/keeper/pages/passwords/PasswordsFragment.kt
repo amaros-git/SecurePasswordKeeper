@@ -68,6 +68,12 @@ class PasswordsFragment : Fragment() {
         viewModel.loadAllPasswords() //TODO should it be here ?
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        Timber.d("onPause called")
+    }
+
     /*private fun setupBottomNavigation() {
         //I don't need to check any item. This just like a button.
         binding.bottomNavigation.menu.setGroupCheckable(0, false, false)
@@ -117,6 +123,7 @@ class PasswordsFragment : Fragment() {
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
             it?.let {
+                Timber.d("got new list")
                 passwordListAdapter.submitMyList(it)
             }
         }
@@ -192,25 +199,23 @@ class PasswordsFragment : Fragment() {
         viewModel.decryptString(data)
 
     private fun processPasswordRemoval(swipedPos: Int) {
-        val passwordId = getPasswordId(swipedPos)
         val passwordSaved = passwordListAdapter.getItem(swipedPos)
+        viewModel.removePasswordItem(passwordListAdapter, swipedPos)
 
-        viewModel.deletePassword(passwordId, swipedPos)
-        passwordListAdapter.notifyItemRemoved(swipedPos)
-        showUndoPasswordRemoval(passwordSaved)
+        showUndoPasswordRemoval(passwordSaved, swipedPos)
     }
 
-    private fun showUndoPasswordRemoval(password: Password) {
+    private fun showUndoPasswordRemoval(password: Password, swipedPos: Int) {
         Snackbar.make(
             binding.root,
             getString(R.string.password_is_removed), Snackbar.LENGTH_LONG
         ).setAction(getString(R.string.undo_password_removal)) {
-            undoPasswordRemoval(password)
+            undoPasswordRemoval(password, swipedPos)
         }.show()
     }
 
-    private fun undoPasswordRemoval(password: Password) {
-
+    private fun undoPasswordRemoval(password: Password, swipedPos: Int) {
+        viewModel.addPasswordItem(passwordListAdapter, password, swipedPos)
     }
 
 }

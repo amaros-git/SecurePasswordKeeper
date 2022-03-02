@@ -9,6 +9,7 @@ import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
+import lv.maros.secured.password.keeper.utils.toPasswordDTO
 
 class PasswordsViewModel(
     private val repository: PasswordDataSource,
@@ -23,15 +24,21 @@ class PasswordsViewModel(
         get() = _passwordList
 
 
+    private suspend fun _loadAllPasswords() {
+        val passwords = repository.getAllPasswords()
+
+        if (passwords.isNotEmpty()) {
+            _passwordList.value =
+                passwords.map { it.toPassword() }.sortedBy { it.website }.toMutableList()
+        }
+
+        invalidateShowNoData()
+    }
+
+
     fun loadAllPasswords() {
         viewModelScope.launch {
-            val passwords = repository.getAllPasswords()
-
-            if (passwords.isNotEmpty()) {
-                _passwordList.value = passwords.map { it.toPassword() }.toMutableList()
-            }
-
-            invalidateShowNoData()
+            _loadAllPasswords()
         }
     }
 
@@ -39,7 +46,7 @@ class PasswordsViewModel(
      * Inform the user that there's not any data if the remindersList is empty
      */
     private fun invalidateShowNoData() {
-        showNoData.value = passwordList.value == null || passwordList.value!!.isEmpty()
+        showNoData.value = _passwordList.value == null || _passwordList.value!!.isEmpty()
     }
 
     fun decryptString(data: String): String {
@@ -55,11 +62,32 @@ class PasswordsViewModel(
     fun deletePassword(passwordId: Int, position: Int) {
         viewModelScope.launch {
             repository.deletePassword(passwordId)
-
             _passwordList.value?.removeAt(position)
+            invalidateShowNoData()
         }
     }
 
+    /*fun undoPasswordRemoval(password: Password) {
+        viewModelScope.launch {
+            repository.savePassword(password.toPasswordDTO())
+
+            _loadAllPasswords()
+        }
+    }*/
+
+    fun removePasswordItem(passwordListAdapter: PasswordListAdapter, swipedPos: Int) {
+        _passwordList.value?.removeAt(swipedPos)
+        passwordListAdapter.notifyItemRemoved(swipedPos)
+    }
+
+    fun addPasswordItem(
+        passwordListAdapter: PasswordListAdapter,
+        password: Password,
+        swipedPos: Int
+    ) {
+        _passwordList.value?.add(swipedPos, password)
+        passwordListAdapter.notifyItemInserted(swipedPos)
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

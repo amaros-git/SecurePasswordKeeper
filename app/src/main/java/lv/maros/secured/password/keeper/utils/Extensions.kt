@@ -76,5 +76,14 @@ fun PasswordInputData.toPasswordDTO(encryptedPassword: String) =
         this.username,
         encryptedPassword,
         System.currentTimeMillis(),
-        0 //Restore a real iD in case of Editing.
+        0 //Restore a real iD in case of Update.
+    )
+
+fun Password.toPasswordDTO() =
+    PasswordDTO(
+        this.website,
+        this.username,
+        this.encryptedPassword,
+        this.passwordLastModificationDate,
+        0
     )
