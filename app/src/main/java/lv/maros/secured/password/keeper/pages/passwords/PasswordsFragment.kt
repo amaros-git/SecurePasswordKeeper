@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -198,23 +197,49 @@ class PasswordsFragment : Fragment() {
     private fun processPasswordVisibilityClick(data: String) =
         viewModel.decryptString(data)
 
+
+    /**
+     * How password removal works:
+     * 1. User swipes and clicks on Delete icon.
+     * 2. We add password to the list and remove it from the RecyclerView.
+     * 3. Then show snackbar to undo password removal
+     * 4. If user clicks on Undo, we remove this password from the list and
+     * add password back to the recycler view
+     * 5. If user does nothing, snackbar callback onDismissed
+     * is triggered and we use the list of deleted passwords
+     * to completely delete password from the database
+     */
     private fun processPasswordRemoval(swipedPos: Int) {
-        val passwordSaved = passwordListAdapter.getItem(swipedPos)
+        val passwordToDelete = passwordListAdapter.getItem(swipedPos)
+
+        viewModel.addPasswordToDeletedList(passwordToDelete)
         viewModel.removePasswordItem(passwordListAdapter, swipedPos)
 
-        showUndoPasswordRemoval(passwordSaved, swipedPos)
+        showUndoPasswordRemoval(passwordToDelete, swipedPos)
     }
 
     private fun showUndoPasswordRemoval(password: Password, swipedPos: Int) {
+        val snackDismissCallback = object : Snackbar.Callback() {
+
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+
+                viewModel.deletePasswords()
+            }
+        }
+
         Snackbar.make(
             binding.root,
-            getString(R.string.password_is_removed), Snackbar.LENGTH_LONG
+            getString(R.string.password_is_removed), Snackbar.LENGTH_SHORT
         ).setAction(getString(R.string.undo_password_removal)) {
             undoPasswordRemoval(password, swipedPos)
-        }.show()
+        }
+            .addCallback(snackDismissCallback)
+            .show()
     }
 
     private fun undoPasswordRemoval(password: Password, swipedPos: Int) {
+        viewModel.removePasswordFromDeletedList(password)
         viewModel.addPasswordItem(passwordListAdapter, password, swipedPos)
     }
 

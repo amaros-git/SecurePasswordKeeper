@@ -23,6 +23,7 @@ class PasswordsViewModel(
     val passwordList: LiveData<MutableList<Password>>
         get() = _passwordList
 
+    private val passwordsToDelete = mutableListOf<Password>()
 
     private suspend fun _loadAllPasswords() {
         val passwords = repository.getAllPasswords()
@@ -59,21 +60,23 @@ class PasswordsViewModel(
         }
     }
 
-    fun deletePassword(passwordId: Int, position: Int) {
+    fun deletePasswords() {
         viewModelScope.launch {
-            repository.deletePassword(passwordId)
-            _passwordList.value?.removeAt(position)
+            passwordsToDelete.forEach {
+                repository.deletePassword(it.id)
+            }
+
             invalidateShowNoData()
         }
     }
 
-    /*fun undoPasswordRemoval(password: Password) {
-        viewModelScope.launch {
-            repository.savePassword(password.toPasswordDTO())
+    fun addPasswordToDeletedList(password: Password) {
+        passwordsToDelete.add(password)
+    }
 
-            _loadAllPasswords()
-        }
-    }*/
+    fun removePasswordFromDeletedList(password: Password) {
+        passwordsToDelete.remove(password)
+    }
 
     fun removePasswordItem(passwordListAdapter: PasswordListAdapter, swipedPos: Int) {
         _passwordList.value?.removeAt(swipedPos)
