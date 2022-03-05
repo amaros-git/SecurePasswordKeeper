@@ -49,6 +49,7 @@ ext {
     swipeRefreshLayoutVersion = '1.1.0'
     timberVersion = '4.7.1'
     truthVersion = '1.1.2'
+    work_version = "2.7.1"
 }
 
 task clean(type: Delete) {

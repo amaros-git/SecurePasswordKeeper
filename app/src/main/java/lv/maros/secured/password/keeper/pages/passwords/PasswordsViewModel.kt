@@ -2,6 +2,9 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.work.Data
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
@@ -24,6 +27,10 @@ class PasswordsViewModel(
         get() = _passwordList
 
     private val passwordsToDelete = mutableListOf<Password>()
+
+    private val worker = WorkManager.getInstance(app)
+    private val KEY_PASSWORDS_TO_DELETE = "passwordsToDelete"
+
 
     private suspend fun _loadAllPasswords() {
         val passwords = repository.getAllPasswords()
@@ -60,15 +67,10 @@ class PasswordsViewModel(
         }
     }
 
+
     fun deletePasswords() {
         if (passwordsToDelete.isNotEmpty()) {
-            viewModelScope.launch {
-                passwordsToDelete.forEach {
-                    repository.deletePassword(it.id)
-                }
-
-                invalidateShowNoData()
-            }
+            val data = workDataOf(KEY_PASSWORDS_TO_DELETE to passwordsToDelete)
         }
     }
 

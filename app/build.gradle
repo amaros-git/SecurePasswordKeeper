@@ -93,6 +93,8 @@ dependencies {
     kapt "androidx.room:room-compiler:2.3.0"
     implementation "androidx.room:room-ktx:2.3.0"
 
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
     /*********************TESTS****************************/
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
