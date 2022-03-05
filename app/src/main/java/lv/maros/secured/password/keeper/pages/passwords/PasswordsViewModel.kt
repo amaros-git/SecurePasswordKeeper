@@ -61,12 +61,14 @@ class PasswordsViewModel(
     }
 
     fun deletePasswords() {
-        viewModelScope.launch {
-            passwordsToDelete.forEach {
-                repository.deletePassword(it.id)
-            }
+        if (passwordsToDelete.isNotEmpty()) {
+            viewModelScope.launch {
+                passwordsToDelete.forEach {
+                    repository.deletePassword(it.id)
+                }
 
-            invalidateShowNoData()
+                invalidateShowNoData()
+            }
         }
     }
 

@@ -67,12 +67,6 @@ class PasswordsFragment : Fragment() {
         viewModel.loadAllPasswords() //TODO should it be here ?
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        Timber.d("onPause called")
-    }
-
     /*private fun setupBottomNavigation() {
         //I don't need to check any item. This just like a button.
         binding.bottomNavigation.menu.setGroupCheckable(0, false, false)
@@ -122,7 +116,6 @@ class PasswordsFragment : Fragment() {
 
         viewModel.passwordList.observe(viewLifecycleOwner) {
             it?.let {
-                Timber.d("got new list")
                 passwordListAdapter.submitMyList(it)
             }
         }
