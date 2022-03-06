@@ -71,6 +71,7 @@ class PasswordsViewModel(
     fun deletePasswords() {
         if (passwordsToDelete.isNotEmpty()) {
             val data = workDataOf(KEY_PASSWORDS_TO_DELETE to passwordsToDelete)
+            worker
         }
     }
 
