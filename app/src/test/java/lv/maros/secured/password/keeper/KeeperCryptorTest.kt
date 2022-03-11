@@ -1,5 +1,5 @@
 package lv.maros.secured.password.keeper
-
+/*
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.KeeperResult
 import org.junit.Test
@@ -50,9 +50,11 @@ class KeeperCryptorTest {
     }
 }
 
+*/
 /**
  * key is a password, value is an encrypted password
- */
+ *//*
+
 fun getTestPasswordMap(): Map<String, String> {
     return mapOf(
         "Qwerty12345" to "a0/17/bf/e7/e0/c1/20/1c/7a/e1/8f/e0/8c/de/58/1d",
@@ -60,3 +62,4 @@ fun getTestPasswordMap(): Map<String, String> {
         "c343:24323cc?>Z\"!#$#%^&$%^" to "c7/3a/30/9a/ff/fa/f9/da/8f/89/f7/6b/86/3b/6f/21/37/34/1f/fe/71/b1/45/40/fa/e9/0d/18/6d/7b/38/67"
     )
 }
+*/
