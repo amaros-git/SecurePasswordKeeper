@@ -28,25 +28,19 @@ class PasswordsViewModel(
 
     private val passwordsToDelete = mutableListOf<Password>()
 
-    private val worker = WorkManager.getInstance(app)
-    private val KEY_PASSWORDS_TO_DELETE = "passwordsToDelete"
+    private val worker = WorkManager.getInstance(app.applicationContext)
 
 
-    private suspend fun _loadAllPasswords() {
-        val passwords = repository.getAllPasswords()
-
-        if (passwords.isNotEmpty()) {
-            _passwordList.value =
-                passwords.map { it.toPassword() }.sortedBy { it.website }.toMutableList()
-        }
-
-        invalidateShowNoData()
-    }
-
-
-    fun loadAllPasswords() {
+    internal fun loadAllPasswords() {
         viewModelScope.launch {
-            _loadAllPasswords()
+            val passwords = repository.getAllPasswords()
+
+            if (passwords.isNotEmpty()) {
+                _passwordList.value =
+                    passwords.map { it.toPassword() }.sortedBy { it.website }.toMutableList()
+            }
+
+            invalidateShowNoData()
         }
     }
 
@@ -57,21 +51,13 @@ class PasswordsViewModel(
         showNoData.value = _passwordList.value == null || _passwordList.value!!.isEmpty()
     }
 
-    fun decryptString(data: String): String {
+    internal fun decryptString(data: String): String {
         val decryptedData = cryptor.decryptString(data)
         return if (null != decryptedData) {
             decryptedData
         } else {
             showErrorMessage.value = (app.getString(R.string.internal_error))
             ""
-        }
-    }
-
-
-    fun deletePasswords() {
-        if (passwordsToDelete.isNotEmpty()) {
-            val data = workDataOf(KEY_PASSWORDS_TO_DELETE to passwordsToDelete)
-            worker
         }
     }
 
@@ -88,13 +74,30 @@ class PasswordsViewModel(
         passwordListAdapter.notifyItemRemoved(swipedPos)
     }
 
-    fun addPasswordItem(
+    private fun addPasswordItem(
         passwordListAdapter: PasswordListAdapter,
         password: Password,
         swipedPos: Int
     ) {
         _passwordList.value?.add(swipedPos, password)
         passwordListAdapter.notifyItemInserted(swipedPos)
+    }
+
+    internal fun undoPasswordsRemoval(
+        passwordListAdapter: PasswordListAdapter,
+        password: Password,
+        swipedPos: Int
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    internal fun deletePasswords(
+        passwordListAdapter: PasswordListAdapter,
+        swipedPos: Int,
+        passwordToDelete: Password
+    ) {
+        val data
+        TODO("Not yet implemented")
     }
 }
 

@@ -165,6 +165,9 @@ class PasswordsFragment : Fragment() {
         )
     }
 
+    private fun processPasswordVisibilityClick(data: String) =
+        viewModel.decryptString(data)
+
     private fun processCopyClick(view: View, position: Int) {
         val textToCopy =
             getClickedPasswordItemViewText(view.id, passwordListAdapter.getItem(position))
@@ -187,53 +190,31 @@ class PasswordsFragment : Fragment() {
             else -> ""
         }
 
-    private fun processPasswordVisibilityClick(data: String) =
-        viewModel.decryptString(data)
-
-
-    /**
-     * How password removal works:
-     * 1. User swipes and clicks on Delete icon.
-     * 2. We add password to the list and remove it from the RecyclerView.
-     * 3. Then show snackbar to undo password removal
-     * 4. If user clicks on Undo, we remove this password from the list and
-     * add password back to the recycler view
-     * 5. If user does nothing, snackbar callback onDismissed
-     * is triggered and we use the list of deleted passwords
-     * to completely delete password from the database
-     */
     private fun processPasswordRemoval(swipedPos: Int) {
         val passwordToDelete = passwordListAdapter.getItem(swipedPos)
 
-        viewModel.addPasswordToDeletedList(passwordToDelete)
-        viewModel.removePasswordItem(passwordListAdapter, swipedPos)
+        /*viewModel.addPasswordToDeletedList(passwordToDelete)
+        viewModel.removePasswordItem()*/
+
+        viewModel.deletePasswords(passwordListAdapter, swipedPos, passwordToDelete)
 
         showUndoPasswordRemoval(passwordToDelete, swipedPos)
     }
 
     private fun showUndoPasswordRemoval(password: Password, swipedPos: Int) {
-        val snackDismissCallback = object : Snackbar.Callback() {
-
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-
-                viewModel.deletePasswords()
-            }
-        }
-
         Snackbar.make(
             binding.root,
             getString(R.string.password_is_removed), Snackbar.LENGTH_SHORT
         ).setAction(getString(R.string.undo_password_removal)) {
             undoPasswordRemoval(password, swipedPos)
         }
-            .addCallback(snackDismissCallback)
             .show()
     }
 
     private fun undoPasswordRemoval(password: Password, swipedPos: Int) {
-        viewModel.removePasswordFromDeletedList(password)
-        viewModel.addPasswordItem(passwordListAdapter, password, swipedPos)
+        /*viewModel.removePasswordFromDeletedList(password)
+        viewModel.addPasswordItem(passwordListAdapter, password, swipedPos)*/
+        viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos)
     }
 
 }

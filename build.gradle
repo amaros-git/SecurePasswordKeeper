@@ -46,7 +46,7 @@ ext {
     robolectricVersion = '4.5.1'
     roomVersion = '2.3.0'
     rulesVersion = '1.0.1'
-    swipeRefreshLayoutVersion = '1.1.0'
+    swipeRefreshLayoutVersion = '1.1.0' //TODO remove, I don't need it
     timberVersion = '4.7.1'
     truthVersion = '1.1.2'
     work_version = "2.7.1"
