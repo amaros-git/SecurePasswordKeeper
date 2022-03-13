@@ -14,7 +14,9 @@ import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
 import lv.maros.secured.password.keeper.workers.PasswordRemovalCoroutineWorker
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 class PasswordsViewModel(
     private val repository: PasswordDataSource,
@@ -27,8 +29,6 @@ class PasswordsViewModel(
     private val _passwordList = MutableLiveData<MutableList<Password>>()
     val passwordList: LiveData<MutableList<Password>>
         get() = _passwordList
-
-    //private val passwordsToDelete = mutableListOf<Password>()
 
     private val workManager = WorkManager.getInstance(app.applicationContext)
 
@@ -54,8 +54,19 @@ class PasswordsViewModel(
         passwordListAdapter.notifyItemInserted(swipedPos)
     }
 
-    private fun generateUniqueWorkName(): String {
+    /**
+     * for such type of application I consider this as unique enough
+     */
+    private fun generateWorkRequestTag(passwordsIds: IntArray): String {
+        val tag =
+            PASSWORDS_REMOVAL_TAG + "_" + passwordsIds.sum().toString() + "_" + Random.nextInt(
+                0,
+                Int.MAX_VALUE
+            )
+                .toString()
 
+        Timber.d("tag = $tag")
+        return tag
     }
 
     internal fun loadAllPasswords() {
@@ -84,32 +95,36 @@ class PasswordsViewModel(
     internal fun undoPasswordsRemoval(
         passwordListAdapter: PasswordListAdapter,
         password: Password,
-        swipedPos: Int
+        swipedPos: Int,
+        workRequestTag: String
     ) {
-        workManager.cancelUniqueWork(PASSWORDS_REMOVAL_WORK_NAME)
+        workManager.cancelAllWorkByTag(workRequestTag)
         addPasswordItem(passwordListAdapter, password, swipedPos)
     }
 
+    /**
+     * returns work request tag
+     */
     internal fun deletePasswords(
         passwordListAdapter: PasswordListAdapter,
         swipedPos: Int,
         passwordIds: IntArray,
-    ) {
+    ): String {
         removePasswordItem(passwordListAdapter, swipedPos)
 
         val data = workDataOf(PASSWORD_IDS_TO_REMOVE_KEY to passwordIds)
 
+        val tag = generateWorkRequestTag(passwordIds)
+
         val workRequest = OneTimeWorkRequestBuilder<PasswordRemovalCoroutineWorker>()
             .setInputData(data)
             .setInitialDelay(PASSWORD_REMOVAL_WORKER_INITIAL_DELAY, TimeUnit.MILLISECONDS)
-            .addTag(PASSWORDS_REMOVAL_TAG)
+            .addTag(tag)
             .build()
 
-        workManager.enqueueUniqueWork(
-            PASSWORDS_REMOVAL_WORK_NAME,
-            ExistingWorkPolicy.APPEND_OR_REPLACE, //TODO test and think which policy is the best here
-            workRequest
-        )
+        workManager.enqueue(workRequest)
+
+        return tag
     }
 }
 

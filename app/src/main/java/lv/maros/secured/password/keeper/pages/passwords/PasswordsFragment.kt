@@ -194,23 +194,34 @@ class PasswordsFragment : Fragment() {
 
     private fun processPasswordRemoval(swipedPos: Int) {
         val passwordToDelete = passwordListAdapter.getItem(swipedPos)
-        viewModel.deletePasswords(passwordListAdapter, swipedPos, intArrayOf(passwordToDelete.id))
+        val workRequestTag =
+            viewModel.deletePasswords(
+                passwordListAdapter,
+                swipedPos,
+                intArrayOf(passwordToDelete.id)
+            )
 
-        showUndoPasswordRemoval(passwordToDelete, swipedPos)
+        showUndoPasswordRemoval(passwordToDelete, swipedPos, workRequestTag)
     }
 
     @SuppressLint("WrongConstant")
-    private fun showUndoPasswordRemoval(password: Password, swipedPos: Int) {
+    private fun showUndoPasswordRemoval(password: Password, swipedPos: Int, workRequestTag: String) {
         Snackbar.make(
             binding.root,
             getString(R.string.password_is_removed), PASSWORD_REMOVAL_SNACKBAR_DURATION
-        ).setAction(getString(R.string.undo_password_removal)) { undoPasswordRemoval(password, swipedPos) }
+        ).setAction(getString(R.string.undo_password_removal)) {
+            undoPasswordRemoval(
+                password,
+                swipedPos,
+                workRequestTag
+            )
+        }
             .setDuration(PASSWORD_REMOVAL_SNACKBAR_DURATION)
             .show()
     }
 
-    private fun undoPasswordRemoval(password: Password, swipedPos: Int) {
-        viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos)
+    private fun undoPasswordRemoval(password: Password, swipedPos: Int, workRequestTag: String) {
+        viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos, workRequestTag)
         binding.passwordList.layoutManager?.scrollToPosition(swipedPos)
     }
 
