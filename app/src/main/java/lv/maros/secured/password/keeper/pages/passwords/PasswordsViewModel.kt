@@ -13,7 +13,7 @@ import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
-import lv.maros.secured.password.keeper.workers.PasswordRemovalWorker
+import lv.maros.secured.password.keeper.workers.PasswordRemovalCoroutineWorker
 import java.util.concurrent.TimeUnit
 
 class PasswordsViewModel(
@@ -54,6 +54,10 @@ class PasswordsViewModel(
         passwordListAdapter.notifyItemInserted(swipedPos)
     }
 
+    private fun generateUniqueWorkName(): String {
+
+    }
+
     internal fun loadAllPasswords() {
         viewModelScope.launch {
             val passwords = repository.getAllPasswords()
@@ -82,7 +86,8 @@ class PasswordsViewModel(
         password: Password,
         swipedPos: Int
     ) {
-        TODO("Not yet implemented")
+        workManager.cancelUniqueWork(PASSWORDS_REMOVAL_WORK_NAME)
+        addPasswordItem(passwordListAdapter, password, swipedPos)
     }
 
     internal fun deletePasswords(
@@ -94,9 +99,9 @@ class PasswordsViewModel(
 
         val data = workDataOf(PASSWORD_IDS_TO_REMOVE_KEY to passwordIds)
 
-        val workRequest = OneTimeWorkRequestBuilder<PasswordRemovalWorker>()
+        val workRequest = OneTimeWorkRequestBuilder<PasswordRemovalCoroutineWorker>()
             .setInputData(data)
-            //.setInitialDelay(PASSWORD_REMOVAL_WORKER_INITIAL_DELAY, TimeUnit.MILLISECONDS)
+            .setInitialDelay(PASSWORD_REMOVAL_WORKER_INITIAL_DELAY, TimeUnit.MILLISECONDS)
             .addTag(PASSWORDS_REMOVAL_TAG)
             .build()
 

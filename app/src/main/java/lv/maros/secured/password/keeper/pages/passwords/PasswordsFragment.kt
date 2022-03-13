@@ -211,6 +211,7 @@ class PasswordsFragment : Fragment() {
 
     private fun undoPasswordRemoval(password: Password, swipedPos: Int) {
         viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos)
+        binding.passwordList.layoutManager?.scrollToPosition(swipedPos)
     }
 
 }

@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.navigation.findNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 import lv.maros.secured.password.keeper.pages.setup.KeeperSetupActivity
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import timber.log.Timber
@@ -19,6 +23,8 @@ class KeeperActivity : AppCompatActivity() {
             Timber.d("Keeper is not configured")
             startSetupActivityAndFinish()
         }
+
+        TEST_addPasswords()
         // else we start destination fragment from main nav graph
     }
 
@@ -44,5 +50,27 @@ class KeeperActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    //TODO REMOVE AFTER TESTS
+    private fun TEST_addPasswords() {
+        val repository = (application as KeeperApplication).localPasswordsRepository
+        for (i in 0..3) {
+            GlobalScope.launch {
+                val passwords = repository.getAllPasswords()
+                if (passwords.isNullOrEmpty()) {
+                    repository.savePassword(
+                        PasswordDTO(
+                            "website_$i",
+                            "username_$i",
+                            "adksdjsadjdas_$i",
+                            System.currentTimeMillis(),
+                            0
+                        )
+                    )
+                }
+            }
+        }
+
     }
 }
