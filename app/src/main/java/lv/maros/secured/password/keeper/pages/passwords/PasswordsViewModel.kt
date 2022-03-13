@@ -2,17 +2,19 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
 import androidx.lifecycle.*
-import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import kotlinx.coroutines.launch
-import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.*
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
-import lv.maros.secured.password.keeper.utils.toPasswordDTO
+import lv.maros.secured.password.keeper.workers.PasswordRemovalWorker
+import java.util.concurrent.TimeUnit
 
 class PasswordsViewModel(
     private val repository: PasswordDataSource,
@@ -26,10 +28,31 @@ class PasswordsViewModel(
     val passwordList: LiveData<MutableList<Password>>
         get() = _passwordList
 
-    private val passwordsToDelete = mutableListOf<Password>()
+    //private val passwordsToDelete = mutableListOf<Password>()
 
-    private val worker = WorkManager.getInstance(app.applicationContext)
+    private val workManager = WorkManager.getInstance(app.applicationContext)
 
+    /**
+     * Inform the user that there's not any data if the remindersList is empty
+     */
+    private fun invalidateShowNoData() {
+        showNoData.value = _passwordList.value == null || _passwordList.value!!.isEmpty()
+    }
+
+
+    private fun removePasswordItem(passwordListAdapter: PasswordListAdapter, swipedPos: Int) {
+        _passwordList.value?.removeAt(swipedPos)
+        passwordListAdapter.notifyItemRemoved(swipedPos)
+    }
+
+    private fun addPasswordItem(
+        passwordListAdapter: PasswordListAdapter,
+        password: Password,
+        swipedPos: Int
+    ) {
+        _passwordList.value?.add(swipedPos, password)
+        passwordListAdapter.notifyItemInserted(swipedPos)
+    }
 
     internal fun loadAllPasswords() {
         viewModelScope.launch {
@@ -44,13 +67,6 @@ class PasswordsViewModel(
         }
     }
 
-    /**
-     * Inform the user that there's not any data if the remindersList is empty
-     */
-    private fun invalidateShowNoData() {
-        showNoData.value = _passwordList.value == null || _passwordList.value!!.isEmpty()
-    }
-
     internal fun decryptString(data: String): String {
         val decryptedData = cryptor.decryptString(data)
         return if (null != decryptedData) {
@@ -59,28 +75,6 @@ class PasswordsViewModel(
             showErrorMessage.value = (app.getString(R.string.internal_error))
             ""
         }
-    }
-
-    fun addPasswordToDeletedList(password: Password) {
-        passwordsToDelete.add(password)
-    }
-
-    fun removePasswordFromDeletedList(password: Password) {
-        passwordsToDelete.remove(password)
-    }
-
-    fun removePasswordItem(passwordListAdapter: PasswordListAdapter, swipedPos: Int) {
-        _passwordList.value?.removeAt(swipedPos)
-        passwordListAdapter.notifyItemRemoved(swipedPos)
-    }
-
-    private fun addPasswordItem(
-        passwordListAdapter: PasswordListAdapter,
-        password: Password,
-        swipedPos: Int
-    ) {
-        _passwordList.value?.add(swipedPos, password)
-        passwordListAdapter.notifyItemInserted(swipedPos)
     }
 
     internal fun undoPasswordsRemoval(
@@ -94,10 +88,23 @@ class PasswordsViewModel(
     internal fun deletePasswords(
         passwordListAdapter: PasswordListAdapter,
         swipedPos: Int,
-        passwordToDelete: Password
+        passwordIds: IntArray,
     ) {
-        val data
-        TODO("Not yet implemented")
+        removePasswordItem(passwordListAdapter, swipedPos)
+
+        val data = workDataOf(PASSWORD_IDS_TO_REMOVE_KEY to passwordIds)
+
+        val workRequest = OneTimeWorkRequestBuilder<PasswordRemovalWorker>()
+            .setInputData(data)
+            //.setInitialDelay(PASSWORD_REMOVAL_WORKER_INITIAL_DELAY, TimeUnit.MILLISECONDS)
+            .addTag(PASSWORDS_REMOVAL_TAG)
+            .build()
+
+        workManager.enqueueUniqueWork(
+            PASSWORDS_REMOVAL_WORK_NAME,
+            ExistingWorkPolicy.APPEND_OR_REPLACE, //TODO test and think which policy is the best here
+            workRequest
+        )
     }
 }
 

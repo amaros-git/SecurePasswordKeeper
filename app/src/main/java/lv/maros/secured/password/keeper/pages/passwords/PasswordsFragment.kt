@@ -1,5 +1,6 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import lv.maros.secured.password.keeper.KeeperApplication
+import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
@@ -145,7 +147,7 @@ class PasswordsFragment : Fragment() {
             }
 
         val passwordVisibilityClickListener: OnPasswordClickListener =
-            {s: String ->
+            { s: String ->
                 processPasswordVisibilityClick(s)
             }
 
@@ -192,28 +194,22 @@ class PasswordsFragment : Fragment() {
 
     private fun processPasswordRemoval(swipedPos: Int) {
         val passwordToDelete = passwordListAdapter.getItem(swipedPos)
-
-        /*viewModel.addPasswordToDeletedList(passwordToDelete)
-        viewModel.removePasswordItem()*/
-
-        viewModel.deletePasswords(passwordListAdapter, swipedPos, passwordToDelete)
+        viewModel.deletePasswords(passwordListAdapter, swipedPos, intArrayOf(passwordToDelete.id))
 
         showUndoPasswordRemoval(passwordToDelete, swipedPos)
     }
 
+    @SuppressLint("WrongConstant")
     private fun showUndoPasswordRemoval(password: Password, swipedPos: Int) {
         Snackbar.make(
             binding.root,
-            getString(R.string.password_is_removed), Snackbar.LENGTH_SHORT
-        ).setAction(getString(R.string.undo_password_removal)) {
-            undoPasswordRemoval(password, swipedPos)
-        }
+            getString(R.string.password_is_removed), PASSWORD_REMOVAL_SNACKBAR_DURATION
+        ).setAction(getString(R.string.undo_password_removal)) { undoPasswordRemoval(password, swipedPos) }
+            .setDuration(PASSWORD_REMOVAL_SNACKBAR_DURATION)
             .show()
     }
 
     private fun undoPasswordRemoval(password: Password, swipedPos: Int) {
-        /*viewModel.removePasswordFromDeletedList(password)
-        viewModel.addPasswordItem(passwordListAdapter, password, swipedPos)*/
         viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos)
     }
 
