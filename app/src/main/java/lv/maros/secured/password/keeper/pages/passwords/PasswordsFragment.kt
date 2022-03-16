@@ -19,6 +19,7 @@ import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
 //import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
+import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeListener
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
@@ -125,20 +126,20 @@ class PasswordsFragment : Fragment() {
 
     private fun getPasswordId(swipedPos: Int) = passwordListAdapter.getItem(swipedPos).id
 
-   /* private val passwordItemClickListener: PasswordItemClickListener =
-        object : PasswordItemClickListener {
+    private val passwordItemClickListener =
+        object : PasswordItemSwipeListener {
 
-            override fun onDeleteClick(swipedPos: Int) {
+            override fun onSwipeLeft(swipedPos: Int) {
                 processPasswordRemoval(swipedPos)
             }
 
-            override fun onEditClick(swipedPos: Int) {
+            override fun onSwipeRight(swipedPos: Int) {
                 navigateToAddEditFragment(
                     PasswordAddEditFragment.MODE_EDIT_PASSWORD,
                     getPasswordId(swipedPos)
                 )
             }
-        }*/
+        }
 
     private fun configurePasswordRecyclerView() {
         val copyClickListener: OnCopyClickListener =
@@ -159,7 +160,7 @@ class PasswordsFragment : Fragment() {
         ItemTouchHelper(
             PasswordItemSwipeCallback(
                 requireContext(),
-                binding.passwordList,
+                passwordItemClickListener
                 //passwordItemClickListener
             )
         ).attachToRecyclerView(
