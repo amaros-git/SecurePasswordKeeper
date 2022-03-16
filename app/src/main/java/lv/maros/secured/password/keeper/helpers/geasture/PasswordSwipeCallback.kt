@@ -14,11 +14,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import lv.maros.secured.password.keeper.R
+import timber.log.Timber
 
 class PasswordItemSwipeCallback(
     private val context: Context,
     private val recyclerView: RecyclerView,
-    private val passwordItemItemClickListener: PasswordItemClickListener,
+    //private val passwordItemItemClickListener: PasswordItemClickListener,
     dragDirs: Int = 0,
     swipeDirs: Int = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) : ItemTouchHelper.SimpleCallback(
@@ -39,12 +40,12 @@ class PasswordItemSwipeCallback(
 
     private var swipedPos = -1
 
-    private var deleteClickRegion: RectF? = null
-    private var editClickRegion: RectF? = null
+    //private var deleteClickRegion: RectF? = null
+    //private var editClickRegion: RectF? = null
 
     private val dXDivider = 6 //TODO
 
-    private val gestureListener: GestureDetector.SimpleOnGestureListener =
+    /*private val gestureListener: GestureDetector.SimpleOnGestureListener =
         object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 deleteClickRegion?.let {
@@ -69,20 +70,20 @@ class PasswordItemSwipeCallback(
         View.OnTouchListener { v, e ->
             v.performClick()
             processOnTouch(v, e)
-        }
+        }*/
 
-    init {
-        configureSwipeCallback()
+    /*init {
+        //configureSwipeCallback()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun configureSwipeCallback() {
         gestureDetector = GestureDetector(context, gestureListener)
         recyclerView.setOnTouchListener(onTouchListener)
-    }
+    }*/
 
 
-    private fun processOnTouch(view: View, e: MotionEvent): Boolean {
+    /*private fun processOnTouch(view: View, e: MotionEvent): Boolean {
         if (swipedPos >= 0) {
             val point = Point(e.rawX.toInt(), e.rawY.toInt())
 
@@ -111,7 +112,7 @@ class PasswordItemSwipeCallback(
         swipedPos = -1
 
         return false
-    }
+    }*/
 
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
         when {
@@ -132,12 +133,12 @@ class PasswordItemSwipeCallback(
 
         editIcon.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom)
 
-        editClickRegion = RectF(
+       /* editClickRegion = RectF(
             editIconLeft.toFloat(),
             editIconTop.toFloat(),
             editIconRight.toFloat(),
             editIconBottom.toFloat()
-        )
+        )*/
 
         editIcon.draw(c)
     }
@@ -150,17 +151,18 @@ class PasswordItemSwipeCallback(
 
         deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
 
-        deleteClickRegion = RectF(
+        /*deleteClickRegion = RectF(
             deleteIconLeft.toFloat(),
             deleteIconTop.toFloat(),
             deleteIconRight.toFloat(),
             deleteIconBottom.toFloat()
-        )
+        )*/
 
         deleteIcon.draw(c)
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+        Timber.d("swipeDir = $swipeDir")
         swipeThreshold = SWIPE_OUT_THRESHOLD
         swipedPos = viewHolder.adapterPosition
     }
@@ -216,8 +218,9 @@ class PasswordItemSwipeCallback(
 
 }
 
+/*
 interface PasswordItemClickListener {
     fun onDeleteClick(swipedPos: Int)
 
     fun onEditClick(swipedPos: Int)
-}
+}*/

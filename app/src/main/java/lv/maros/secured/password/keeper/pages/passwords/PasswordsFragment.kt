@@ -17,7 +17,7 @@ import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
-import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
+//import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
@@ -125,7 +125,7 @@ class PasswordsFragment : Fragment() {
 
     private fun getPasswordId(swipedPos: Int) = passwordListAdapter.getItem(swipedPos).id
 
-    private val passwordItemClickListener: PasswordItemClickListener =
+   /* private val passwordItemClickListener: PasswordItemClickListener =
         object : PasswordItemClickListener {
 
             override fun onDeleteClick(swipedPos: Int) {
@@ -138,7 +138,7 @@ class PasswordsFragment : Fragment() {
                     getPasswordId(swipedPos)
                 )
             }
-        }
+        }*/
 
     private fun configurePasswordRecyclerView() {
         val copyClickListener: OnCopyClickListener =
@@ -160,7 +160,7 @@ class PasswordsFragment : Fragment() {
             PasswordItemSwipeCallback(
                 requireContext(),
                 binding.passwordList,
-                passwordItemClickListener
+                //passwordItemClickListener
             )
         ).attachToRecyclerView(
             binding.passwordList
