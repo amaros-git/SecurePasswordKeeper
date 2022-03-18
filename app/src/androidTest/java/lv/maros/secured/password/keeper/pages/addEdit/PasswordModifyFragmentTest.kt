@@ -54,7 +54,9 @@ class PasswordModifyFragmentTest {
         val navController = TestNavHostController(appContext)
         val fragment = launchFragment(navController)
 
-        fillPasswordAddEditFragmentWithTestData(TestPasswordInputDataProvider.INPUT_DATA_PASSWORDS_DO_NOT_MATCH)
+        fillPasswordAddEditFragmentWithTestData(
+            TestPasswordInputDataProvider.INPUT_DATA_PASSWORDS_DO_NOT_MATCH
+        )
 
         //Click Save button
         onView(withId(R.id.addEdit_apply_button)).perform(click())
