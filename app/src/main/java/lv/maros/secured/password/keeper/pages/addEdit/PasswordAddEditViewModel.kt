@@ -21,13 +21,13 @@ class PasswordAddEditViewModel(
 ) : BaseViewModel(app) {
 
     private val _passwordToEdit = MutableLiveData<Password>()
-    val passwordToEdit: LiveData<Password>
+    internal val passwordToEdit: LiveData<Password>
         get() = _passwordToEdit
 
-    val websiteError: SingleLiveEvent<String> = SingleLiveEvent()
-    val usernameError: SingleLiveEvent<String> = SingleLiveEvent()
-    val passwordError: SingleLiveEvent<String> = SingleLiveEvent()
-    val repeatPasswordError: SingleLiveEvent<String> = SingleLiveEvent()
+    internal val websiteError: SingleLiveEvent<String> = SingleLiveEvent()
+    internal val usernameError: SingleLiveEvent<String> = SingleLiveEvent()
+    internal val passwordError: SingleLiveEvent<String> = SingleLiveEvent()
+    internal val repeatPasswordError: SingleLiveEvent<String> = SingleLiveEvent()
 
     /*//during conversion PasswordDTO->Password->PasswordInputData a real ID of
     //updated password is lost. So we save it here. Is there better way tp handle this ?
@@ -76,7 +76,11 @@ class PasswordAddEditViewModel(
         return cryptor.encryptString(data)
     }
 
-    fun savePassword(passwordData: PasswordInputData) {
+    override fun onCleared() {
+        Timber.d("onCleared called")
+    }
+
+    internal fun savePassword(passwordData: PasswordInputData) {
         if (verifyPasswordInputData(passwordData)) {
             viewModelScope.launch {
                 val encryptedPassword = encryptString(passwordData.password)
@@ -89,7 +93,7 @@ class PasswordAddEditViewModel(
         }
     }
 
-    fun updatePassword(passwordData: PasswordInputData, passwordId: Int) {
+    internal fun updatePassword(passwordData: PasswordInputData, passwordId: Int) {
         if (verifyPasswordInputData(passwordData)) {
             viewModelScope.launch {
                 val passwordDTO = passwordData.toPasswordDTO(encryptString(passwordData.password))
@@ -102,11 +106,11 @@ class PasswordAddEditViewModel(
         }
     }
 
-    fun decryptString(data: String): String? {
+    internal fun decryptString(data: String): String? {
         return cryptor.decryptString(data)
     }
 
-    fun loadPassword(passwordId: Int) {
+    internal  fun loadPassword(passwordId: Int) {
         viewModelScope.launch {
             val passwordDTO = repository.getPassword(passwordId)
 

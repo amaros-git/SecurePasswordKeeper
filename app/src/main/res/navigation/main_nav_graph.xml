@@ -27,12 +27,12 @@
             app:destination="@id/passwordAddEditFragment">
             <argument
                 android:name="mode"
-                app:argType="integer"
-                android:defaultValue="0" />
+                android:defaultValue="0"
+                app:argType="integer" />
             <argument
                 android:name="passwordId"
-                app:argType="integer"
-                android:defaultValue="-1" />
+                android:defaultValue="-1"
+                app:argType="integer" />
         </action>
     </fragment>
 
@@ -44,7 +44,23 @@
             android:id="@+id/action_passwordAddEditFragment_to_passwordsFragment"
             app:destination="@id/passwordsFragment"
             app:popUpTo="@id/passwordsFragment"
-            app:popUpToInclusive="true">
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_passwordAddEditFragment_to_passwordGeneratorFragment"
+            app:destination="@id/passwordGeneratorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordGeneratorFragment"
+        android:name="lv.maros.secured.password.keeper.pages.generator.PasswordGeneratorFragment"
+        android:label="PasswordGeneratorFragment">
+        <action
+            android:id="@+id/action_passwordGeneratorFragment_to_passwordAddEditFragment"
+            app:destination="@id/passwordAddEditFragment">
+            <argument
+                android:name="generatedPassword"
+                app:nullable="true"
+                android:defaultValue="@null"
+                app:argType="string" />
         </action>
     </fragment>
 

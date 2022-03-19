@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
 import lv.maros.secured.password.keeper.R
+import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
 //import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
@@ -30,11 +31,11 @@ import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
 
 
-class PasswordsFragment : Fragment() {
+class PasswordsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentPasswordsBinding
 
-    private val viewModel: PasswordsViewModel by viewModels {
+    override val _viewModel: PasswordsViewModel by viewModels {
         PasswordsViewModelFactory(
             (requireContext().applicationContext as KeeperApplication).localPasswordsRepository,
             (requireContext().applicationContext as KeeperApplication).cryptor,
@@ -50,7 +51,7 @@ class PasswordsFragment : Fragment() {
     ): View {
 
         binding = FragmentPasswordsBinding.inflate(inflater)
-        binding.viewModel = viewModel
+        binding.viewModel = _viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setTitle(getString(R.string.app_name))
@@ -67,7 +68,7 @@ class PasswordsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.loadAllPasswords() //TODO should it be here ?
+        _viewModel.loadAllPasswords() //TODO should it be here ?
     }
 
     /*private fun setupBottomNavigation() {
@@ -117,7 +118,7 @@ class PasswordsFragment : Fragment() {
             navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
         }
 
-        viewModel.passwordList.observe(viewLifecycleOwner) {
+        _viewModel.passwordList.observe(viewLifecycleOwner) {
             it?.let {
                 passwordListAdapter.submitMyList(it)
             }
@@ -161,7 +162,6 @@ class PasswordsFragment : Fragment() {
             PasswordItemSwipeCallback(
                 requireContext(),
                 passwordItemClickListener
-                //passwordItemClickListener
             )
         ).attachToRecyclerView(
             binding.passwordList
@@ -169,7 +169,7 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun processPasswordVisibilityClick(data: String) =
-        viewModel.decryptString(data)
+        _viewModel.decryptString(data)
 
     private fun processCopyClick(view: View, position: Int) {
         val textToCopy =
@@ -189,14 +189,14 @@ class PasswordsFragment : Fragment() {
             R.id.passwordItem_website_copy_button -> password.website
             R.id.passwordItem_username_copy_button -> password.username
             R.id.passwordItem_password_copy_button ->
-                viewModel.decryptString(password.encryptedPassword)
+                _viewModel.decryptString(password.encryptedPassword)
             else -> ""
         }
 
     private fun processPasswordRemoval(swipedPos: Int) {
         val passwordToDelete = passwordListAdapter.getItem(swipedPos)
         val workRequestTag =
-            viewModel.deletePasswords(
+            _viewModel.deletePasswords(
                 passwordListAdapter,
                 swipedPos,
                 intArrayOf(passwordToDelete.id)
@@ -222,7 +222,7 @@ class PasswordsFragment : Fragment() {
     }
 
     private fun undoPasswordRemoval(password: Password, swipedPos: Int, workRequestTag: String) {
-        viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos, workRequestTag)
+        _viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos, workRequestTag)
         binding.passwordList.layoutManager?.scrollToPosition(swipedPos)
     }
 

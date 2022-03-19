@@ -13,6 +13,7 @@ import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
+import lv.maros.secured.password.keeper.pages.generator.PasswordGeneratorFragmentDirections
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import timber.log.Timber
@@ -79,19 +80,19 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private fun observeTextInoutErrors() {
         _viewModel.websiteError.observe(viewLifecycleOwner) {
-            binding.websiteLayout.error = it
+            binding.addEditWebsiteTextLayout.error = it
         }
 
         _viewModel.usernameError.observe(viewLifecycleOwner) {
-            binding.usernameLayout.error = it
+            binding.addEditUsernameTextLayout.error = it
         }
 
         _viewModel.passwordError.observe(viewLifecycleOwner) {
-            binding.passwordLayout.error = it
+            binding.addEditPasswordTextLayout.error = it
         }
 
         _viewModel.repeatPasswordError.observe(viewLifecycleOwner) {
-            binding.repeatPasswordLayout.error = it
+            binding.addEditRepeatPasswordTextLayout.error = it
         }
     }
 
@@ -122,7 +123,7 @@ class PasswordAddEditFragment : BaseFragment() {
             text = requireContext().getText(R.string.update_password_button_text)
 
             setOnClickListener {
-                resetTextInputLayoutsErrors(binding.passwordModificationLayout)
+                resetTextInputLayoutsErrors(binding.addEditPasswordLayout)
                 _viewModel.updatePassword(collectPasswordInputData(), passwordId)
             }
         }
@@ -135,7 +136,7 @@ class PasswordAddEditFragment : BaseFragment() {
             text = requireContext().getText(R.string.add_password_button_text)
 
             setOnClickListener {
-                resetTextInputLayoutsErrors(binding.passwordModificationLayout)
+                resetTextInputLayoutsErrors(binding.addEditPasswordLayout)
                 _viewModel.savePassword(collectPasswordInputData())
             }
         }
@@ -144,24 +145,33 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private fun setupCommonViews() {
         binding.addEditCancelButton.setOnClickListener {
-            findNavController().navigate(PasswordAddEditFragmentDirections.actionPasswordAddEditFragmentToPasswordsFragment())
+            findNavController().popBackStack()
+        }
+
+        binding.addEditGeneratorButton.setOnClickListener {
+            findNavController().navigate(
+                PasswordAddEditFragmentDirections.actionPasswordAddEditFragmentToPasswordGeneratorFragment()
+            )
         }
     }
 
     private fun showPassword(password: Password) {
         val (website, username, encryptedPassword) = password
 
-        binding.websiteLayout.editText?.setText(website)
-        binding.usernameLayout.editText?.setText(username)
-        binding.passwordLayout.editText?.setText(_viewModel.decryptString(encryptedPassword))
+        binding.addEditWebsiteTextLayout.editText?.setText(website)
+        binding.addEditUsernameTextLayout.editText?.setText(username)
+        binding.addEditPasswordTextLayout.editText?.setText(
+            _viewModel.decryptString(
+                encryptedPassword
+            )
+        )
     }
 
-
     private fun collectPasswordInputData() = PasswordInputData(
-        binding.websiteEditText.text.toString(),
-        binding.usernameEditText.text.toString(),
-        binding.passwordEditText.text.toString(),
-        binding.repeatPasswordEditText.text.toString()
+        binding.addEditWebsiteText.text.toString(),
+        binding.addEditUsernameText.text.toString(),
+        binding.addEditPasswordText.text.toString(),
+        binding.addEditRepeatPasswordText.text.toString()
     )
 
     private fun resetTextInputLayoutsErrors(layout: ViewGroup) {
