@@ -1,20 +1,14 @@
 package lv.maros.secured.password.keeper
 
 import android.app.Application
-import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import fillPasswordAddEditFragmentWithTestData
-import hasTextInputLayoutErrorText
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.TypeSafeMatcher
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,7 +32,7 @@ class KeeperActivityTest {
 
         fillPasswordAddEditFragmentWithTestData(TestPasswordInputDataProvider.INPUT_DATA_ALL_GOOD)
 
-        onView(withId(R.id.addEdit_apply_button)).perform(click())
+        onView(withId(R.id.add_edit_apply_button)).perform(click())
 
 
 

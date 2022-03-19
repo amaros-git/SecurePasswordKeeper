@@ -41,7 +41,7 @@ class PasswordModifyFragmentTest {
         val fragment = launchFragment(navController)
 
         //Click Cancel button
-        onView(withId(R.id.addEdit_cancel_button)).perform(click())
+        onView(withId(R.id.add_edit_cancel_button)).perform(click())
 
         //Check destination fragment
         Assert.assertEquals(navController.currentDestination!!.id, R.id.passwordsFragment)
@@ -59,10 +59,10 @@ class PasswordModifyFragmentTest {
         )
 
         //Click Save button
-        onView(withId(R.id.addEdit_apply_button)).perform(click())
+        onView(withId(R.id.add_edit_apply_button)).perform(click())
 
         //Check password error
-        onView(withId(R.id.passwordLayout)).check(
+        onView(withId(R.id.add_edit_password_text_layout)).check(
             ViewAssertions.matches(
                 hasTextInputLayoutErrorText(
                     appContext.getString(R.string.password_do_not_match_error)
@@ -70,7 +70,7 @@ class PasswordModifyFragmentTest {
             )
         )
         //Check password error
-        onView(withId(R.id.repeatPasswordLayout)).check(
+        onView(withId(R.id.add_edit_repeat_password_text_layout)).check(
             ViewAssertions.matches(
                 hasTextInputLayoutErrorText(
                     appContext.getString(R.string.password_do_not_match_error)

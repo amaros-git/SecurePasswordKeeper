@@ -46,5 +46,6 @@
     <string name="password_blank_or_empty_error">Password is empty or contains spaces</string>
     <string name="undo_password_removal">Undo</string>
     <string name="password_is_removed">Password is removed. You still can undo this</string>
+    <string name="generate_password_button">Generate password</string>
 
 </resources>

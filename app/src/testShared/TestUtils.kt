@@ -24,10 +24,10 @@ fun fillPasswordAddEditFragmentWithTestData(testDataType: Int) {
     val (website, username, password, repeatPassword) =
         TestPasswordInputDataProvider.provide(testDataType)
 
-    onView(withId(R.id.websiteEditText)).perform(replaceText(website))
-    onView(withId(R.id.usernameEditText)).perform(replaceText(username))
-    onView(withId(R.id.passwordEditText)).perform( replaceText(password))
-    onView(withId(R.id.repeatPasswordEditText)).perform(
+    onView(withId(R.id.add_edit_website_text)).perform(replaceText(website))
+    onView(withId(R.id.add_edit_username_text)).perform(replaceText(username))
+    onView(withId(R.id.add_edit_password_text)).perform( replaceText(password))
+    onView(withId(R.id.add_edit_repeat_password_text)).perform(
         replaceText(repeatPassword),
         closeSoftKeyboard()
     )
