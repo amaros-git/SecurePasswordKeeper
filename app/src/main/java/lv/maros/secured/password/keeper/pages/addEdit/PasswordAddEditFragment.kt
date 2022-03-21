@@ -35,31 +35,6 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private var currentMode by Delegates.notNull<Int>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        binding = FragmentAddEditPasswordBinding.inflate(inflater)
-        binding.lifecycleOwner = this.viewLifecycleOwner
-
-        setDisplayHomeAsUpEnabled(true)
-
-        configureFragmentMode()
-
-        setupCommonViews()
-
-        observeTextInoutErrors()
-
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        loadPassword()
-
-    }
 
     private fun getMode(): Int {
         currentMode = arguments?.getInt(ARGUMENTS_MODE_KEY) ?: MODE_UNSUPPORTED
@@ -76,7 +51,6 @@ class PasswordAddEditFragment : BaseFragment() {
             }
         }
     }
-
 
     private fun observeTextInoutErrors() {
         _viewModel.websiteError.observe(viewLifecycleOwner) {
@@ -183,6 +157,33 @@ class PasswordAddEditFragment : BaseFragment() {
             }
         }
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        binding = FragmentAddEditPasswordBinding.inflate(inflater)
+        binding.lifecycleOwner = this.viewLifecycleOwner
+
+        setDisplayHomeAsUpEnabled(true)
+
+        configureFragmentMode()
+
+        setupCommonViews()
+
+        observeTextInoutErrors()
+
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loadPassword()
+
+    }
+
 
     companion object {
         const val ARGUMENTS_MODE_KEY = "mode"

@@ -11,6 +11,7 @@ import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordGeneratorBinding
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
+import timber.log.Timber
 
 
 class PasswordGeneratorFragment : BaseFragment() {
@@ -23,6 +24,21 @@ class PasswordGeneratorFragment : BaseFragment() {
         binding.passwordGeneratorCancelButton.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.passwordGeneratorOkButton.setOnClickListener {
+            val password = getGeneratedPassword()
+            findNavController().navigate(
+                PasswordGeneratorFragmentDirections
+                    .actionPasswordGeneratorFragmentToPasswordAddEditFragment(password)
+            )
+        }
+    }
+
+    private fun getGeneratedPassword(): String {
+        val text = null.toString()
+        Timber.d("text = $text")
+        return binding.passwordGeneratorPasswordText.text.toString()
+
     }
 
     override fun onCreateView(
@@ -39,7 +55,6 @@ class PasswordGeneratorFragment : BaseFragment() {
 
         return binding.root
     }
-
 
 
 }

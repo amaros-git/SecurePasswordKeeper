@@ -1,4 +1,4 @@
-:<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -55,12 +55,14 @@
         android:label="PasswordGeneratorFragment">
         <action
             android:id="@+id/action_passwordGeneratorFragment_to_passwordAddEditFragment"
-            app:destination="@id/passwordAddEditFragment">
+            app:destination="@id/passwordAddEditFragment"
+            app:popUpTo="@id/passwordAddEditFragment"
+            app:popUpToInclusive="true">
             <argument
                 android:name="generatedPassword"
-                app:nullable="true"
                 android:defaultValue="@null"
-                app:argType="string" />
+                app:argType="string"
+                app:nullable="true" />
         </action>
     </fragment>
 

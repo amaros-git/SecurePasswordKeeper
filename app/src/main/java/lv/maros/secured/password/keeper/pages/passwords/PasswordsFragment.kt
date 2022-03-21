@@ -45,32 +45,6 @@ class PasswordsFragment : BaseFragment() {
 
     private lateinit var passwordListAdapter: PasswordListAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        binding = FragmentPasswordsBinding.inflate(inflater)
-        binding.viewModel = _viewModel
-        binding.lifecycleOwner = this.viewLifecycleOwner
-
-        setTitle(getString(R.string.app_name))
-        setDisplayHomeAsUpEnabled(false)
-
-        configurePasswordRecyclerView()
-
-        setupViews()
-        //setupBottomNavigation()
-
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        _viewModel.loadAllPasswords() //TODO should it be here ?
-    }
-
     /*private fun setupBottomNavigation() {
         //I don't need to check any item. This just like a button.
         binding.bottomNavigation.menu.setGroupCheckable(0, false, false)
@@ -224,6 +198,32 @@ class PasswordsFragment : BaseFragment() {
     private fun undoPasswordRemoval(password: Password, swipedPos: Int, workRequestTag: String) {
         _viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos, workRequestTag)
         binding.passwordList.layoutManager?.scrollToPosition(swipedPos)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        binding = FragmentPasswordsBinding.inflate(inflater)
+        binding.viewModel = _viewModel
+        binding.lifecycleOwner = this.viewLifecycleOwner
+
+        setTitle(getString(R.string.app_name))
+        setDisplayHomeAsUpEnabled(false)
+
+        configurePasswordRecyclerView()
+
+        setupViews()
+        //setupBottomNavigation()
+
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        _viewModel.loadAllPasswords() //TODO should it be here ?
     }
 
 }
