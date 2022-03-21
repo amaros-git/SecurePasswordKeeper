@@ -19,7 +19,6 @@ class PasswordGeneratorFragment : BaseFragment() {
 
     override val _viewModel: PasswordGeneratorViewModel by viewModels()
 
-
     private fun configureViews() {
         binding.passwordGeneratorCancelButton.setOnClickListener {
             findNavController().popBackStack()
@@ -40,5 +39,7 @@ class PasswordGeneratorFragment : BaseFragment() {
 
         return binding.root
     }
+
+
 
 }
