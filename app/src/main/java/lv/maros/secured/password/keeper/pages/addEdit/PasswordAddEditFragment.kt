@@ -13,7 +13,6 @@ import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentAddEditPasswordBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
-import lv.maros.secured.password.keeper.pages.generator.PasswordGeneratorFragmentDirections
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import timber.log.Timber
@@ -123,11 +122,18 @@ class PasswordAddEditFragment : BaseFragment() {
         }
 
         binding.addEditGeneratorButton.setOnClickListener {
-            findNavController().navigate(
-                PasswordAddEditFragmentDirections.actionPasswordAddEditFragmentToPasswordGeneratorFragment()
-            )
+            showPasswordGeneratorDialog()
+
         }
     }
+
+    private fun showPasswordGeneratorDialog() {
+        PasswordGeneratorDialog().show(
+            requireActivity().supportFragmentManager,
+            PasswordGeneratorDialog.PASSWORD_GENERATOR_DIALOG_TAG
+        )
+    }
+
 
     private fun showPassword(password: Password) {
         val (website, username, encryptedPassword) = password
@@ -183,7 +189,6 @@ class PasswordAddEditFragment : BaseFragment() {
         loadPassword()
 
     }
-
 
     companion object {
         const val ARGUMENTS_MODE_KEY = "mode"

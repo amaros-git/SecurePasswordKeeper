@@ -15,7 +15,7 @@ import lv.maros.secured.password.keeper.pages.setup.SharedSetupViewModelFactory
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PASSKEY
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_PIN
 
-class PasskeyInputBottomDialog(
+class PasskeyInputBottomDialog private constructor(
     private val keeperAuthType: String
 ) : BottomSheetDialogFragment() {
 

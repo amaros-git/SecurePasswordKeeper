@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/passwordGeneratorFragment"
-        android:name="lv.maros.secured.password.keeper.pages.generator.PasswordGeneratorFragment"
+        android:name="lv.maros.secured.password.keeper.pages.addEdit.PasswordGeneratorFragment"
         android:label="PasswordGeneratorFragment">
         <action
             android:id="@+id/action_passwordGeneratorFragment_to_passwordAddEditFragment"
