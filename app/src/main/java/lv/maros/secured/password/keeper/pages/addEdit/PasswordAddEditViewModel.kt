@@ -24,14 +24,15 @@ class PasswordAddEditViewModel(
     internal val passwordToEdit: LiveData<Password>
         get() = _passwordToEdit
 
+    private val _generatedPassword = MutableLiveData<String>()
+    internal val generatedPassword: LiveData<String>
+        get() = _generatedPassword
+
     internal val websiteError: SingleLiveEvent<String> = SingleLiveEvent()
     internal val usernameError: SingleLiveEvent<String> = SingleLiveEvent()
     internal val passwordError: SingleLiveEvent<String> = SingleLiveEvent()
     internal val repeatPasswordError: SingleLiveEvent<String> = SingleLiveEvent()
 
-    /*//during conversion PasswordDTO->Password->PasswordInputData a real ID of
-    //updated password is lost. So we save it here. Is there better way tp handle this ?
-    private var passwordToEditId: Int by Delegates.notNull()*/
 
     private fun verifyPasswordInputData(passwordData: PasswordInputData): Boolean {
         val (website, username, password, repeatPassword) = passwordData
@@ -120,6 +121,10 @@ class PasswordAddEditViewModel(
                 Timber.e("Password with id $passwordId doesn't exist")
             }
         }
+    }
+
+    internal fun saveGeneratedPassword(password: String) {
+        _generatedPassword.value = password
     }
 }
 

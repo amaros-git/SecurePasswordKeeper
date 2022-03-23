@@ -23,18 +23,6 @@ class PasskeyInputBottomDialog private constructor(
 
     private val viewModel: SharedSetupViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DialogAuthMethodBinding.inflate(inflater)
-
-        setupViews()
-
-        return binding.root
-    }
-
     //TODO - create data class and provide to layout. REFACTOR
     private fun setupViews() {
         when (keeperAuthType) {
@@ -83,6 +71,20 @@ class PasskeyInputBottomDialog private constructor(
            viewModel.completeAuthConfigurationAndNavigate(passkey1, keeperAuthType)
            dismiss()
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DialogAuthMethodBinding.inflate(inflater)
+
+        dialog?.setCanceledOnTouchOutside(false)
+
+        setupViews()
+
+        return binding.root
     }
 
     companion object {

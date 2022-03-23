@@ -128,10 +128,11 @@ class PasswordAddEditFragment : BaseFragment() {
     }
 
     private fun showPasswordGeneratorDialog() {
-        PasswordGeneratorDialog().show(
-            requireActivity().supportFragmentManager,
-            PasswordGeneratorDialog.PASSWORD_GENERATOR_DIALOG_TAG
-        )
+        PasswordGeneratorDialog.newInstance(_viewModel)
+            .show(
+                requireActivity().supportFragmentManager,
+                PasswordGeneratorDialog.PASSWORD_GENERATOR_DIALOG_TAG
+            )
     }
 
 
