@@ -1,15 +1,14 @@
 package lv.maros.secured.password.keeper.security
 
-import timber.log.Timber
 import kotlin.random.Random
 
 object KeeperPasswordManager {
 
     private val allowedLetters = ('A'..'Z') + ('a'..'z')
-    private val allowedNumbers = ('0'..'9')
+    private val allowedDigits = ('0'..'9').toList()
     private val allowedSymbols = """
         ~!@#$%^&*()_+"|<>?
-    """.trimIndent()
+    """.trimIndent().toList()
 
     private var useLetters: Boolean = true
     private var useDigits: Boolean = true
@@ -18,6 +17,20 @@ object KeeperPasswordManager {
     private fun getRandomSymbol(): Char {
         val i = Random.nextInt(0, allowedSymbols.length)
         return allowedSymbols[i]
+    }
+
+    private fun getAllowedCharsRange(): CharRange {
+        val range = CharRange.EMPTY
+        when {
+            useLetters -> {
+                range + allowedLetters
+            }
+            useDigits -> {
+                range + allowedDigits
+            }
+        }
+
+        return range
     }
 
     fun generateEncryptionKey(length: Int = 16): String {
@@ -29,12 +42,7 @@ object KeeperPasswordManager {
     }
 
     fun generatePassword(length: Int): String {
-        val char = getRandomSymbol()
-        /*val allowedChars = ('A'..'Z') +  +
-
-        return (1..length)
-            .map { allowedChars.random() }
-            .joinToString("")*/
-        return ""
+        val chars = getAllowedCharsRange()
+        return (1 .. length).map { chars.random() }.joinToString("")
     }
 }

@@ -21,6 +21,16 @@ class PasswordGeneratorDialog private constructor(
     private lateinit var binding: DialogPasswordGeneratorBinding
 
     private fun configureViews() {
+        viewModel.generatedPassword.observe(viewLifecycleOwner) {
+            binding.passwordGeneratorPasswordText.setText(it)
+        }
+
+        setClickListeners()
+
+        configureSpinner()
+    }
+
+    private fun setClickListeners() {
         binding.passwordGeneratorOkButton.setOnClickListener {
             viewModel.saveGeneratedPassword(getGeneratedPassword())
             this.dismiss()
@@ -33,8 +43,6 @@ class PasswordGeneratorDialog private constructor(
         binding.passwordGeneratorGenerateButton.setOnClickListener {
             generatePassword()
         }
-
-        configureSpinner()
     }
 
     private fun configureSpinner() {
@@ -50,6 +58,7 @@ class PasswordGeneratorDialog private constructor(
     private fun generatePassword() {
         val password = KeeperPasswordManager.generatePassword(8)
         Timber.d("password = $password")
+        viewModel.saveGeneratedPassword(password)
     }
 
     private fun getGeneratedPassword(): String {
