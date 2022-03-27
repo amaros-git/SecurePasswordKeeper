@@ -4,45 +4,70 @@ import kotlin.random.Random
 
 object KeeperPasswordManager {
 
-    private val allowedLetters = ('A'..'Z') + ('a'..'z')
+    private val uppercaseLetters = ('A' .. 'Z')
+    private val lowercaseLetters = ('a' .. 'z')
+    private val allowedLetters = uppercaseLetters + lowercaseLetters
     private val allowedDigits = ('0'..'9').toList()
     private val allowedSymbols = """
-        ~!@#$%^&*()_+"|<>?
+        !@#$%^&*()_+=
     """.trimIndent().toList()
 
+    //Default config
     private var useLetters: Boolean = true
     private var useDigits: Boolean = true
     private var useSymbols: Boolean = true
 
-    private fun getRandomSymbol(): Char {
-        val i = Random.nextInt(0, allowedSymbols.length)
-        return allowedSymbols[i]
-    }
 
-    private fun getAllowedCharsRange(): CharRange {
-        val range = CharRange.EMPTY
-        when {
-            useLetters -> {
-                range + allowedLetters
-            }
-            useDigits -> {
-                range + allowedDigits
-            }
+    private fun getAllowedCharList(): List<Char> {
+        val charList = mutableListOf<Char>()
+        if (useLetters) {
+            charList += allowedLetters
+        }
+        if (useDigits) {
+            charList += allowedDigits
+        }
+        if (useSymbols) {
+            charList += allowedSymbols
         }
 
-        return range
+        return charList.toList()
     }
 
+    private fun searchForCharInString(string: String, chars: List<Char>): Boolean {
+        chars.forEach {
+            if(string.contains(it, false)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isContainingUppercaseLetter(password: String): Boolean {
+        return searchForCharInString(password, uppercaseLetters.toList())
+    }
+
+    fun isContainingDigits(password: String): Boolean {
+        return searchForCharInString(password, allowedDigits)
+    }
+
+    fun isContainingSymbols(password: String): Boolean {
+        return searchForCharInString(password, allowedSymbols)
+    }
+
+
+
+    //TODO
     fun generateEncryptionKey(length: Int = 16): String {
         return "kF8g8hDDXvypd5KP"
     }
 
-    fun generateEncryptionIV(): String {
+    //TODO
+    fun generateEncryptionIV(length: Int = 16): String {
         return "fbBMmGE2Z6GtKvEs"
     }
 
     fun generatePassword(length: Int): String {
-        val chars = getAllowedCharsRange()
+        val chars = getAllowedCharList()
         return (1 .. length).map { chars.random() }.joinToString("")
     }
 }
