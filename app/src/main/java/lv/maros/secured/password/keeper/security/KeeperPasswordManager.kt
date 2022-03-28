@@ -4,8 +4,8 @@ import kotlin.random.Random
 
 object KeeperPasswordManager {
 
-    private val uppercaseLetters = ('A' .. 'Z')
-    private val lowercaseLetters = ('a' .. 'z')
+    private val uppercaseLetters = ('A'..'Z')
+    private val lowercaseLetters = ('a'..'z')
     private val allowedLetters = uppercaseLetters + lowercaseLetters
     private val allowedDigits = ('0'..'9').toList()
     private val allowedSymbols = """
@@ -37,14 +37,14 @@ object KeeperPasswordManager {
 
     private fun searchForCharInString(string: String, chars: List<Char>): Boolean {
         chars.forEach {
-            if(string.contains(it, false)) {
+            if (string.contains(it, false)) {
                 return true
             }
         }
         return false
     }
 
-    fun applyConfig(config: PasswordGeneratorConfig) {
+    private fun applyConfig(config: PasswordGeneratorConfig) {
         this.useLetters = config.useLetters
         this.useDigits = config.useDigits
         this.useSymbols = config.useSymbols
@@ -72,14 +72,21 @@ object KeeperPasswordManager {
         return "fbBMmGE2Z6GtKvEs"
     }
 
-    fun generatePassword(length: Int = PASSWORD_LENGTH_STRONG): String {
-        val chars = getAllowedCharList()
-        return (1 .. length).map { chars.random() }.joinToString("")
-    }
+    fun generatePassword(
+        length: Int = PASSWORD_LENGTH_STRONG,
+        config: PasswordGeneratorConfig? = null
+    ): String {
+        if (null != config) {
+            applyConfig(config)
+        }
 
+        val chars = getAllowedCharList()
+
+        return (1..length).map { chars.random() }.joinToString("")
+    }
 }
 
-data class PasswordGeneratorConfig (
+data class PasswordGeneratorConfig(
     val useLetters: Boolean,
     val useDigits: Boolean,
     val useSymbols: Boolean

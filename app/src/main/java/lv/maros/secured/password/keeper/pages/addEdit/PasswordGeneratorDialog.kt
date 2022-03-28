@@ -17,15 +17,13 @@ import timber.log.Timber
 
 class PasswordGeneratorDialog private constructor(
     private val viewModel: PasswordAddEditViewModel
-): BottomSheetDialogFragment() {
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogPasswordGeneratorBinding
 
-    private fun configureViews() {
-        viewModel.generatedPassword.observe(viewLifecycleOwner) {
-            binding.passwordGeneratorPasswordText.setText(it)
-        }
+    private val passwordLengthRange = (8..24) //TODO move out somewhere to have access from others
 
+    private fun configureViews() {
         setClickListeners()
 
         configureSpinner()
@@ -47,9 +45,11 @@ class PasswordGeneratorDialog private constructor(
     }
 
     private fun configureSpinner() {
-        val intArray = intArrayOf(0, 1, 3).toTypedArray()
-
-        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, intArray).also {
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            passwordLengthRange.toList().toTypedArray()
+        ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.passwordGeneratorPasswordLengthSpinner.adapter = it
         }
@@ -57,14 +57,11 @@ class PasswordGeneratorDialog private constructor(
 
 
     private fun generatePassword() {
-        val password = KeeperPasswordManager.generatePassword(8)
-        Timber.d("password = $password")
-        viewModel.saveGeneratedPassword(password)
-    }
-
-    private fun getGeneratedPassword(): String {
-        return binding.passwordGeneratorPasswordText.text.toString()
-
+        val password = KeeperPasswordManager.generatePassword(
+            getPasswordLength(),
+            getPasswordGeneratorConfig()
+        )
+        binding.passwordGeneratorPasswordText.setText(password)
     }
 
     private fun getPasswordGeneratorConfig() = PasswordGeneratorConfig(
@@ -73,6 +70,13 @@ class PasswordGeneratorDialog private constructor(
         binding.passwordGeneratorSymbolsCheck.isChecked
 
     )
+
+    private fun getPasswordLength() =
+        binding.passwordGeneratorPasswordLengthSpinner.selectedItem.toString().toInt()
+
+    private fun getGeneratedPassword(): String {
+        return binding.passwordGeneratorPasswordText.text.toString()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
