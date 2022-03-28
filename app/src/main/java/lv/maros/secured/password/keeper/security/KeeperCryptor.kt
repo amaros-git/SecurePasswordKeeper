@@ -1,9 +1,7 @@
 package lv.maros.secured.password.keeper.security
 
 import android.app.Application
-import android.content.Context
 import lv.maros.secured.password.keeper.KeeperApplication
-import lv.maros.secured.password.keeper.utils.KeeperResult
 import timber.log.Timber
 import java.lang.NullPointerException
 import java.security.MessageDigest
@@ -20,21 +18,14 @@ import javax.crypto.spec.SecretKeySpec
  * @throws NullPointerException
  * if key or iv doesn't exist
  */
-class KeeperCryptor(private val app: Application) {
+class KeeperCryptor(app: Application) {
 
-    // TODO REWORK to newInstance()
     private val messageDigest: MessageDigest =
         MessageDigest.getInstance(HASHING_PROVIDER_ALGO_SHA_265)
 
     private val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION_SCHEME)
 
-    val configStorage: KeeperConfigStorage = (app as KeeperApplication).configStorage
-
-    private val key: String =
-        configStorage.getEncryptionKey() ?: throw NullPointerException("Encryption key is null")
-
-    private val iv: String =
-        configStorage.getEncryptionIV() ?: throw NullPointerException("Encryption IV is null")
+    private val configStorage: KeeperConfigStorage = (app as KeeperApplication).configStorage
 
     /**
      * returns hashed string using SHA-256 algorithm
@@ -53,23 +44,39 @@ class KeeperCryptor(private val app: Application) {
         return hashString.toString()
     }
 
-    fun encryptString(data: String): String {
-        val encryptedBytes =
-            encryptDecrypt(Cipher.ENCRYPT_MODE, data.encodeToByteArray(), key, iv)
+    private fun getEncryptionKey(): String {
+        return configStorage.getEncryptionKey()
+            ?: throw NullPointerException("Encryption key is null")
+    }
 
+    private fun getEncryptionIV(): String {
+        return configStorage.getEncryptionIV()
+            ?: throw NullPointerException("Encryption IV is null")
+    }
+
+    //TODO Throws
+    fun encryptString(data: String): String {
+        val encryptedBytes = encryptDecrypt(
+            Cipher.ENCRYPT_MODE,
+            data.encodeToByteArray(),
+            getEncryptionKey(),
+            getEncryptionIV()
+        )
         return convertToSignedHexString(encryptedBytes)
     }
 
+    //TODO Throws
     fun decryptString(encryptedData: String): String? {
         val encryptedByteList = encryptedData.split(ENCRYPTED_HEX_PASSWORD_DELIMITER)
 
         return if (encryptedByteList.size.rem(ENCRYPTED_PASSWORD_BLOCK_LENGTH) == 0) {
-            val decryptedBytes = encryptDecrypt(
+            return encryptDecrypt(
                 Cipher.DECRYPT_MODE,
                 convertToByteArray(encryptedByteList),
-                key, iv
+                getEncryptionKey(),
+                getEncryptionIV()
             )
-            decryptedBytes.decodeToString()
+                .decodeToString()
         } else {
             Timber.e("Wrong length or format")
             null
