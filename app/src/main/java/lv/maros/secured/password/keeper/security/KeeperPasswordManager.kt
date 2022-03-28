@@ -17,6 +17,8 @@ object KeeperPasswordManager {
     private var useDigits: Boolean = true
     private var useSymbols: Boolean = true
 
+    private const val PASSWORD_LENGTH_STRONG = 16
+
 
     private fun getAllowedCharList(): List<Char> {
         val charList = mutableListOf<Char>()
@@ -42,6 +44,12 @@ object KeeperPasswordManager {
         return false
     }
 
+    fun applyConfig(config: PasswordGeneratorConfig) {
+        this.useLetters = config.useLetters
+        this.useDigits = config.useDigits
+        this.useSymbols = config.useSymbols
+    }
+
     fun isContainingUppercaseLetter(password: String): Boolean {
         return searchForCharInString(password, uppercaseLetters.toList())
     }
@@ -54,8 +62,6 @@ object KeeperPasswordManager {
         return searchForCharInString(password, allowedSymbols)
     }
 
-
-
     //TODO
     fun generateEncryptionKey(length: Int = 16): String {
         return "kF8g8hDDXvypd5KP"
@@ -66,8 +72,15 @@ object KeeperPasswordManager {
         return "fbBMmGE2Z6GtKvEs"
     }
 
-    fun generatePassword(length: Int): String {
+    fun generatePassword(length: Int = PASSWORD_LENGTH_STRONG): String {
         val chars = getAllowedCharList()
         return (1 .. length).map { chars.random() }.joinToString("")
     }
+
 }
+
+data class PasswordGeneratorConfig (
+    val useLetters: Boolean,
+    val useDigits: Boolean,
+    val useSymbols: Boolean
+)

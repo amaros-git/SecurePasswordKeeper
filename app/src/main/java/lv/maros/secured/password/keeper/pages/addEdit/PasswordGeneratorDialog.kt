@@ -9,6 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.DialogPasswordGeneratorBinding
 import lv.maros.secured.password.keeper.security.KeeperPasswordManager
+import lv.maros.secured.password.keeper.security.PasswordGeneratorConfig
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import timber.log.Timber
@@ -65,6 +66,13 @@ class PasswordGeneratorDialog private constructor(
         return binding.passwordGeneratorPasswordText.text.toString()
 
     }
+
+    private fun getPasswordGeneratorConfig() = PasswordGeneratorConfig(
+        binding.passwordGeneratorSymbolsCheck.isChecked,
+        binding.passwordGeneratorDigitsCheck.isChecked,
+        binding.passwordGeneratorSymbolsCheck.isChecked
+
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

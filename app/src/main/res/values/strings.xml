@@ -48,5 +48,12 @@
     <string name="password_is_removed">Password is removed. You still can undo this</string>
     <string name="generate_password_button">Generate password</string>
     <string name="password_generator_fragment_title">Password generator</string>
+    <string name="include_symbols_label">Include symbols</string>
+    <string name="checkbox_symbols_text">E.g. !@#$</string>
+    <string name="checkbox_numbers_text">E.g. 1234</string>
+    <string name="include_numbers_label">Include digits</string>
+    <string name="checkbox_letters_text">E.g. AbCd</string>
+    <string name="include_letters_label">Include letters</string>
+    <string name="password_length_label">Password length</string>
 
 </resources>
