@@ -26,6 +26,7 @@ import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
+import lv.maros.secured.password.keeper.utils.uncheckAllItems
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
@@ -45,14 +46,14 @@ class PasswordsFragment : BaseFragment() {
 
     private lateinit var passwordListAdapter: PasswordListAdapter
 
-    /*private fun setupBottomNavigation() {
-        //I don't need to check any item. This just like a button.
-        binding.bottomNavigation.menu.setGroupCheckable(0, false, false)
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.uncheckAllItems()
 
-        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.settingsMenu -> {
-                    Timber.d("SETTINGS")
+                R.id.searchMenu -> {
+                    Timber.d("Search")
+                    showSearchView()
                     true
                 }
                 R.id.sortMenu -> {
@@ -62,8 +63,10 @@ class PasswordsFragment : BaseFragment() {
                 else -> false
             }
         }
+    }
 
-    }*/
+    private fun showSearchView() {
+    }
 
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
@@ -213,9 +216,8 @@ class PasswordsFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(false)
 
         configurePasswordRecyclerView()
-
         setupViews()
-        //setupBottomNavigation()
+        setupBottomNavigation()
 
         return binding.root
     }

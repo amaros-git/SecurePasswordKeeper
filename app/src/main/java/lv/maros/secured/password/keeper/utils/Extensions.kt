@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
@@ -39,6 +40,15 @@ fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
 fun CharSequence.isNotBlankOrEmpty(): Boolean = !isBlank() && !isEmpty()
 
 fun CharSequence.isBlankOrEmpty(): Boolean = isBlank() || isEmpty()
+
+fun BottomNavigationView.uncheckAllItems() {
+    menu.setGroupCheckable(0, true, false)
+    for (i in 0 until menu.size()) {
+        menu.getItem(i).isChecked = false
+    }
+    menu.setGroupCheckable(0, true, true)
+}
+
 
 //animate changing the view visibility
 fun View.fadeIn() {
