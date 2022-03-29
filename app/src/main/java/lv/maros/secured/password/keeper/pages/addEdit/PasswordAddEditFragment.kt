@@ -34,7 +34,6 @@ class PasswordAddEditFragment : BaseFragment() {
 
     private var currentMode by Delegates.notNull<Int>()
 
-
     private fun getMode(): Int {
         currentMode = arguments?.getInt(ARGUMENTS_MODE_KEY) ?: MODE_UNSUPPORTED
         return currentMode
@@ -123,9 +122,16 @@ class PasswordAddEditFragment : BaseFragment() {
 
         binding.addEditGeneratorButton.setOnClickListener {
             showPasswordGeneratorDialog()
+        }
 
+        _viewModel.generatedPassword.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.addEditPasswordText.setText(it)
+                binding.addEditRepeatPasswordText.setText(it)
+            }
         }
     }
+
 
     private fun showPasswordGeneratorDialog() {
         PasswordGeneratorDialog.newInstance(_viewModel)
@@ -169,16 +175,13 @@ class PasswordAddEditFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentAddEditPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setDisplayHomeAsUpEnabled(true)
 
         configureFragmentMode()
-
         setupCommonViews()
-
         observeTextInoutErrors()
 
         return binding.root
@@ -186,9 +189,7 @@ class PasswordAddEditFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-
         loadPassword()
-
     }
 
     companion object {

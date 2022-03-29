@@ -25,7 +25,6 @@ class PasswordGeneratorDialog private constructor(
 
     private fun configureViews() {
         setClickListeners()
-
         configureSpinner()
     }
 
@@ -55,7 +54,6 @@ class PasswordGeneratorDialog private constructor(
         }
     }
 
-
     private fun generatePassword() {
         val password = KeeperPasswordManager.generatePassword(
             getPasswordLength(),
@@ -65,7 +63,7 @@ class PasswordGeneratorDialog private constructor(
     }
 
     private fun getPasswordGeneratorConfig() = PasswordGeneratorConfig(
-        binding.passwordGeneratorSymbolsCheck.isChecked,
+        binding.passwordGeneratorLettersCheck.isChecked,
         binding.passwordGeneratorDigitsCheck.isChecked,
         binding.passwordGeneratorSymbolsCheck.isChecked
 
@@ -101,6 +99,4 @@ class PasswordGeneratorDialog private constructor(
             return PasswordGeneratorDialog(viewModel)
         }
     }
-
-
 }

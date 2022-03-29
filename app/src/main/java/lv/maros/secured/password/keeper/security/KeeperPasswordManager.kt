@@ -6,7 +6,7 @@ object KeeperPasswordManager {
 
     private val uppercaseLetters = ('A'..'Z')
     private val lowercaseLetters = ('a'..'z')
-    private val allowedLetters = uppercaseLetters + lowercaseLetters
+    private val allowedLetters: List<Char> = uppercaseLetters + lowercaseLetters
     private val allowedDigits = ('0'..'9').toList()
     private val allowedSymbols = """
         !@#$%^&*()_+=

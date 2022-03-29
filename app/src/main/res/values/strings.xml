@@ -39,7 +39,7 @@
     <string name="password_do_not_match_error">Passwords don\'t match</string>
     <string name="internal_error">Internal error, please try again. Or restart application</string>
     <string name="username_empty_error">Username is empty or contains spaces</string>
-    <string name="website_empty_error">Please enter a website or any password name</string>
+    <string name="website_empty_error">Please enter a website name/address or any password name</string>
     <string name="password_list_empty">Empty</string>
     <string name="no_data">No Data</string>
     <string name="space_char_error">Password cannot contain space character</string>

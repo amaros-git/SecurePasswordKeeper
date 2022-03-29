@@ -64,7 +64,8 @@ class PasswordAddEditViewModel(
                 usernameError.value = app.getString(R.string.username_empty_error)
                 false
             }
-            website.isBlankOrEmpty() -> {
+
+            website.isEmpty() -> {
                 websiteError.value = app.getString(R.string.website_empty_error)
                 false
             }
