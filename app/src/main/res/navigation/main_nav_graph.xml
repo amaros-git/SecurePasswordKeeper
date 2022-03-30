@@ -21,7 +21,7 @@
         android:id="@+id/passwordsFragment"
         android:name="lv.maros.secured.password.keeper.pages.passwords.PasswordsFragment"
         android:label="passwords_fragment"
-        tools:layout="@layout/fragment_passwords">
+        tools:layout="@layout/fragment_passwords_back">
         <action
             android:id="@+id/action_passwordsFragment_to_passwordAddEditFragment"
             app:destination="@id/passwordAddEditFragment">

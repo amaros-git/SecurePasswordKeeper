@@ -55,5 +55,7 @@
     <string name="checkbox_letters_text">E.g. AbCd</string>
     <string name="include_letters_label">Include letters</string>
     <string name="password_length_label">Password length</string>
+    <string name="generated_password_label">Password</string>
+    <string name="dialog_generate_password_button">Generate password</string>
 
 </resources>
