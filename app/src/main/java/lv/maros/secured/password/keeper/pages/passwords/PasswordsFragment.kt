@@ -48,7 +48,7 @@ class PasswordsFragment : BaseFragment() {
     private lateinit var passwordListAdapter: PasswordListAdapter
 
     private fun setupBottomNavigation() {
-       /* binding.bottomNavigation.uncheckAllItems()
+        binding.bottomNavigation.uncheckAllItems()
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
@@ -63,7 +63,7 @@ class PasswordsFragment : BaseFragment() {
                 }
                 else -> false
             }
-        }*/
+        }
     }
 
     private fun showSearchView() {
