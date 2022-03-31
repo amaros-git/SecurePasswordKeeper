@@ -214,7 +214,6 @@ class PasswordsFragment : BaseFragment() {
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarLayout.keeperToolbar)
-
         setTitle(getString(R.string.app_name))
         setDisplayHomeAsUpEnabled(false)
 

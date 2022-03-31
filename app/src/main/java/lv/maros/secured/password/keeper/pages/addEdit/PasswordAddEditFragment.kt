@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
@@ -178,6 +179,7 @@ class PasswordAddEditFragment : BaseFragment() {
         binding = FragmentAddEditPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarLayout.keeperToolbar)
         setDisplayHomeAsUpEnabled(true)
 
         configureFragmentMode()
