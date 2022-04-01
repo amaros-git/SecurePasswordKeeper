@@ -67,6 +67,11 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun showSearchView() {
+        if ( binding.chips.visibility != View.VISIBLE) {
+            binding.chips.visibility = View.VISIBLE
+        } else {
+            binding.chips.visibility = View.GONE
+        }
     }
 
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
@@ -135,6 +140,8 @@ class PasswordsFragment : BaseFragment() {
             PasswordListAdapter(passwordVisibilityClickListener, copyClickListener)
 
         binding.passwordList.setup(passwordListAdapter)
+
+        binding.passwordList.isNestedScrollingEnabled = false
 
         ItemTouchHelper(
             PasswordItemSwipeCallback(
