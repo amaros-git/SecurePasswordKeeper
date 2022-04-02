@@ -141,7 +141,7 @@ class PasswordsFragment : BaseFragment() {
 
         binding.passwordList.setup(passwordListAdapter)
 
-        binding.passwordList.isNestedScrollingEnabled = false
+        //binding.passwordList.isNestedScrollingEnabled = false
 
         ItemTouchHelper(
             PasswordItemSwipeCallback(
