@@ -203,6 +203,7 @@ class PasswordsFragment : BaseFragment() {
             )
         }
             .setDuration(PASSWORD_REMOVAL_SNACKBAR_DURATION)
+            .setAnchorView(binding.bottomNavigation)
             .show()
     }
 
