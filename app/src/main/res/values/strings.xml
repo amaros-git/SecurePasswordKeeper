@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Secure Password Keeper</string>
-    <string name="app_label">Password keeper</string>
 
     <!-- Text Views text -->
     <string name="login_fragment">Login</string>
@@ -57,5 +56,6 @@
     <string name="password_length_label">Password length</string>
     <string name="generated_password_label">Password</string>
     <string name="dialog_generate_password_button">Generate password</string>
+    <string name="search_hint">Search for password</string>
 
 </resources>
