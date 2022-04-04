@@ -1,15 +1,17 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -54,11 +56,12 @@ class PasswordsFragment : BaseFragment() {
             when (it.itemId) {
                 R.id.searchMenu -> {
                     Timber.d("Search")
-                    showSearchView()
+                    toggleViewVisibility(binding.addEditSearchView)
                     true
                 }
                 R.id.sortMenu -> {
                     Timber.d("SORT")
+                    toggleViewVisibility(binding.addEditSortChips)
                     true
                 }
                 else -> false
@@ -66,11 +69,21 @@ class PasswordsFragment : BaseFragment() {
         }
     }
 
-    private fun showSearchView() {
-        if ( binding.chips.visibility != View.VISIBLE) {
-            binding.chips.visibility = View.VISIBLE
+    private fun configureSearchView() {
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        binding.addEditSearchView.apply {
+            // Assumes current activity is the searchable activity
+            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
+            isSubmitButtonEnabled = true
+        }
+    }
+
+    private fun toggleViewVisibility(view: View) {
+        if (view.visibility != View.VISIBLE) {
+            view.visibility = View.VISIBLE
         } else {
-            binding.chips.visibility = View.GONE
+            view.visibility = View.GONE
         }
     }
 
@@ -225,9 +238,11 @@ class PasswordsFragment : BaseFragment() {
         setTitle(getString(R.string.app_name))
         setDisplayHomeAsUpEnabled(false)
 
+        //TODO rework config methods
         configurePasswordRecyclerView()
         setupViews()
         setupBottomNavigation()
+        configureSearchView()
 
         return binding.root
     }
