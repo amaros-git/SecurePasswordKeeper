@@ -69,16 +69,6 @@ class PasswordsFragment : BaseFragment() {
         }
     }
 
-    private fun configureSearchView() {
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        binding.addEditSearchView.apply {
-            // Assumes current activity is the searchable activity
-            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
-            isSubmitButtonEnabled = true
-        }
-    }
-
     private fun toggleViewVisibility(view: View) {
         if (view.visibility != View.VISIBLE) {
             view.visibility = View.VISIBLE
@@ -242,7 +232,6 @@ class PasswordsFragment : BaseFragment() {
         configurePasswordRecyclerView()
         setupViews()
         setupBottomNavigation()
-        configureSearchView()
 
         return binding.root
     }
