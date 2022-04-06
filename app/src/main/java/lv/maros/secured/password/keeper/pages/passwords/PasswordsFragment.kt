@@ -56,7 +56,7 @@ class PasswordsFragment : BaseFragment() {
             when (it.itemId) {
                 R.id.searchMenu -> {
                     Timber.d("Search")
-                    toggleViewVisibility(binding.addEditSearchView)
+                    //toggleViewVisibility(binding.addEditSearchView)
                     true
                 }
                 R.id.sortMenu -> {
