@@ -57,5 +57,6 @@
     <string name="generated_password_label">Password</string>
     <string name="dialog_generate_password_button">Generate password</string>
     <string name="search_hint">Search for password</string>
+    <string name="save_generated_password_button">Save</string>
 
 </resources>

@@ -81,10 +81,8 @@ class PasswordGeneratorDialog private constructor(
         savedInstanceState: Bundle?
     ): View {
         binding = DialogPasswordGeneratorBinding.inflate(inflater)
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        setTitle(getString(R.string.password_generator_fragment_title))
-        setDisplayHomeAsUpEnabled(true)
         dialog?.setCanceledOnTouchOutside(false)
 
         configureViews()

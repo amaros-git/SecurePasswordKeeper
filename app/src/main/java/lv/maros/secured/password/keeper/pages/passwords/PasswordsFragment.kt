@@ -222,7 +222,7 @@ class PasswordsFragment : BaseFragment() {
 
         binding = FragmentPasswordsBinding.inflate(inflater)
         binding.viewModel = _viewModel
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.lifecycleOwner = viewLifecycleOwner
 
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarLayout.keeperToolbar)
         setTitle(getString(R.string.app_name))
