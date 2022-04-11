@@ -133,7 +133,6 @@ class PasswordAddEditFragment : BaseFragment() {
         }
     }
 
-
     private fun showPasswordGeneratorDialog() {
         PasswordGeneratorDialog.newInstance(_viewModel)
             .show(
@@ -141,7 +140,6 @@ class PasswordAddEditFragment : BaseFragment() {
                 PasswordGeneratorDialog.PASSWORD_GENERATOR_DIALOG_TAG
             )
     }
-
 
     private fun showPassword(password: Password) {
         val (website, username, encryptedPassword) = password

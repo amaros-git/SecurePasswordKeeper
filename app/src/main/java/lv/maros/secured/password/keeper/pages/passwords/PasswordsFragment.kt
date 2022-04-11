@@ -26,6 +26,8 @@ import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallba
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeListener
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
+import lv.maros.secured.password.keeper.pages.addEdit.PasswordGeneratorDialog
+import lv.maros.secured.password.keeper.pages.passwords.search.PasswordSearchDialog
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
@@ -56,7 +58,7 @@ class PasswordsFragment : BaseFragment() {
             when (it.itemId) {
                 R.id.searchMenu -> {
                     Timber.d("Search")
-                    //toggleViewVisibility(binding.addEditSearchView)
+                    showSearchDialog()
                     true
                 }
                 R.id.sortMenu -> {
@@ -67,6 +69,14 @@ class PasswordsFragment : BaseFragment() {
                 else -> false
             }
         }
+    }
+
+    private fun showSearchDialog() {
+        PasswordSearchDialog.newInstance()
+            .show(
+                requireActivity().supportFragmentManager,
+                PasswordSearchDialog.PASSWORD_SEARCH_DIALOG_TAG
+            )
     }
 
     private fun toggleViewVisibility(view: View) {

@@ -1,14 +1,11 @@
-package lv.maros.secured.password.keeper.pages.passwords
+package lv.maros.secured.password.keeper.pages.passwords.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.databinding.DialogPasswordSearchBinding
-import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
-import lv.maros.secured.password.keeper.utils.setTitle
 
 
 class PasswordSearchDialog private constructor(
@@ -29,6 +26,8 @@ class PasswordSearchDialog private constructor(
     }
 
     companion object {
+
+        const val PASSWORD_SEARCH_DIALOG_TAG = "PASSWORD_SEARCH_TAG"
 
         fun newInstance(): PasswordSearchDialog {
             return PasswordSearchDialog()
