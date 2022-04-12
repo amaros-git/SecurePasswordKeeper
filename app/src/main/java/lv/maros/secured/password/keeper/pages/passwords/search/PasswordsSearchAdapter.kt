@@ -17,7 +17,7 @@ import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
 
-class PasswordListAdapter() : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordsSearchAdapter() : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

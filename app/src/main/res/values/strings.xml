@@ -56,7 +56,8 @@
     <string name="password_length_label">Password length</string>
     <string name="generated_password_label">Password</string>
     <string name="dialog_generate_password_button">Generate password</string>
-    <string name="search_hint">Search for password</string>
+    <string name="search_hint">Start to input what you want to find</string>
     <string name="save_generated_password_button">Save</string>
+    <string name="search_button_text">Search</string>
 
 </resources>

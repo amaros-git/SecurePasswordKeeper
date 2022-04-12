@@ -6,10 +6,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Context.DOMAIN_VERIFICATION_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
@@ -72,11 +74,20 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun showSearchDialog() {
-        PasswordSearchDialog.newInstance()
-            .show(
-                requireActivity().supportFragmentManager,
-                PasswordSearchDialog.PASSWORD_SEARCH_DIALOG_TAG
-            )
+        val passwords = _viewModel.getPasswordsList()
+        if (null != passwords) {
+            PasswordSearchDialog.newInstance(passwords)
+                .show(
+                    requireActivity().supportFragmentManager,
+                    PasswordSearchDialog.PASSWORD_SEARCH_DIALOG_TAG
+                )
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "No passwords to search in",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun toggleViewVisibility(view: View) {
@@ -204,7 +215,11 @@ class PasswordsFragment : BaseFragment() {
     }
 
     @SuppressLint("WrongConstant")
-    private fun showUndoPasswordRemoval(password: Password, swipedPos: Int, workRequestTag: String) {
+    private fun showUndoPasswordRemoval(
+        password: Password,
+        swipedPos: Int,
+        workRequestTag: String
+    ) {
         Snackbar.make(
             binding.root,
             getString(R.string.password_is_removed), PASSWORD_REMOVAL_SNACKBAR_DURATION

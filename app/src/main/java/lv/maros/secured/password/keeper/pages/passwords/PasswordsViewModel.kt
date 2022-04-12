@@ -126,6 +126,8 @@ class PasswordsViewModel(
 
         return tag
     }
+
+    internal fun getPasswordsList(): List<Password>? = _passwordList.value?.toList()
 }
 
 @Suppress("UNCHECKED_CAST")
