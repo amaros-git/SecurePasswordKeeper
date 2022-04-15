@@ -17,9 +17,10 @@ import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
 
-class PasswordsSearchAdapter() : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordsSearchAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PasswordViewHolder.from(parent)
 
@@ -28,9 +29,9 @@ class PasswordsSearchAdapter() : ListAdapter<Password, PasswordViewHolder>(Passw
         holder.bind(password)
     }
 
-  /*  public override fun getItem(position: Int): Password {
-        return super.getItem(position)
-    }*/
+    /*  public override fun getItem(position: Int): Password {
+          return super.getItem(position)
+      }*/
 
     fun submitMyList(list: List<Password>) {
         adapterScope.launch {
@@ -42,7 +43,7 @@ class PasswordsSearchAdapter() : ListAdapter<Password, PasswordViewHolder>(Passw
 }
 
 class PasswordViewHolder(val binding: PasswordItemBinding) :
-    RecyclerView.ViewHolder(binding.root)/*, View.OnLongClickListener*/ {
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Password) {
         binding.password = item
