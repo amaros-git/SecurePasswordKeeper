@@ -2,7 +2,6 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
 import androidx.lifecycle.*
-import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf

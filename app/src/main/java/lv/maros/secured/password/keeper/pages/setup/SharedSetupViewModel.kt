@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.R
-import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.models.KeeperConfig
-import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModel
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.security.KeeperPasswordManager

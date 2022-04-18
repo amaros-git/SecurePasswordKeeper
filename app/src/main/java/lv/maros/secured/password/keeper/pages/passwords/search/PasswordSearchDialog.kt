@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -19,21 +21,26 @@ import timber.log.Timber
 
 class PasswordSearchDialog private constructor(
     private val passwords: List<Password>
+
 ) : BottomSheetDialogFragment() {
+
+    private val viewModel: PasswordSearchViewModel by viewModels {
+        PasswordSearchViewModelFactory(requireActivity().application)
+    }
 
     private lateinit var binding: DialogPasswordSearchBinding
 
-    private lateinit var passwordListAdapter: PasswordsSearchAdapter
+    private lateinit var passwordsSearchAdapter: PasswordsSearchAdapter
 
     private fun configurePasswordRecyclerView() {
-        val adapter = PasswordsSearchAdapter()
+        passwordsSearchAdapter = PasswordsSearchAdapter()
         //TODO rework setup extension to <T>
         binding.searchDialogSuggestionsList.apply {
             layoutManager = LinearLayoutManager(this.context)
             this.adapter = adapter
         }
 
-        adapter.submitMyList(passwords)
+        passwordsSearchAdapter.submitMyList(passwords)
     }
 
     private fun configureSearchView() {
@@ -48,6 +55,7 @@ class PasswordSearchDialog private constructor(
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("search phrase = $s")
+
             }
         }
 
@@ -57,6 +65,13 @@ class PasswordSearchDialog private constructor(
     private fun configureViews() {
         configurePasswordRecyclerView()
         configureSearchView()
+
+        viewModel.searchResult.observe(viewLifecycleOwner) {
+            it?.let {
+                //passwordsSearchAdapter.submitMyList(it)
+            }
+
+        }
     }
 
     override fun onCreateView(

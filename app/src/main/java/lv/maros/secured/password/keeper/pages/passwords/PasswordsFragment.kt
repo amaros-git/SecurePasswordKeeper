@@ -1,19 +1,15 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.annotation.SuppressLint
-import android.app.SearchManager
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.Context.DOMAIN_VERIFICATION_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -28,7 +24,6 @@ import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallba
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeListener
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
-import lv.maros.secured.password.keeper.pages.addEdit.PasswordGeneratorDialog
 import lv.maros.secured.password.keeper.pages.passwords.search.PasswordSearchDialog
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle

@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
-import lv.maros.secured.password.keeper.pages.passwords.PasswordsViewModel
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.utils.SingleLiveEvent
 
