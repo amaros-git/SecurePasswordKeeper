@@ -1,6 +1,8 @@
 package lv.maros.secured.password.keeper.pages.passwords.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +36,28 @@ class PasswordSearchDialog private constructor(
         adapter.submitMyList(passwords)
     }
 
+    private fun configureSearchView() {
+        //TODO refactor later
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Timber.d("search phrase = $s")
+            }
+        }
+
+        binding.searchDialogSearchText.addTextChangedListener(textWatcher)
+    }
+
+    private fun configureViews() {
+        configurePasswordRecyclerView()
+        configureSearchView()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +72,7 @@ class PasswordSearchDialog private constructor(
             Timber.d(it.toString())
         }
 
-        configurePasswordRecyclerView()
+        configureViews()
 
         return binding.root
     }
