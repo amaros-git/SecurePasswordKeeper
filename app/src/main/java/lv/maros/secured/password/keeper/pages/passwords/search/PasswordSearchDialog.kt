@@ -6,16 +6,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import lv.maros.secured.password.keeper.databinding.DialogPasswordSearchBinding
-import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
 import lv.maros.secured.password.keeper.models.Password
-import lv.maros.secured.password.keeper.pages.passwords.PasswordListAdapter
-import lv.maros.secured.password.keeper.utils.setup
 import timber.log.Timber
 
 
@@ -25,7 +20,7 @@ class PasswordSearchDialog private constructor(
 ) : BottomSheetDialogFragment() {
 
     private val viewModel: PasswordSearchViewModel by viewModels {
-        PasswordSearchViewModelFactory(requireActivity().application)
+        PasswordSearchViewModelFactory(passwords, requireActivity().application)
     }
 
     private lateinit var binding: DialogPasswordSearchBinding
@@ -37,10 +32,8 @@ class PasswordSearchDialog private constructor(
         //TODO rework setup extension to <T>
         binding.searchDialogSuggestionsList.apply {
             layoutManager = LinearLayoutManager(this.context)
-            this.adapter = adapter
+            this.adapter = passwordsSearchAdapter
         }
-
-        passwordsSearchAdapter.submitMyList(passwords)
     }
 
     private fun configureSearchView() {
@@ -55,7 +48,7 @@ class PasswordSearchDialog private constructor(
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("search phrase = $s")
-
+                s?.let { viewModel.showSearchSuggestions(s) }
             }
         }
 
@@ -68,7 +61,10 @@ class PasswordSearchDialog private constructor(
 
         viewModel.searchResult.observe(viewLifecycleOwner) {
             it?.let {
-                //passwordsSearchAdapter.submitMyList(it)
+                it.forEach { item ->
+                    Timber.d(item.toString())
+                }
+                passwordsSearchAdapter.submitMyList(it)
             }
 
         }

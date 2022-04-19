@@ -1,9 +1,7 @@
 package lv.maros.secured.password.keeper.pages.passwords.search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
-import lv.maros.secured.password.keeper.models.Password
-import lv.maros.secured.password.keeper.views.OnCopyClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordClickListener
-import timber.log.Timber
+import lv.maros.secured.password.keeper.databinding.PasswordSearchItemBinding
+import lv.maros.secured.password.keeper.models.PasswordSearchResultItem
 
-class PasswordsSearchAdapter : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordsSearchAdapter : ListAdapter<PasswordSearchResultItem, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -25,15 +21,15 @@ class PasswordsSearchAdapter : ListAdapter<Password, PasswordViewHolder>(Passwor
         PasswordViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
-        val password: Password = getItem(position)
-        holder.bind(password)
+        val passwordItem = getItem(position)
+        holder.bind(passwordItem)
     }
 
     /*  public override fun getItem(position: Int): Password {
           return super.getItem(position)
       }*/
 
-    fun submitMyList(list: List<Password>) {
+    fun submitMyList(list: List<PasswordSearchResultItem>) {
         adapterScope.launch {
             withContext(Dispatchers.Main) {
                 submitList(list)
@@ -42,17 +38,17 @@ class PasswordsSearchAdapter : ListAdapter<Password, PasswordViewHolder>(Passwor
     }
 }
 
-class PasswordViewHolder(val binding: PasswordItemBinding) :
+class PasswordViewHolder(val binding: PasswordSearchItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Password) {
-        binding.password = item
+    fun bind(item: PasswordSearchResultItem) {
+        binding.searchItem = item
         binding.executePendingBindings()
     }
 
     companion object {
         fun from(parent: ViewGroup): PasswordViewHolder {
-            val binding = PasswordItemBinding.inflate(
+            val binding = PasswordSearchItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -63,18 +59,17 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
     }
 }
 
-//TODO
-class PasswordDiffCallback : DiffUtil.ItemCallback<Password>() {
+class PasswordDiffCallback : DiffUtil.ItemCallback<PasswordSearchResultItem>() {
     override fun areItemsTheSame(
-        oldItem: Password,
-        newItem: Password
+        oldItem: PasswordSearchResultItem,
+        newItem: PasswordSearchResultItem
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: Password,
-        newItem: Password
+        oldItem: PasswordSearchResultItem,
+        newItem: PasswordSearchResultItem
     ): Boolean {
         return oldItem == newItem
     }

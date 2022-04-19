@@ -97,3 +97,4 @@ fun Password.toPasswordDTO() =
         this.passwordLastModificationDate,
         0
     )
+
