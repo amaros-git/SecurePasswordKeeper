@@ -52,6 +52,10 @@ class PasswordSearchViewModel(
         _searchResult.value = getSearchSuggestions(key)
     }
 
+    fun clearSearchSuggestions() {
+        _searchResult.value = emptyList()
+    }
+
 }
 
     @Suppress("UNCHECKED_CAST")

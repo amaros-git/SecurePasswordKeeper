@@ -48,7 +48,11 @@ class PasswordSearchDialog private constructor(
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("search phrase = $s")
-                s?.let { viewModel.showSearchSuggestions(s) }
+                if (s.isNullOrEmpty()) {
+                    viewModel.clearSearchSuggestions()
+                } else {
+                    viewModel.showSearchSuggestions(s)
+                }
             }
         }
 
