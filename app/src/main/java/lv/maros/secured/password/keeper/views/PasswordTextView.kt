@@ -34,7 +34,6 @@ class PasswordTextView @JvmOverloads constructor(
         if (isPasswordVisible) {
             passwordClickListener?.let {
                 val decryptedPassword = it.invoke(encryptedPassword)
-                Timber.d("decryptedPassword = $decryptedPassword")
                 text = decryptedPassword
             }
         } else {

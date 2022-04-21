@@ -1,9 +1,7 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +13,6 @@ import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
-import timber.log.Timber
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
