@@ -1,7 +1,6 @@
 package lv.maros.secured.password.keeper.pages.passwords.search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,11 +9,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.databinding.PasswordSearchItemBinding
 import lv.maros.secured.password.keeper.models.PasswordSearchResultItem
+import lv.maros.secured.password.keeper.views.OnSearchItemClickListener
 
-class PasswordsSearchAdapter(private val clickListener) : ListAdapter<PasswordSearchResultItem, PasswordViewHolder>(PasswordDiffCallback()) {
+class PasswordsSearchAdapter(
+    private val clickListener: OnSearchItemClickListener
+) : ListAdapter<PasswordSearchResultItem, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -24,6 +25,8 @@ class PasswordsSearchAdapter(private val clickListener) : ListAdapter<PasswordSe
     override fun onBindViewHolder(holder: PasswordViewHolder, position: Int) {
         val passwordItem = getItem(position)
         holder.bind(passwordItem)
+
+        holder.binding.passwordSearchItemView.setOnSearchItemClickListener(position, clickListener)
     }
 
     /*  public override fun getItem(position: Int): Password {
@@ -75,5 +78,3 @@ class PasswordDiffCallback : DiffUtil.ItemCallback<PasswordSearchResultItem>() {
         return oldItem == newItem
     }
 }
-
-typealias OnSearchItemClickListener = (View) -> Unit

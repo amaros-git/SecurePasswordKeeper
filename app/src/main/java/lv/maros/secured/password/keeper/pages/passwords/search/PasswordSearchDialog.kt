@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import lv.maros.secured.password.keeper.databinding.DialogPasswordSearchBinding
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.views.OnSearchItemClickListener
 import timber.log.Timber
 
 
@@ -28,12 +29,20 @@ class PasswordSearchDialog private constructor(
     private lateinit var passwordsSearchAdapter: PasswordsSearchAdapter
 
     private fun configurePasswordRecyclerView() {
-        passwordsSearchAdapter = PasswordsSearchAdapter()
+        val clickListener: OnSearchItemClickListener = { position ->
+            processOnSearchViewClick(position)
+        }
+
+        passwordsSearchAdapter = PasswordsSearchAdapter(clickListener)
         //TODO rework setup extension to <T>
         binding.searchDialogSuggestionsList.apply {
             layoutManager = LinearLayoutManager(this.context)
             this.adapter = passwordsSearchAdapter
         }
+    }
+
+    private fun processOnSearchViewClick(position: Int) {
+        Timber.d("Clicked on position $position")
     }
 
     private fun configureSearchView() {
