@@ -30,7 +30,7 @@ class PasswordSearchDialog private constructor(
 
     private fun configurePasswordRecyclerView() {
         val clickListener: OnSearchItemClickListener = { position ->
-            processOnSearchViewClick(position)
+            processOnSearchResultItemClick(position)
         }
 
         passwordsSearchAdapter = PasswordsSearchAdapter(clickListener)
@@ -41,19 +41,17 @@ class PasswordSearchDialog private constructor(
         }
     }
 
-    private fun processOnSearchViewClick(position: Int) {
+    private fun processOnSearchResultItemClick(position: Int) {
         Timber.d("Clicked on position $position")
+        val searchItem = passwordsSearchAdapter.getItem(position)
     }
 
     private fun configureSearchView() {
         //TODO refactor later
         val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun afterTextChanged(s: Editable?) {
-            }
-
+            override fun afterTextChanged(s: Editable?) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Timber.d("search phrase = $s")
@@ -102,7 +100,6 @@ class PasswordSearchDialog private constructor(
     }
 
     companion object {
-
         const val PASSWORD_SEARCH_DIALOG_TAG = "PASSWORD_SEARCH_TAG"
 
         fun newInstance(passwords: List<Password>): PasswordSearchDialog {

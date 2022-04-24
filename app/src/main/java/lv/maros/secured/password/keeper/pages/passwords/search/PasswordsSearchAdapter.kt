@@ -10,12 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordSearchItemBinding
-import lv.maros.secured.password.keeper.models.PasswordSearchResultItem
+import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.views.OnSearchItemClickListener
 
 class PasswordsSearchAdapter(
     private val clickListener: OnSearchItemClickListener
-) : ListAdapter<PasswordSearchResultItem, PasswordViewHolder>(PasswordDiffCallback()) {
+) : ListAdapter<PasswordSearchResult, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -29,11 +29,11 @@ class PasswordsSearchAdapter(
         holder.binding.passwordSearchItemView.setOnSearchItemClickListener(position, clickListener)
     }
 
-    /*  public override fun getItem(position: Int): Password {
-          return super.getItem(position)
-      }*/
+  public override fun getItem(position: Int): PasswordSearchResult {
+      return super.getItem(position)
+  }
 
-    fun submitMyList(list: List<PasswordSearchResultItem>) {
+    fun submitMyList(list: List<PasswordSearchResult>) {
         adapterScope.launch {
             withContext(Dispatchers.Main) {
                 submitList(list)
@@ -45,7 +45,7 @@ class PasswordsSearchAdapter(
 class PasswordViewHolder(val binding: PasswordSearchItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: PasswordSearchResultItem) {
+    fun bind(item: PasswordSearchResult) {
         binding.searchItem = item
         binding.executePendingBindings()
     }
@@ -63,18 +63,18 @@ class PasswordViewHolder(val binding: PasswordSearchItemBinding) :
     }
 }
 
-class PasswordDiffCallback : DiffUtil.ItemCallback<PasswordSearchResultItem>() {
+class PasswordDiffCallback : DiffUtil.ItemCallback<PasswordSearchResult>() {
     override fun areItemsTheSame(
-        oldItem: PasswordSearchResultItem,
-        newItem: PasswordSearchResultItem
+        old: PasswordSearchResult,
+        aNew: PasswordSearchResult
     ): Boolean {
-        return oldItem.id == newItem.id
+        return old.id == aNew.id
     }
 
     override fun areContentsTheSame(
-        oldItem: PasswordSearchResultItem,
-        newItem: PasswordSearchResultItem
+        old: PasswordSearchResult,
+        aNew: PasswordSearchResult
     ): Boolean {
-        return oldItem == newItem
+        return old == aNew
     }
 }

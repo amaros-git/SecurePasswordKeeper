@@ -7,38 +7,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.models.Password
-import lv.maros.secured.password.keeper.models.PasswordSearchResultItem
+import lv.maros.secured.password.keeper.models.PasswordSearchResult
 
 class PasswordSearchViewModel(
     private val passwords: List<Password>,
     private val app: Application
 ) : BaseViewModel(app) {
 
-
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val _searchResult = MutableLiveData<List<PasswordSearchResultItem>>()
-    val searchResult: LiveData<List<PasswordSearchResultItem>>
+    private val _searchResult = MutableLiveData<List<PasswordSearchResult>>()
+    val searchResult: LiveData<List<PasswordSearchResult>>
         get() = _searchResult
 
     private fun invalidateShowNoData() {
         showNoData.value = _searchResult.value == null || _searchResult.value!!.isEmpty()
     }
 
-    private fun getSearchSuggestions(key: CharSequence): List<PasswordSearchResultItem> {
-        val tempList = mutableListOf<PasswordSearchResultItem>()
+    private fun getSearchSuggestions(key: CharSequence): List<PasswordSearchResult> {
+        val tempList = mutableListOf<PasswordSearchResult>()
         passwords.forEach {
             if (it.website.contains(key, true)) {
-                tempList.add(PasswordSearchResultItem(
+                tempList.add(PasswordSearchResult(
                     it.website,
-                    PasswordSearchResultItem.TYPE_WEBSITE,
+                    PasswordSearchResult.TYPE_WEBSITE,
                     it.id
                 ))
             }
             if (it.username.contains(key, true)) {
-                tempList.add(PasswordSearchResultItem(
+                tempList.add(PasswordSearchResult(
                     it.username,
-                    PasswordSearchResultItem.TYPE_USERNAME,
+                    PasswordSearchResult.TYPE_USERNAME,
                     it.id
                 ))
             }
