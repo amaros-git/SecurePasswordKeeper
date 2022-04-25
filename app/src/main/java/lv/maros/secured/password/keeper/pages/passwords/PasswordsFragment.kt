@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -70,6 +71,7 @@ class PasswordsFragment : BaseFragment() {
 
     private fun showSearchDialog() {
         val passwords = _viewModel.getPasswordsList()
+
         if (null != passwords) {
             PasswordSearchDialog.newInstance(passwords)
                 .show(
@@ -252,6 +254,10 @@ class PasswordsFragment : BaseFragment() {
         configurePasswordRecyclerView()
         setupViews()
         setupBottomNavigation()
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG, viewLifecycleOwner) { requestKey, bundle ->
+            Timber.d("requestKey $requestKey")
+        }
 
         return binding.root
     }

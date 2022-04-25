@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -44,6 +46,8 @@ class PasswordSearchDialog private constructor(
     private fun processOnSearchResultItemClick(position: Int) {
         Timber.d("Clicked on position $position")
         val searchItem = passwordsSearchAdapter.getItem(position)
+
+        requireActivity().supportFragmentManager.setFragmentResult(PASSWORD_SEARCH_REQUEST_TAG, bundleOf("dasdad" to "Hi"))
     }
 
     private fun configureSearchView() {
@@ -100,7 +104,8 @@ class PasswordSearchDialog private constructor(
     }
 
     companion object {
-        const val PASSWORD_SEARCH_DIALOG_TAG = "PASSWORD_SEARCH_TAG"
+        const val PASSWORD_SEARCH_DIALOG_TAG = "PASSWORD_SEARCH_DIALOG_TAG"
+        const val PASSWORD_SEARCH_REQUEST_TAG = "PASSWORD_SEARCH_RESULT_TAG"
 
         fun newInstance(passwords: List<Password>): PasswordSearchDialog {
             return PasswordSearchDialog(passwords)
