@@ -10,6 +10,7 @@ import lv.maros.secured.password.keeper.*
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
 import lv.maros.secured.password.keeper.workers.PasswordRemovalCoroutineWorker
@@ -127,6 +128,10 @@ class PasswordsViewModel(
     }
 
     internal fun getPasswordsList(): List<Password>? = _passwordList.value?.toList()
+
+    internal fun processSearchRequest(searchResult: List<PasswordSearchResult>) {
+
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

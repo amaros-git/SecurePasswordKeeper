@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import lv.maros.secured.password.keeper.databinding.DialogPasswordSearchBinding
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.views.OnSearchItemClickListener
 import timber.log.Timber
 
@@ -45,9 +46,14 @@ class PasswordSearchDialog private constructor(
 
     private fun processOnSearchResultItemClick(position: Int) {
         Timber.d("Clicked on position $position")
-        val searchItem = passwordsSearchAdapter.getItem(position)
+        val searchItem: PasswordSearchResult = passwordsSearchAdapter.getItem(position)
 
-        requireActivity().supportFragmentManager.setFragmentResult(PASSWORD_SEARCH_REQUEST_TAG, bundleOf("dasdad" to "Hi"))
+        requireActivity().supportFragmentManager.setFragmentResult(
+            PASSWORD_SEARCH_REQUEST_TAG,
+            bundleOf(PASSWORD_SEARCH_RESULT_TAG to arrayOf(searchItem))
+        )
+
+        dismiss()
     }
 
     private fun configureSearchView() {
@@ -105,7 +111,10 @@ class PasswordSearchDialog private constructor(
 
     companion object {
         const val PASSWORD_SEARCH_DIALOG_TAG = "PASSWORD_SEARCH_DIALOG_TAG"
-        const val PASSWORD_SEARCH_REQUEST_TAG = "PASSWORD_SEARCH_RESULT_TAG"
+
+        const val PASSWORD_SEARCH_REQUEST_TAG = "PASSWORD_SEARCH_REQUEST_TAG"
+        //array of PasswordSearchResult. If nothing found, empty array is returned.
+        const val PASSWORD_SEARCH_RESULT_TAG = "PASSWORD_SEARCH_RESULT_TAG"
 
         fun newInstance(passwords: List<Password>): PasswordSearchDialog {
             return PasswordSearchDialog(passwords)

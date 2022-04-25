@@ -24,6 +24,7 @@ import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeListener
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.pages.addEdit.PasswordAddEditFragment
 import lv.maros.secured.password.keeper.pages.passwords.search.PasswordSearchDialog
 import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
@@ -174,6 +175,19 @@ class PasswordsFragment : BaseFragment() {
         )
     }
 
+    private fun setupSearch() {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG,
+            viewLifecycleOwner
+        ) { requestKey, bundle ->
+            if (PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG == requestKey) {
+                bundle.getParcelableArray(PasswordSearchDialog.PASSWORD_SEARCH_RESULT_TAG)?.let {
+                    _viewModel.processSearchRequest(it.filterIsInstance<PasswordSearchResult>())
+                }
+            }
+        }
+    }
+
     private fun processPasswordVisibilityClick(data: String) =
         _viewModel.decryptString(data)
 
@@ -254,10 +268,7 @@ class PasswordsFragment : BaseFragment() {
         configurePasswordRecyclerView()
         setupViews()
         setupBottomNavigation()
-
-        requireActivity().supportFragmentManager.setFragmentResultListener(PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG, viewLifecycleOwner) { requestKey, bundle ->
-            Timber.d("requestKey $requestKey")
-        }
+        setupSearch()
 
         return binding.root
     }
