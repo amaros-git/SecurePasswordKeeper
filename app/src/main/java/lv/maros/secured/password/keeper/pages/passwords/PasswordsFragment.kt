@@ -34,6 +34,7 @@ import lv.maros.secured.password.keeper.utils.uncheckAllItems
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
+import kotlin.internal.NoInfer
 
 
 class PasswordsFragment : BaseFragment() {
@@ -182,10 +183,14 @@ class PasswordsFragment : BaseFragment() {
         ) { requestKey, bundle ->
             if (PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG == requestKey) {
                 bundle.getParcelableArray(PasswordSearchDialog.PASSWORD_SEARCH_RESULT_TAG)?.let {
-                    _viewModel.processSearchRequest(it.filterIsInstance<PasswordSearchResult>())
+                    processSearchRequest(it.filterIsInstance<PasswordSearchResult>())
                 }
             }
         }
+    }
+
+    private fun processSearchRequest(items: List<PasswordSearchResult>) {
+        passwordListAdapter.filterItems(items)
     }
 
     private fun processPasswordVisibilityClick(data: String) =

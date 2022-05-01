@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
+import lv.maros.secured.password.keeper.models.PasswordSearchResult
+import lv.maros.secured.password.keeper.utils.isNotBlankOrEmpty
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 
@@ -20,6 +22,8 @@ class PasswordListAdapter(
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
+
+    private lateinit var currentItems: List<Password>
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
         binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
@@ -42,12 +46,33 @@ class PasswordListAdapter(
         return super.getItem(position)
     }
 
-    fun submitMyList(list: List<Password>) {
+    internal fun submitMyList(list: List<Password>) {
+        currentItems = list
         adapterScope.launch {
             withContext(Dispatchers.Main) {
                 submitList(list)
             }
         }
+    }
+
+    private fun removeDuplicateIds(items: List<PasswordSearchResult>): Set<Int> {
+        val ids = mutableSetOf<Int>()
+        for (i in items.indices) {
+            ids.add(items[i].id)
+        }
+
+        return ids
+    }
+
+    internal fun filterItems(items: List<PasswordSearchResult>) {
+        val ids = removeDuplicateIds(items)
+        val filteredItems = mutableListOf<Password>()
+        currentItems.forEach {
+            if (ids.contains(it.id)) {
+                filteredItems.
+            }
+        }
+
     }
 }
 
