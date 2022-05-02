@@ -1,5 +1,6 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,6 @@ import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
-import lv.maros.secured.password.keeper.utils.isNotBlankOrEmpty
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 
@@ -23,7 +23,7 @@ class PasswordListAdapter(
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    private lateinit var currentItems: List<Password>
+    private val cachedList = mutableListOf<Password>()
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
         binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
@@ -31,6 +31,51 @@ class PasswordListAdapter(
         binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
         binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
         binding.passwordItemPasswordCopyButton.setOnCopyClickListener(position, copyClickListener)
+    }
+
+    private fun removeDuplicateIds(items: List<PasswordSearchResult>): Set<Int> {
+        val ids = mutableSetOf<Int>()
+        for (i in items.indices) {
+            ids.add(items[i].id)
+        }
+
+        return ids
+    }
+
+    private fun cacheList(list: List<Password>) {
+        cachedList.clear()
+        list.forEach {
+            cachedList.add(it)
+        }
+    }
+
+    internal fun submitMyList(list: List<Password>) {
+        cacheList(list)
+        adapterScope.launch {
+            withContext(Dispatchers.Main) {
+                submitList(list)
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    internal fun filterItems(searchItems: List<PasswordSearchResult>) {
+        val mCurrentList = currentList
+
+        if (searchItems.isNotEmpty()) {
+            mCurrentList.clear()
+
+            //TODO improve it
+            for (searchItem in searchItems) {
+                for (cachedItem in cachedList) {
+                    if(searchItem.id == cachedItem.id) {
+                        mCurrentList.add(cachedItem)
+                    }
+                }
+            }
+        }
+
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -44,35 +89,6 @@ class PasswordListAdapter(
 
     public override fun getItem(position: Int): Password {
         return super.getItem(position)
-    }
-
-    internal fun submitMyList(list: List<Password>) {
-        currentItems = list
-        adapterScope.launch {
-            withContext(Dispatchers.Main) {
-                submitList(list)
-            }
-        }
-    }
-
-    private fun removeDuplicateIds(items: List<PasswordSearchResult>): Set<Int> {
-        val ids = mutableSetOf<Int>()
-        for (i in items.indices) {
-            ids.add(items[i].id)
-        }
-
-        return ids
-    }
-
-    internal fun filterItems(items: List<PasswordSearchResult>) {
-        val ids = removeDuplicateIds(items)
-        val filteredItems = mutableListOf<Password>()
-        currentItems.forEach {
-            if (ids.contains(it.id)) {
-                filteredItems.
-            }
-        }
-
     }
 }
 

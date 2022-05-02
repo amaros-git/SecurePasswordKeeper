@@ -34,7 +34,6 @@ import lv.maros.secured.password.keeper.utils.uncheckAllItems
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
-import kotlin.internal.NoInfer
 
 
 class PasswordsFragment : BaseFragment() {
