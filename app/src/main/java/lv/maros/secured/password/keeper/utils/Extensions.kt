@@ -13,7 +13,7 @@ import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
 import lv.maros.secured.password.keeper.pages.passwords.PasswordListAdapter
 
-
+//TODO rework setup extension to <T>
 fun RecyclerView.setup(
     adapter: PasswordListAdapter
 ) {

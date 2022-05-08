@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -33,24 +32,27 @@ class PasswordSearchDialog private constructor(
 
     private fun configurePasswordRecyclerView() {
         val clickListener: OnSearchItemClickListener = { position ->
-            processOnSearchResultItemClick(position)
+            processOnSearchSuggestionItemClick(position)
         }
 
         passwordsSearchAdapter = PasswordsSearchAdapter(clickListener)
-        //TODO rework setup extension to <T>
+
         binding.searchDialogSuggestionsList.apply {
             layoutManager = LinearLayoutManager(this.context)
             this.adapter = passwordsSearchAdapter
         }
     }
 
-    private fun processOnSearchResultItemClick(position: Int) {
-        Timber.d("Clicked on position $position")
-        val searchItem: PasswordSearchResult = passwordsSearchAdapter.getItem(position)
+    private fun processOnSearchSuggestionItemClick(position: Int) =
+        setSearchResultAndFinish(arrayOf(passwordsSearchAdapter.getItem(position)))
 
+    private fun processOnSearchButtonClick() =
+        setSearchResultAndFinish(passwordsSearchAdapter.currentList.toTypedArray())
+
+    private fun setSearchResultAndFinish(searchItems: Array<PasswordSearchResult>) {
         requireActivity().supportFragmentManager.setFragmentResult(
             PASSWORD_SEARCH_REQUEST_TAG,
-            bundleOf(PASSWORD_SEARCH_RESULT_TAG to arrayOf(searchItem))
+            bundleOf(PASSWORD_SEARCH_RESULT_TAG to searchItems)
         )
 
         dismiss()
@@ -64,7 +66,6 @@ class PasswordSearchDialog private constructor(
             override fun afterTextChanged(s: Editable?) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Timber.d("search phrase = $s")
                 if (s.isNullOrEmpty()) {
                     viewModel.clearSearchSuggestions()
                 } else {
@@ -74,6 +75,10 @@ class PasswordSearchDialog private constructor(
         }
 
         binding.searchDialogSearchText.addTextChangedListener(textWatcher)
+
+        binding.searchDialogSearchButton.setOnClickListener {
+            processOnSearchButtonClick()
+        }
     }
 
     private fun configureViews() {
@@ -82,12 +87,8 @@ class PasswordSearchDialog private constructor(
 
         viewModel.searchResult.observe(viewLifecycleOwner) {
             it?.let {
-                it.forEach { item ->
-                    Timber.d(item.toString())
-                }
                 passwordsSearchAdapter.submitMyList(it)
             }
-
         }
     }
 
@@ -113,6 +114,7 @@ class PasswordSearchDialog private constructor(
         const val PASSWORD_SEARCH_DIALOG_TAG = "PASSWORD_SEARCH_DIALOG_TAG"
 
         const val PASSWORD_SEARCH_REQUEST_TAG = "PASSWORD_SEARCH_REQUEST_TAG"
+
         //array of PasswordSearchResult. If nothing found, empty array is returned.
         const val PASSWORD_SEARCH_RESULT_TAG = "PASSWORD_SEARCH_RESULT_TAG"
 
