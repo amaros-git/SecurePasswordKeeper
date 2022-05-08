@@ -23,7 +23,9 @@ class PasswordListAdapter(
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    private val cachedList = mutableListOf<Password>()
+    //TODO these both variables MUST be protected against multithreads !!!!!!!!!!!!!!!!!!
+    private val cachedItems = mutableListOf<Password>()
+    private var mCurrentList: MutableList<Password>? = null
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
         binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
@@ -42,37 +44,46 @@ class PasswordListAdapter(
         return ids
     }
 
-    private fun cacheList(list: List<Password>) {
-        cachedList.clear()
+    private fun cacheItems(list: List<Password>) {
+        cachedItems.clear()
         list.forEach {
-            cachedList.add(it)
+            cachedItems.add(it)
         }
     }
 
-    internal fun submitMyList(list: List<Password>) {
-        cacheList(list)
+    internal fun submitMyList(list: MutableList<Password>) {
+        cacheItems(list)
+        mCurrentList = list
+
         adapterScope.launch {
             withContext(Dispatchers.Main) {
-                submitList(list)
+                submitList(mCurrentList)
             }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     internal fun filterItems(searchItems: List<PasswordSearchResult>) {
-        val mCurrentList = currentList
-
-        if (searchItems.isNotEmpty()) {
-            mCurrentList.clear()
-
-            //TODO improve it
+        mCurrentList?.let {
+            it.clear()
+            //TODO improve filter algo
             for (searchItem in searchItems) {
-                for (cachedItem in cachedList) {
-                    if(searchItem.id == cachedItem.id) {
-                        mCurrentList.add(cachedItem)
+                for (cachedItem in cachedItems) {
+                    if (searchItem.id == cachedItem.id) {
+                        it.add(cachedItem)
                     }
                 }
             }
+        }
+
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    internal fun clearAllFilters() {
+        currentList.clear()
+        cachedItems.forEach {
+            currentList.add(it)
         }
 
         notifyDataSetChanged()

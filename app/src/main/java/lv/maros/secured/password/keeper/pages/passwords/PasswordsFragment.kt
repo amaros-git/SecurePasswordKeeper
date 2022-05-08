@@ -189,7 +189,9 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun processSearchRequest(items: List<PasswordSearchResult>) {
-        passwordListAdapter.filterItems(items)
+        if (items.isNotEmpty()) {
+            passwordListAdapter.filterItems(items)
+        }
     }
 
     private fun processPasswordVisibilityClick(data: String) =
