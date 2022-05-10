@@ -6,11 +6,12 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.setFragmentResultListener
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -20,7 +21,6 @@ import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseFragment
 import lv.maros.secured.password.keeper.databinding.FragmentPasswordsBinding
-//import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemClickListener
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeCallback
 import lv.maros.secured.password.keeper.helpers.geasture.PasswordItemSwipeListener
 import lv.maros.secured.password.keeper.models.Password
@@ -51,22 +51,30 @@ class PasswordsFragment : BaseFragment() {
     private lateinit var passwordListAdapter: PasswordListAdapter
 
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.uncheckAllItems()
+        binding.passwordsBottomMenu.apply {
+            uncheckAllItems()
+            setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.searchMenu -> {
+                        processSearchMenuItemClick()
 
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.searchMenu -> {
-                    Timber.d("Search")
-                    showSearchDialog()
-                    true
+                        true
+                    }
+                    R.id.sortMenu -> {
+                        toggleViewVisibility(binding.passwordsSortChips)
+                        true
+                    }
+                    else -> false
                 }
-                R.id.sortMenu -> {
-                    Timber.d("SORT")
-                    toggleViewVisibility(binding.addEditSortChips)
-                    true
-                }
-                else -> false
             }
+        }
+    }
+
+    private fun processSearchMenuItemClick() {
+        if (passwordListAdapter.isSearchResultsFilterActive()) {
+            passwordListAdapter.clearAllFilters()
+        } else {
+            showSearchDialog()
         }
     }
 
@@ -96,6 +104,11 @@ class PasswordsFragment : BaseFragment() {
         }
     }
 
+    private fun toggleBottomMenuSearchIcon() {
+        val bottomMenu: MenuItem = binding.passwordsBottomMenu.menu.getItem(R.id.searchMenu)
+        //if (bottomMenu.icon.
+    }
+
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
         val action = when (mode) {
             PasswordAddEditFragment.MODE_ADD_PASSWORD -> {
@@ -119,7 +132,7 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun setupViews() {
-        binding.addPasswordFab.setOnClickListener {
+        binding.passwordsAddPasswordFab.setOnClickListener {
             navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
         }
 
@@ -161,7 +174,7 @@ class PasswordsFragment : BaseFragment() {
         passwordListAdapter =
             PasswordListAdapter(passwordVisibilityClickListener, copyClickListener)
 
-        binding.passwordList.setup(passwordListAdapter)
+        binding.passwordsPasswordList.setup(passwordListAdapter)
 
         //binding.passwordList.isNestedScrollingEnabled = false
 
@@ -171,11 +184,11 @@ class PasswordsFragment : BaseFragment() {
                 passwordItemClickListener
             )
         ).attachToRecyclerView(
-            binding.passwordList
+            binding.passwordsPasswordList
         )
     }
 
-    private fun setupSearch() {
+    private fun setSearchDialogResultListener() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG,
             viewLifecycleOwner
@@ -189,8 +202,16 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun processSearchRequest(items: List<PasswordSearchResult>) {
+        val searchMenuItem = binding.passwordsBottomMenu.menu.findItem(R.id.searchMenu)
+
+        searchMenuItem.icon = ResourcesCompat.getDrawable(
+                activity?.resources!!,
+                R.drawable.ic_baseline_cancel_18,
+                null
+            )
+
         if (items.isNotEmpty()) {
-            passwordListAdapter.filterItems(items)
+            passwordListAdapter.showSearchResultItems(items)
         }
     }
 
@@ -248,13 +269,13 @@ class PasswordsFragment : BaseFragment() {
             )
         }
             .setDuration(PASSWORD_REMOVAL_SNACKBAR_DURATION)
-            .setAnchorView(binding.bottomNavigation)
+            .setAnchorView(binding.passwordsBottomMenu)
             .show()
     }
 
     private fun undoPasswordRemoval(password: Password, swipedPos: Int, workRequestTag: String) {
         _viewModel.undoPasswordsRemoval(passwordListAdapter, password, swipedPos, workRequestTag)
-        binding.passwordList.layoutManager?.scrollToPosition(swipedPos)
+        binding.passwordsPasswordList.layoutManager?.scrollToPosition(swipedPos)
     }
 
     override fun onCreateView(
@@ -274,7 +295,7 @@ class PasswordsFragment : BaseFragment() {
         configurePasswordRecyclerView()
         setupViews()
         setupBottomNavigation()
-        setupSearch()
+        setSearchDialogResultListener()
 
         return binding.root
     }

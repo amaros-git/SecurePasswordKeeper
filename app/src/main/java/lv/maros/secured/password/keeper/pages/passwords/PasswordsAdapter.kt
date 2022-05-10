@@ -25,7 +25,8 @@ class PasswordListAdapter(
 
     //TODO these both variables MUST be protected against multithreads !!!!!!!!!!!!!!!!!!
     private val cachedItems = mutableListOf<Password>()
-    private var mCurrentList: MutableList<Password>? = null
+    private lateinit var mCurrentList: MutableList<Password>
+    private var isSearchResultsFilterActive = false
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
         binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
@@ -63,20 +64,19 @@ class PasswordListAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    internal fun filterItems(searchItems: List<PasswordSearchResult>) {
-        mCurrentList?.let {
-            it.clear()
-            //TODO improve filter algo
-            for (searchItem in searchItems) {
-                for (cachedItem in cachedItems) {
-                    if (searchItem.id == cachedItem.id) {
-                        it.add(cachedItem)
-                    }
+    internal fun showSearchResultItems(searchItems: List<PasswordSearchResult>) {
+        mCurrentList.clear()
+        //TODO improve filter algo
+        for (searchItem in searchItems) {
+            for (cachedItem in cachedItems) {
+                if (searchItem.id == cachedItem.id) {
+                    mCurrentList.add(cachedItem)
                 }
             }
         }
-
         notifyDataSetChanged()
+
+        isSearchResultsFilterActive = true
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -85,9 +85,12 @@ class PasswordListAdapter(
         cachedItems.forEach {
             currentList.add(it)
         }
-
         notifyDataSetChanged()
+
+        isSearchResultsFilterActive = false
     }
+
+    internal fun isSearchResultsFilterActive() = isSearchResultsFilterActive
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PasswordViewHolder.from(parent)
