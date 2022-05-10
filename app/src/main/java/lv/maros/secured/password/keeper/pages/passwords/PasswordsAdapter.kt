@@ -81,9 +81,9 @@ class PasswordListAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     internal fun clearAllFilters() {
-        currentList.clear()
+        mCurrentList.clear()
         cachedItems.forEach {
-            currentList.add(it)
+            mCurrentList.add(it)
         }
         notifyDataSetChanged()
 

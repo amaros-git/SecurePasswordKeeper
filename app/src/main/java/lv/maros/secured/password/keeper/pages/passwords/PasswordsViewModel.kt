@@ -1,6 +1,7 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -128,10 +129,6 @@ class PasswordsViewModel(
     }
 
     internal fun getPasswordsList(): List<Password>? = _passwordList.value?.toList()
-
-    internal fun processSearchRequest(searchResult: List<PasswordSearchResult>) {
-
-    }
 }
 
 @Suppress("UNCHECKED_CAST")

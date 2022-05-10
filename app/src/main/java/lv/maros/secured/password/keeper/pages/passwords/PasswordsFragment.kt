@@ -73,6 +73,8 @@ class PasswordsFragment : BaseFragment() {
     private fun processSearchMenuItemClick() {
         if (passwordListAdapter.isSearchResultsFilterActive()) {
             passwordListAdapter.clearAllFilters()
+
+            changeSearchMenuIcon("search")
         } else {
             showSearchDialog()
         }
@@ -102,11 +104,6 @@ class PasswordsFragment : BaseFragment() {
         } else {
             view.visibility = View.GONE
         }
-    }
-
-    private fun toggleBottomMenuSearchIcon() {
-        val bottomMenu: MenuItem = binding.passwordsBottomMenu.menu.getItem(R.id.searchMenu)
-        //if (bottomMenu.icon.
     }
 
     private fun navigateToAddEditFragment(mode: Int, passwordId: Int = -1) {
@@ -195,23 +192,35 @@ class PasswordsFragment : BaseFragment() {
         ) { requestKey, bundle ->
             if (PasswordSearchDialog.PASSWORD_SEARCH_REQUEST_TAG == requestKey) {
                 bundle.getParcelableArray(PasswordSearchDialog.PASSWORD_SEARCH_RESULT_TAG)?.let {
-                    processSearchRequest(it.filterIsInstance<PasswordSearchResult>())
+                    processSearchDialogResult(it.filterIsInstance<PasswordSearchResult>())
                 }
             }
         }
     }
 
-    private fun processSearchRequest(items: List<PasswordSearchResult>) {
+    private fun processSearchDialogResult(searchResultItems: List<PasswordSearchResult>) {
+        passwordListAdapter.showSearchResultItems(searchResultItems)
+
+        changeSearchMenuIcon("clear")
+    }
+
+    private fun changeSearchMenuIcon(type: String) {
         val searchMenuItem = binding.passwordsBottomMenu.menu.findItem(R.id.searchMenu)
-
-        searchMenuItem.icon = ResourcesCompat.getDrawable(
-                activity?.resources!!,
-                R.drawable.ic_baseline_cancel_18,
-                null
-            )
-
-        if (items.isNotEmpty()) {
-            passwordListAdapter.showSearchResultItems(items)
+        when(type) {
+            "search" -> {
+                searchMenuItem.icon = ResourcesCompat.getDrawable(
+                    activity?.resources!!,
+                    R.drawable.ic_baseline_search_18,
+                    null
+                )
+            }
+            "clear" -> {
+                searchMenuItem.icon = ResourcesCompat.getDrawable(
+                    activity?.resources!!,
+                    R.drawable.ic_baseline_cancel_18,
+                    null
+                )
+            }
         }
     }
 
