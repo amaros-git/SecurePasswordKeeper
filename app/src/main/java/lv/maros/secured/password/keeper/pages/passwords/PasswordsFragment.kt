@@ -212,6 +212,7 @@ class PasswordsFragment : BaseFragment() {
                     R.drawable.ic_baseline_search_18,
                     null
                 )
+                searchMenuItem.title = "Search" //TODO
             }
             "clear" -> {
                 searchMenuItem.icon = ResourcesCompat.getDrawable(
@@ -219,6 +220,7 @@ class PasswordsFragment : BaseFragment() {
                     R.drawable.ic_baseline_cancel_18,
                     null
                 )
+                searchMenuItem.title = "Clear" //TODO
             }
         }
     }
