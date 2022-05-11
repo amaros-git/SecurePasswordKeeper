@@ -63,10 +63,10 @@ class PasswordListAdapter(
         }
     }
 
+    //TODO improve filter algo !!!!!!!!!!!!!!!!!!
     @SuppressLint("NotifyDataSetChanged")
     internal fun showSearchResultItems(searchItems: List<PasswordSearchResult>) {
         mCurrentList.clear()
-        //TODO improve filter algo
         for (searchItem in searchItems) {
             for (cachedItem in cachedItems) {
                 if (searchItem.id == cachedItem.id) {

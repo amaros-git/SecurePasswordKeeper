@@ -73,7 +73,6 @@ class PasswordsFragment : BaseFragment() {
     private fun processSearchMenuItemClick() {
         if (passwordListAdapter.isSearchResultsFilterActive()) {
             passwordListAdapter.clearAllFilters()
-
             changeSearchMenuIcon("search")
         } else {
             showSearchDialog()
