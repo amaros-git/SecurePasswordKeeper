@@ -26,6 +26,7 @@ class PasswordListAdapter(
     //TODO these both variables MUST be protected against multithreads !!!!!!!!!!!!!!!!!!
     private val cachedItems = mutableListOf<Password>()
     private lateinit var mCurrentList: MutableList<Password>
+
     private var isSearchResultsFilterActive = false
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
@@ -63,13 +64,15 @@ class PasswordListAdapter(
         }
     }
 
-    //TODO improve filter algo !!!!!!!!!!!!!!!!!!
+    //TODO improve alo
     @SuppressLint("NotifyDataSetChanged")
     internal fun showSearchResultItems(searchItems: List<PasswordSearchResult>) {
+        val ids = removeDuplicateIds(searchItems)
+
         mCurrentList.clear()
-        for (searchItem in searchItems) {
+        for (id in ids) {
             for (cachedItem in cachedItems) {
-                if (searchItem.id == cachedItem.id) {
+                if (id == cachedItem.id) {
                     mCurrentList.add(cachedItem)
                 }
             }
@@ -92,6 +95,14 @@ class PasswordListAdapter(
 
     internal fun isSearchResultsFilterActive() = isSearchResultsFilterActive
 
+    internal fun sortPasswords(sortingType: Int) {
+        when(sortingType) {
+            SORTING_TYPE_USERNAME_AZ -> {
+
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PasswordViewHolder.from(parent)
 
@@ -104,6 +115,11 @@ class PasswordListAdapter(
     public override fun getItem(position: Int): Password {
         return super.getItem(position)
     }
+
+    internal companion object {
+        const val SORTING_TYPE_USERNAME_AZ = 0
+    }
+
 }
 
 class PasswordViewHolder(val binding: PasswordItemBinding) :
