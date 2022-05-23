@@ -6,7 +6,6 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -50,7 +49,7 @@ class PasswordsFragment : BaseFragment() {
 
     private lateinit var passwordListAdapter: PasswordListAdapter
 
-    private fun setupBottomNavigation() {
+    private fun configureBottomNavigation() {
         binding.passwordsBottomMenu.apply {
             uncheckAllItems()
             setOnItemSelectedListener {
@@ -127,7 +126,7 @@ class PasswordsFragment : BaseFragment() {
         action?.let { findNavController().navigate(action) }
     }
 
-    private fun setupViews() {
+    private fun configureViews() {
         binding.passwordsAddPasswordFab.setOnClickListener {
             navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
         }
@@ -288,6 +287,12 @@ class PasswordsFragment : BaseFragment() {
         binding.passwordsPasswordList.layoutManager?.scrollToPosition(swipedPos)
     }
 
+    private fun configureSortChips() {
+        binding.passwordsSortChips.setOnClickListener {
+            Timber.d("Clicked")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -303,9 +308,10 @@ class PasswordsFragment : BaseFragment() {
 
         //TODO rework config methods
         configurePasswordRecyclerView()
-        setupViews()
-        setupBottomNavigation()
+        configureViews()
+        configureBottomNavigation()
         setSearchDialogResultListener()
+        configureSortChips()
 
         return binding.root
     }
