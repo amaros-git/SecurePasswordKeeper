@@ -287,12 +287,44 @@ class PasswordsFragment : BaseFragment() {
         binding.passwordsPasswordList.layoutManager?.scrollToPosition(swipedPos)
     }
 
+    //TODO rework
     private fun configureSortChips() {
         binding.passwordsSortChips.setOnClickListener {
             Timber.d("Clicked")
         }
-    }
 
+        binding.passwordsSortChips.setOnCheckedStateChangeListener { _, checkedIds ->
+            checkedIds.forEach {
+                val sortingType = when(it) { //by design only one chip can be checked.
+                    R.id.username_AZ_sort_chip -> {
+                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                    }
+                    R.id.username_ZA_sort_chip -> {
+                        PasswordListAdapter.SORTING_TYPE_USERNAME_ZA
+                    }
+                    R.id.website_AZ_sort_chip -> {
+                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                    }
+                    R.id.website_ZA_sort_chip -> {
+                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                    }
+                    R.id.latest_sort_chip -> {
+                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                    }
+                    R.id.oldest_sort_chip -> {
+                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                    }
+                    else -> {
+                        PasswordListAdapter.SORTING_TYPE_UNKNOWN
+                    }
+                }
+                Timber.d("sortingType = $sortingType")
+
+                passwordListAdapter.sortPasswords(sortingType)
+            }
+        }
+    }
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

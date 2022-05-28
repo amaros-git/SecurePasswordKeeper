@@ -118,6 +118,13 @@ class PasswordListAdapter(
 
     internal companion object {
         const val SORTING_TYPE_USERNAME_AZ = 0
+        const val SORTING_TYPE_USERNAME_ZA = 1
+        const val SORTING_TYPE_WEBSITE_AZ = 2
+        const val SORTING_TYPE_WEBSITE_ZA = 3
+        const val SORTING_TYPE_LATEST = 4
+        const val SORTING_TYPE_OLDEST = 5
+
+        const val SORTING_TYPE_UNKNOWN = -1
     }
 
 }
