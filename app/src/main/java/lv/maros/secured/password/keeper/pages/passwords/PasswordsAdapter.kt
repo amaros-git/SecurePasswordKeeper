@@ -95,12 +95,19 @@ class PasswordListAdapter(
 
     internal fun isSearchResultsFilterActive() = isSearchResultsFilterActive
 
+    @SuppressLint("NotifyDataSetChanged")
     internal fun sortPasswords(sortingType: Int) {
         when(sortingType) {
             SORTING_TYPE_USERNAME_AZ -> {
+                mCurrentList.sortBy { it.username }
+            }
 
+            SORTING_TYPE_USERNAME_ZA -> {
+                mCurrentList.sortByDescending { it.username }
             }
         }
+
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

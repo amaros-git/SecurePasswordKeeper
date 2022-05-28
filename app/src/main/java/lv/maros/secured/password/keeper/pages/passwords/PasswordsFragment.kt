@@ -303,22 +303,21 @@ class PasswordsFragment : BaseFragment() {
                         PasswordListAdapter.SORTING_TYPE_USERNAME_ZA
                     }
                     R.id.website_AZ_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                        PasswordListAdapter.SORTING_TYPE_WEBSITE_AZ
                     }
                     R.id.website_ZA_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                        PasswordListAdapter.SORTING_TYPE_WEBSITE_ZA
                     }
                     R.id.latest_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                        PasswordListAdapter.SORTING_TYPE_LATEST
                     }
                     R.id.oldest_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                        PasswordListAdapter.SORTING_TYPE_OLDEST
                     }
                     else -> {
                         PasswordListAdapter.SORTING_TYPE_UNKNOWN
                     }
                 }
-                Timber.d("sortingType = $sortingType")
 
                 passwordListAdapter.sortPasswords(sortingType)
             }
