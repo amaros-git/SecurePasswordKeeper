@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -343,6 +345,14 @@ class PasswordsFragment : BaseFragment() {
         configureBottomNavigation()
         setSearchDialogResultListener()
         configureSortChips()
+
+
+        //JUST FOR TEST
+        binding.passwordsTestDeleteFab.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DELETE)
+            intent.data = Uri.parse("package:" + requireActivity().packageName)
+            startActivity(intent)
+        }
 
         return binding.root
     }

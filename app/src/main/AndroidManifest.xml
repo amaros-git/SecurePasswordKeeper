@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="lv.maros.secured.password.keeper">
 
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+
     <application
         android:name=".KeeperApplication"
         android:icon="@mipmap/ic_launcher"
