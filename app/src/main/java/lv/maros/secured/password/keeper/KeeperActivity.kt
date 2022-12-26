@@ -24,6 +24,8 @@ class KeeperActivity : AppCompatActivity() {
             startSetupActivityAndFinish()
         }
 
+        startSetupActivityAndFinish()
+
         TEST_addPasswords()
         // else we start destination fragment from main nav graph
     }
