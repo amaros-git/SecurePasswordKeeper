@@ -76,7 +76,7 @@ class PasswordSearchDialog private constructor(
 
         binding.searchDialogSearchText.addTextChangedListener(textWatcher)
 
-        binding.searchDialogSearchButton.setOnClickListener {
+        binding.searchDialogShowAllButton.setOnClickListener {
             processOnSearchButtonClick()
         }
     }

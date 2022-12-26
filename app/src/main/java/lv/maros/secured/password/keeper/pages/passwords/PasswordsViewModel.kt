@@ -33,6 +33,10 @@ class PasswordsViewModel(
 
     private val workManager = WorkManager.getInstance(app.applicationContext)
 
+    init {
+        loadAllPasswords()
+    }
+
     /**
      * Inform the user that there's not any data if the remindersList is empty
      */

@@ -15,6 +15,7 @@ import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.views.OnCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
+import timber.log.Timber
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
@@ -25,7 +26,7 @@ class PasswordListAdapter(
 
     //TODO these both variables MUST be protected against multithreads !!!!!!!!!!!!!!!!!!
     private val cachedItems = mutableListOf<Password>()
-    private lateinit var mCurrentList: MutableList<Password>
+    private var mCurrentList: MutableList<Password> = mutableListOf()
 
     private var isSearchResultsFilterActive = false
 
@@ -101,10 +102,22 @@ class PasswordListAdapter(
             SORTING_TYPE_USERNAME_AZ -> {
                 mCurrentList.sortBy { it.username }
             }
-
             SORTING_TYPE_USERNAME_ZA -> {
                 mCurrentList.sortByDescending { it.username }
             }
+            SORTING_TYPE_WEBSITE_AZ -> {
+                mCurrentList.sortBy { it.website }
+            }
+            SORTING_TYPE_WEBSITE_ZA -> {
+                mCurrentList.sortByDescending { it.website }
+            }
+            SORTING_TYPE_LATEST -> {
+                mCurrentList.sortByDescending { it.passwordLastModificationDate }
+            }
+            SORTING_TYPE_OLDEST -> {
+                mCurrentList.sortBy { it.passwordLastModificationDate }
+            }
+
         }
 
         notifyDataSetChanged()
@@ -130,8 +143,6 @@ class PasswordListAdapter(
         const val SORTING_TYPE_WEBSITE_ZA = 3
         const val SORTING_TYPE_LATEST = 4
         const val SORTING_TYPE_OLDEST = 5
-
-        const val SORTING_TYPE_UNKNOWN = -1
     }
 
 }

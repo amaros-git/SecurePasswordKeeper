@@ -16,6 +16,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
@@ -206,7 +207,7 @@ class PasswordsFragment : BaseFragment() {
 
     private fun changeSearchMenuIcon(type: String) {
         val searchMenuItem = binding.passwordsBottomMenu.menu.findItem(R.id.searchMenu)
-        when(type) {
+        when (type) {
             "search" -> {
                 searchMenuItem.icon = ResourcesCompat.getDrawable(
                     activity?.resources!!,
@@ -291,41 +292,37 @@ class PasswordsFragment : BaseFragment() {
 
     //TODO rework
     private fun configureSortChips() {
-        binding.passwordsSortChips.setOnClickListener {
+        binding.passwordsSortChips.setOnClickListener { //TODO wtf ?
             Timber.d("Clicked")
         }
 
+        //by design only one chip can be checked.
         binding.passwordsSortChips.setOnCheckedStateChangeListener { _, checkedIds ->
             checkedIds.forEach {
-                val sortingType = when(it) { //by design only one chip can be checked.
+                when (it) {
                     R.id.username_AZ_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_USERNAME_AZ
+                        passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_USERNAME_AZ)
                     }
                     R.id.username_ZA_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_USERNAME_ZA
+                        passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_USERNAME_ZA)
                     }
                     R.id.website_AZ_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_WEBSITE_AZ
+                        passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_WEBSITE_AZ)
                     }
                     R.id.website_ZA_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_WEBSITE_ZA
+                        passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_WEBSITE_ZA)
                     }
                     R.id.latest_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_LATEST
+                        passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_LATEST)
                     }
                     R.id.oldest_sort_chip -> {
-                        PasswordListAdapter.SORTING_TYPE_OLDEST
-                    }
-                    else -> {
-                        PasswordListAdapter.SORTING_TYPE_UNKNOWN
+                        passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_OLDEST)
                     }
                 }
-
-                passwordListAdapter.sortPasswords(sortingType)
             }
         }
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -340,19 +337,11 @@ class PasswordsFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(false)
 
         //TODO rework config methods
-        configurePasswordRecyclerView()
         configureViews()
+        configurePasswordRecyclerView()
         configureBottomNavigation()
         setSearchDialogResultListener()
         configureSortChips()
-
-
-        //JUST FOR TEST
-        binding.passwordsTestDeleteFab.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DELETE)
-            intent.data = Uri.parse("package:" + requireActivity().packageName)
-            startActivity(intent)
-        }
 
         return binding.root
     }
@@ -360,7 +349,7 @@ class PasswordsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
-        _viewModel.loadAllPasswords() //TODO should it be here ?
+        _viewModel.loadAllPasswords() // When return from AddEdit, we need to update passwords. TODO can avoid to read all passwords from DB ?
     }
 
 }
