@@ -1,5 +1,6 @@
 package lv.maros.secured.password.keeper.security
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -177,8 +178,8 @@ class KeeperConfigStorage private constructor(
         private const val KEEPER_CONFIG_STRING_ENCRYPTION_IV = "keeper_encryption_iv"
         private const val KEEPER_CONFIG_BOOL_USE_LOGIN = "keeper_use_login"
 
-        inline fun build(context: Context, block: Builder.() -> Unit) =
-            Builder().apply(block).build(context)
+        inline fun build(app: Application, block: Builder.() -> Unit) =
+            Builder().apply(block).build(app)
     }
 
     class Builder {

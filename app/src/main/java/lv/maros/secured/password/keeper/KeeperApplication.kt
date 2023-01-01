@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.work.Configuration
 import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
+import lv.maros.secured.password.keeper.security.KeeperAccessAuthenticator
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import timber.log.Timber
@@ -30,6 +31,9 @@ class KeeperApplication : Application(), Configuration.Provider {
 
     val configStorage: KeeperConfigStorage
         get() = ServiceLocator.provideKeeperConfigStorage(this)
+
+    val authenticator: KeeperAccessAuthenticator
+        get() =
 
     override fun onCreate() {
         super.onCreate()
