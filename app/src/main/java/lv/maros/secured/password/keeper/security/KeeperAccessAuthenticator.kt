@@ -13,7 +13,7 @@ class KeeperAccessAuthenticator(private val app: Application) {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    private fun test_biometric(view: View) {
+    /*private fun test_biometric(view: View) {
         executor = ContextCompat.getMainExecutor(app)
         biometricPrompt = BiometricPrompt(this, executor,
             object : BiometricPrompt.AuthenticationCallback() {
@@ -49,5 +49,6 @@ class KeeperAccessAuthenticator(private val app: Application) {
         // if needed by your app.
 
         biometricPrompt.authenticate(promptInfo)
-    }
+    }*/
+
 }

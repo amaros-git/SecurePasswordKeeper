@@ -59,5 +59,6 @@
     <string name="search_hint">Type what to search</string>
     <string name="save_generated_password_button">Save</string>
     <string name="show_all_button_text">Show all</string>
+    <string name="biometric_radio_text">Biometric</string>
 
 </resources>

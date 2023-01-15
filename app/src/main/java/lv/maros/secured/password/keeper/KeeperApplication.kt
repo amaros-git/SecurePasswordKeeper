@@ -32,9 +32,6 @@ class KeeperApplication : Application(), Configuration.Provider {
     val configStorage: KeeperConfigStorage
         get() = ServiceLocator.provideKeeperConfigStorage(this)
 
-    val authenticator: KeeperAccessAuthenticator
-        get() =
-
     override fun onCreate() {
         super.onCreate()
 

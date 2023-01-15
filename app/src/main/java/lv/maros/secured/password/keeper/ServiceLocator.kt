@@ -41,9 +41,4 @@ object ServiceLocator {
         }
     }
 
-    fun provideKeeperAccessAuthenticator (app: Application): KeeperAccessAuthenticator {
-        synchronized(lock) {
-            return authenticator ?: KeeperAccessAuthenticator()
-        }
-    }
 }

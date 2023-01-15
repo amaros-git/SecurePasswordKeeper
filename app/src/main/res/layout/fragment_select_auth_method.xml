@@ -19,6 +19,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
+                android:id="@+id/biometricRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/biometric_radio_text"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:padding="@dimen/margin_small"/>
+
+            <RadioButton
                 android:id="@+id/passwordRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
