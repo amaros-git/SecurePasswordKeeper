@@ -26,7 +26,9 @@ class KeeperActivity : AppCompatActivity() {
 
         startSetupActivityAndFinish()
 
+        //TODO REMOVE AFTER TESTS
         TEST_addPasswords()
+
         // else we start destination fragment from main nav graph
     }
 
