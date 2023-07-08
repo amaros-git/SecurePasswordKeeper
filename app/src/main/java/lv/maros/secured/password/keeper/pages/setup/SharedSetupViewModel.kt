@@ -14,6 +14,7 @@ import lv.maros.secured.password.keeper.security.KeeperPasswordManager
 import lv.maros.secured.password.keeper.utils.KEEPER_AUTH_TYPE_NONE
 import lv.maros.secured.password.keeper.utils.KEEPER_PASSKEY_PIN_MIN_LENGTH
 import lv.maros.secured.password.keeper.utils.SingleLiveEvent
+import timber.log.Timber
 
 class SharedSetupViewModel (
     private val configStorage: KeeperConfigStorage,
@@ -58,6 +59,7 @@ class SharedSetupViewModel (
         viewModelScope.launch(Dispatchers.IO) {
             val encryptionKey = KeeperPasswordManager.generateEncryptionKey()
             val iv = KeeperPasswordManager.generateEncryptionIV()
+            Timber.d("encryptionKey: $encryptionKey, iv: $iv")
 
             configStorage.saveOrUpdateKeeperConfig(
                 KeeperConfig(

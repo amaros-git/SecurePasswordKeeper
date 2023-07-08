@@ -48,6 +48,8 @@ class PasswordsViewModel(
     private fun removePasswordItem(passwordListAdapter: PasswordListAdapter, swipedPos: Int) {
         _passwordList.value?.removeAt(swipedPos)
         passwordListAdapter.notifyItemRemoved(swipedPos)
+
+        invalidateShowNoData()
     }
 
     private fun addPasswordItem(
@@ -57,6 +59,8 @@ class PasswordsViewModel(
     ) {
         _passwordList.value?.add(swipedPos, password)
         passwordListAdapter.notifyItemInserted(swipedPos)
+
+        invalidateShowNoData()
     }
 
     /**
@@ -113,7 +117,7 @@ class PasswordsViewModel(
     internal fun deletePasswords(
         passwordListAdapter: PasswordListAdapter,
         swipedPos: Int,
-        passwordIds: IntArray,
+        passwordIds: IntArray
     ): String {
         removePasswordItem(passwordListAdapter, swipedPos)
 

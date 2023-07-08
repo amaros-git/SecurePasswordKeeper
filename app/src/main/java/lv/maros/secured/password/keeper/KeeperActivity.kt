@@ -24,12 +24,7 @@ class KeeperActivity : AppCompatActivity() {
             startSetupActivityAndFinish()
         }
 
-        startSetupActivityAndFinish()
-
-        //TODO REMOVE AFTER TESTS
-        TEST_addPasswords()
-
-        // else we start destination fragment from main nav graph
+        // else we start destination fragment from main nav graph TODO OR Show login screen
     }
 
     private fun startSetupActivityAndFinish() {
@@ -54,27 +49,5 @@ class KeeperActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    //TODO REMOVE AFTER TESTS
-    private fun TEST_addPasswords() {
-        val repository = (application as KeeperApplication).localPasswordsRepository
-        for (i in 0..3) {
-            GlobalScope.launch {
-                val passwords = repository.getAllPasswords()
-                if (passwords.isNullOrEmpty()) {
-                    repository.savePassword(
-                        PasswordDTO(
-                            "website_$i",
-                            "username_$i",
-                            "adksdjsadjdas_$i",
-                            System.currentTimeMillis(),
-                            0
-                        )
-                    )
-                }
-            }
-        }
-
     }
 }

@@ -43,7 +43,7 @@ class ConfigureAuthMethodFragment : Fragment() {
         }
 
         binding.disableAuthRadioButton.setOnClickListener {
-            //TODO
+            disableAuthentication()
         }
 
         viewModel.showToastEvent.observe(viewLifecycleOwner) {
@@ -61,6 +61,11 @@ class ConfigureAuthMethodFragment : Fragment() {
                     )
             }
         }
+    }
+
+    private fun disableAuthentication() {
+        // for now just move to the next page
+        moveToTheNextPage()
     }
 
     private fun checkBiometricAuthentication() {
@@ -116,7 +121,6 @@ class ConfigureAuthMethodFragment : Fragment() {
         )
     }
 
-
     private fun showPasskeyInputDialog(keeperAuthType: String) {
         PasskeyInputBottomDialog.newInstance(keeperAuthType)
             .show(requireActivity().supportFragmentManager, keeperAuthType)
@@ -138,5 +142,4 @@ class ConfigureAuthMethodFragment : Fragment() {
 
         return binding.root
     }
-
 }

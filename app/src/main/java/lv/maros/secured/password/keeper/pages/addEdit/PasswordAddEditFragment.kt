@@ -88,7 +88,7 @@ class PasswordAddEditFragment : BaseFragment() {
     private fun setupEditMode() {
         _viewModel.passwordToEdit.observe(viewLifecycleOwner) {
             it?.let {
-                showPassword(it)
+                fillPasswordEditingFields(it)
             }
         }
 
@@ -141,16 +141,15 @@ class PasswordAddEditFragment : BaseFragment() {
             )
     }
 
-    private fun showPassword(password: Password) {
+    private fun fillPasswordEditingFields(password: Password) {
         val (website, username, encryptedPassword) = password
 
         binding.addEditWebsiteTextLayout.editText?.setText(website)
         binding.addEditUsernameTextLayout.editText?.setText(username)
-        binding.addEditPasswordTextLayout.editText?.setText(
-            _viewModel.decryptString(
-                encryptedPassword
-            )
-        )
+
+        val decryptedPassword = _viewModel.decryptString(encryptedPassword)
+        binding.addEditPasswordTextLayout.editText?.setText(decryptedPassword)
+        binding.addEditRepeatPasswordTextLayout.editText?.setText(decryptedPassword)
     }
 
     private fun collectPasswordInputData() = PasswordInputData(
