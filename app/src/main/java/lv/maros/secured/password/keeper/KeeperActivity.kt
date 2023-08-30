@@ -1,16 +1,11 @@
 package lv.maros.secured.password.keeper
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 import lv.maros.secured.password.keeper.pages.setup.KeeperSetupActivity
-import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import timber.log.Timber
 
 class KeeperActivity : AppCompatActivity() {

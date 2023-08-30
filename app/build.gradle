@@ -76,6 +76,8 @@ dependencies {
 
     // Materials
     implementation "com.google.android.material:material:1.6.0"
+    implementation 'androidx.window:window:1.0.0'
+    runtimeOnly "androidx.compose.material3:material3-window-size-class:1.2.0-alpha01"
 
     // Navigation, Lifecycle
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'

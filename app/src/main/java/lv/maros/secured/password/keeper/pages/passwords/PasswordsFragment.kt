@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +14,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.google.android.material.chip.Chip
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.material.snackbar.Snackbar
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
@@ -321,6 +320,31 @@ class PasswordsFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    enum class WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
+
+    private fun computeWindowSizeClasses() {
+        val metrics = WindowMetricsCalculator.getOrCreate()
+            .computeCurrentWindowMetrics(getApplicationContext())
+
+        val widthDp = metrics.bounds.width() /
+                resources.displayMetrics.density
+        val widthWindowSizeClass = when {
+            widthDp < 600f -> WindowSizeClass.COMPACT
+            widthDp < 840f -> WindowSizeClass.MEDIUM
+            else -> WindowSizeClass.EXPANDED
+        }
+
+        val heightDp = metrics.bounds.height() /
+                resources.displayMetrics.density
+        val heightWindowSizeClass = when {
+            heightDp < 480f -> WindowSizeClass.COMPACT
+            heightDp < 900f -> WindowSizeClass.MEDIUM
+            else -> WindowSizeClass.EXPANDED
+        }
+
+        // Use widthWindowSizeClass and heightWindowSizeClass.
     }
 
     override fun onCreateView(
