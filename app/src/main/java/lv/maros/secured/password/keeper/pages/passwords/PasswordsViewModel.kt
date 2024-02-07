@@ -1,7 +1,6 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -10,8 +9,8 @@ import kotlinx.coroutines.launch
 import lv.maros.secured.password.keeper.*
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
+import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 import lv.maros.secured.password.keeper.models.Password
-import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
 import lv.maros.secured.password.keeper.workers.PasswordRemovalCoroutineWorker
@@ -34,7 +33,29 @@ class PasswordsViewModel(
     private val workManager = WorkManager.getInstance(app.applicationContext)
 
     init {
+        TEST_load_password()
+
         loadAllPasswords()
+    }
+
+    fun TEST_load_password() {
+        viewModelScope.launch {
+            val passwords = repository.getAllPasswords()
+            if(passwords.isEmpty()) {
+                for (i in 0 .. 9) {
+                    repository.savePassword(
+                        PasswordDTO(
+                            website = "website$i",
+                            username = "username$i",
+                            encryptedPassword = cryptor.encryptString("password$i"),
+                            passwordLastModificationDate = 12301L,
+                            0
+                        )
+                    )
+                }
+            }
+        }
+
     }
 
     /**
