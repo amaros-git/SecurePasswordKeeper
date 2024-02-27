@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Secure Password Keeper</string>
 
-    <!-- Text Views text -->
+    <!-- Views text -->
     <string name="login_fragment">Login</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="save_button">Save</string>
@@ -18,9 +18,14 @@
     <string name="back_button_text">Back</string>
     <string name="website_label">Website</string>
     <string name="username_label">Username</string>
+    <string name="username_from_a_to_z">Username A-Z</string>
+    <string name="username_from_z_to_a">Username Z-A</string>
+    <string name="website_from_a_to_z">Website A-Z</string>
+    <string name="website_from_z_to_a">Website Z-A</string>
+    <string name="latest_passwords">Latest</string>
+    <string name="oldest_passwords">Oldest</string>
 
-
-    <!-- Text Views hints -->
+    <!-- Views hints -->
     <string name="password_hint">Please enter password</string>
     <string name="password_repeat_hint">Please repeat password</string>
     <string name="pin_hint">Please enter PIN</string>
@@ -30,8 +35,8 @@
     <string name="website">Website or any password name</string>
     <string name="username">Username*</string>
     <string name="save">Save</string>
-
-
+    <string name="search_text">Search</string>
+    <string name="clear_text">Clear</string>
 
     <!-- Text messages, errors -->
     <string name="password_too_short">Minimal password length is 8 symbols</string>
@@ -60,5 +65,6 @@
     <string name="save_generated_password_button">Save</string>
     <string name="show_all_button_text">Show all</string>
     <string name="biometric_radio_text">Biometric</string>
+
 
 </resources>

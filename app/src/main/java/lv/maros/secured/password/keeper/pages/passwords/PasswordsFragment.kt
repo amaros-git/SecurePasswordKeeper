@@ -56,15 +56,22 @@ class PasswordsFragment : BaseFragment() {
             uncheckAllItems()
             setOnItemSelectedListener {
                 when (it.itemId) {
+                    R.id.addMenu -> {
+                        navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
+                        true
+                    }
+
                     R.id.searchMenu -> {
                         processSearchMenuItemClick()
 
                         true
                     }
+
                     R.id.sortMenu -> {
                         toggleViewVisibility(binding.passwordsSortChips)
                         true
                     }
+
                     else -> false
                 }
             }
@@ -113,12 +120,14 @@ class PasswordsFragment : BaseFragment() {
                     mode
                 )
             }
+
             PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
                 PasswordsFragmentDirections.actionPasswordsFragmentToPasswordAddEditFragment(
                     mode,
                     passwordId
                 )
             }
+
             else -> {
                 Timber.e("Wrong mode provided for AddEditFragment")
                 null
@@ -129,9 +138,7 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun configureViews() {
-        binding.passwordsAddPasswordFab.setOnClickListener {
-            navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
-        }
+
 
         _viewModel.passwordList.observe(viewLifecycleOwner) {
             it?.let {
@@ -210,18 +217,19 @@ class PasswordsFragment : BaseFragment() {
             "search" -> {
                 searchMenuItem.icon = ResourcesCompat.getDrawable(
                     activity?.resources!!,
-                    R.drawable.ic_baseline_search_18,
+                    R.drawable.ic_search,
                     null
                 )
-                searchMenuItem.title = "Search" //TODO
+                searchMenuItem.title = getString(R.string.search_hint)
             }
+
             "clear" -> {
                 searchMenuItem.icon = ResourcesCompat.getDrawable(
                     activity?.resources!!,
-                    R.drawable.ic_baseline_cancel_18,
+                    R.drawable.ic_cancel,
                     null
                 )
-                searchMenuItem.title = "Clear" //TODO
+                searchMenuItem.title = getString(R.string.clear_text)
             }
         }
     }
@@ -248,6 +256,7 @@ class PasswordsFragment : BaseFragment() {
             R.id.passwordItem_username_copy_button -> password.username
             R.id.passwordItem_password_copy_button ->
                 _viewModel.decryptString(password.encryptedPassword)
+
             else -> ""
         }
 
@@ -291,7 +300,7 @@ class PasswordsFragment : BaseFragment() {
 
     //TODO rework
     private fun configureSortChips() {
-        binding.passwordsSortChips.setOnClickListener { //TODO wtf ?
+        binding.passwordsSortChips.setOnClickListener { //TODO ?
             Timber.d("Clicked")
         }
 
@@ -302,18 +311,23 @@ class PasswordsFragment : BaseFragment() {
                     R.id.username_AZ_sort_chip -> {
                         passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_USERNAME_AZ)
                     }
+
                     R.id.username_ZA_sort_chip -> {
                         passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_USERNAME_ZA)
                     }
+
                     R.id.website_AZ_sort_chip -> {
                         passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_WEBSITE_AZ)
                     }
+
                     R.id.website_ZA_sort_chip -> {
                         passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_WEBSITE_ZA)
                     }
+
                     R.id.latest_sort_chip -> {
                         passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_LATEST)
                     }
+
                     R.id.oldest_sort_chip -> {
                         passwordListAdapter.sortPasswords(PasswordListAdapter.SORTING_TYPE_OLDEST)
                     }

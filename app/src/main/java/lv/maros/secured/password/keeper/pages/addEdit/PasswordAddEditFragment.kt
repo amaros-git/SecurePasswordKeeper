@@ -72,15 +72,10 @@ class PasswordAddEditFragment : BaseFragment() {
     private fun configureFragmentMode() {
         when (getMode()) {
             MODE_EDIT_PASSWORD -> {
-                setTitle(getString(R.string.edit_password_title))
                 setupEditMode()
             }
             MODE_ADD_PASSWORD -> {
-                setTitle(getString(R.string.add_new_password_title))
                 setupAddMode()
-            }
-            else -> { //TODO
-                setTitle("SecurePasswordKeeper")
             }
         }
     }
@@ -175,9 +170,6 @@ class PasswordAddEditFragment : BaseFragment() {
     ): View {
         binding = FragmentAddEditPasswordBinding.inflate(inflater)
         binding.lifecycleOwner = this.viewLifecycleOwner
-
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarLayout.keeperToolbar)
-        setDisplayHomeAsUpEnabled(true)
 
         configureFragmentMode()
         setupCommonViews()

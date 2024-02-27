@@ -14,6 +14,8 @@ class KeeperActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        (this as AppCompatActivity).supportActionBar?.hide()
+
         if (!isKeeperConfigured()) {
             Timber.d("Keeper is not configured")
             startSetupActivityAndFinish()

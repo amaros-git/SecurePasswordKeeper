@@ -18,10 +18,10 @@ class PasswordItemSwipeCallback(
     dragDirs, swipeDirs
 ) {
     private val deleteIcon: Drawable =
-        ContextCompat.getDrawable(context, R.drawable.baseline_delete_black_48)!! //TODO
+        ContextCompat.getDrawable(context, R.drawable.ic_delete)!! //TODO
 
     private val editIcon: Drawable =
-        ContextCompat.getDrawable(context, R.drawable.baseline_edit_black_48)!! //TODO
+        ContextCompat.getDrawable(context, R.drawable.ic_edit)!! //TODO
 
     private val marginMedium = context.resources.getDimension(R.dimen.margin_medium).toInt()
 
@@ -96,7 +96,6 @@ class PasswordItemSwipeCallback(
     }
 
 }
-
 
 interface PasswordItemSwipeListener {
     fun onSwipeLeft(swipedPos: Int)
