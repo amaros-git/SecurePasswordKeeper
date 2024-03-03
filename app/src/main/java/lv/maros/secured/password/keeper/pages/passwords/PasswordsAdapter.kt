@@ -2,6 +2,7 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -19,7 +20,9 @@ import timber.log.Timber
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
-    private val copyClickListener: OnCopyClickListener
+    private val copyClickListener: OnCopyClickListener,
+    private val websiteLongClicker: OnLongClickListener,
+    private val usernameLongClicker: OnLongClickListener
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -32,6 +35,8 @@ class PasswordListAdapter(
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
         binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
+
+        binding.passwordItemWebsiteText.setOnLongClickListener()
 
         binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
         binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
