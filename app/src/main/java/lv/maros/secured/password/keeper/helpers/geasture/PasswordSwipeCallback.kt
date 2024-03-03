@@ -27,6 +27,9 @@ class PasswordItemSwipeCallback(
 
     private var swipedPos = -1
 
+    private val swipeVelocity = 0.5f
+    private val swipeThreshold = 0.6F
+
     private fun drawIcon(itemView: View, dX: Float, c: Canvas) {
         when {
             dX > 0 -> { //swipe right
@@ -95,6 +98,13 @@ class PasswordItemSwipeCallback(
         return false
     }
 
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        return swipeThreshold
+    }
+
+    override fun getSwipeVelocityThreshold(defaultValue: Float): Float {
+        return swipeVelocity
+    }
 }
 
 interface PasswordItemSwipeListener {
