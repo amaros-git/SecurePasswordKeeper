@@ -6,13 +6,13 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatImageButton
 import timber.log.Timber
 
-class PasswordItemCopyButton @JvmOverloads constructor(
+class PasswordCopyButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ): AppCompatImageButton(context, attrs), View.OnClickListener {
 
     private var position = -1
 
-    private var copyOnClickListener: OnCopyClickListener? = null
+    private var listener: OnPasswordCopyClickListener? = null
 
     init {
         setOnClickListener(this)
@@ -20,19 +20,19 @@ class PasswordItemCopyButton @JvmOverloads constructor(
 
     override fun onClick(v: View) {
         if (position >= 0) {
-            copyOnClickListener?.invoke(v, position)
+            listener?.invoke(v, position)
         } else {
             Timber.e("Wrong position was set: $position")
         }
     }
 
-    fun setOnCopyClickListener(position: Int, clickListener: OnCopyClickListener) {
+    fun setOnCopyClickListener(position: Int, clickListener: OnPasswordCopyClickListener) {
         this.position = position
-        copyOnClickListener = clickListener
+        listener = clickListener
     }
 }
 
 /**
  * Int is a view holder position in recycler view
  */
-typealias OnCopyClickListener = (View, Int) -> Unit
+typealias OnPasswordCopyClickListener = (View, Int) -> Unit

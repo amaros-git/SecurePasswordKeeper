@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -32,7 +31,7 @@ import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
 import lv.maros.secured.password.keeper.utils.uncheckAllItems
-import lv.maros.secured.password.keeper.views.OnCopyClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import timber.log.Timber
 
@@ -165,7 +164,7 @@ class PasswordsFragment : BaseFragment() {
         }
 
     private fun configurePasswordRecyclerView() {
-        val copyClickListener: OnCopyClickListener =
+        val copyClickListener: OnPasswordCopyClickListener =
             { view, position ->
                 processCopyClick(view, position)
             }

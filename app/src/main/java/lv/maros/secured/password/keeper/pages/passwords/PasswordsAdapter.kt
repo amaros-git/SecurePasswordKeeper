@@ -14,15 +14,16 @@ import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
-import lv.maros.secured.password.keeper.views.OnCopyClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordCopyClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
-import timber.log.Timber
+import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
-    private val copyClickListener: OnCopyClickListener,
-    private val websiteLongClicker: OnLongClickListener,
-    private val usernameLongClicker: OnLongClickListener
+    private val copyClickListener: OnPasswordCopyClickListener,
+    private val passwordInfoClickListener: OnPasswordInfoClickListener
+//    private val websiteLongClicker: OnLongClickListener,
+//    private val usernameLongClicker: OnLongClickListener
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -38,9 +39,9 @@ class PasswordListAdapter(
 
         binding.passwordItemWebsiteText.setOnLongClickListener()
 
-        binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
-        binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
-        binding.passwordItemPasswordCopyButton.setOnCopyClickListener(position, copyClickListener)
+//        binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
+//        binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
+//        binding.passwordItemPasswordCopyButton.setOnCopyClickListener(position, copyClickListener)
     }
 
     private fun removeDuplicateIds(items: List<PasswordSearchResult>): Set<Int> {

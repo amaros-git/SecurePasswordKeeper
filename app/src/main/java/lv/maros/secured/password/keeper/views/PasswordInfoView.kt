@@ -6,17 +6,19 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import timber.log.Timber
 
-class PasswordSearchView @JvmOverloads constructor(
+class PasswordInfoView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-): AppCompatTextView(context, attrs), View.OnClickListener {
+): AppCompatTextView(context, attrs), View.OnClickListener, View.OnLongClickListener {
 
     private var position = -1
 
-    private var clickListener: OnSearchItemClickListener? = null
+    private var clickListener: OnPasswordInfoClickListener? = null
 
     init {
         setOnClickListener(this)
     }
+
+
 
     override fun onClick(v: View) {
         if (position >= 0) {
@@ -26,9 +28,19 @@ class PasswordSearchView @JvmOverloads constructor(
         }
     }
 
-    fun setOnSearchItemClickListener(position: Int, clickListener: OnSearchItemClickListener) {
+    fun setOnSearchItemClickListener(position: Int, clickListener: OnPasswordInfoClickListener) {
         this.position = position
         this.clickListener = clickListener
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        return if (position >= 0) {
+            clickListener?.invoke(position)
+            true
+        } else {
+            Timber.e("Wrong position was set: $position")
+            false
+        }
     }
 }
 
@@ -36,4 +48,4 @@ class PasswordSearchView @JvmOverloads constructor(
  * Int is a view holder position in recycler view
  */
 
-typealias OnSearchItemClickListener = (Int) -> Unit
+typealias OnPasswordInfoClickListener = (Int) -> Unit
