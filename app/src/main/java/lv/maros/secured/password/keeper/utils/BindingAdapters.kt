@@ -2,8 +2,8 @@ package lv.maros.secured.password.keeper.utils
 
 import android.view.View
 import androidx.databinding.BindingAdapter
-import lv.maros.secured.password.keeper.views.PasswordTextView
-import lv.maros.secured.password.keeper.views.PasswordTextView.Companion.PASSWORD_TEXT_VIEW_MASK
+import lv.maros.secured.password.keeper.views.PasswordSecretView
+import lv.maros.secured.password.keeper.views.PasswordSecretView.Companion.PASSWORD_TEXT_VIEW_MASK
 
 object BindingAdapters {
 
@@ -30,7 +30,7 @@ object BindingAdapters {
 
     @BindingAdapter("password")
     @JvmStatic
-    fun setPassword(view: PasswordTextView, password: String) {
+    fun setPassword(view: PasswordSecretView, password: String) {
         view.encryptedPassword = password
         view.text = PASSWORD_TEXT_VIEW_MASK
     }

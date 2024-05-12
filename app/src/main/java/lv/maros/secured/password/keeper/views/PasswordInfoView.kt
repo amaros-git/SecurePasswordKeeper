@@ -15,27 +15,32 @@ class PasswordInfoView @JvmOverloads constructor(
     private var clickListener: OnPasswordInfoClickListener? = null
 
     init {
-        setOnClickListener(this)
+        //setOnClickListener(this)
+        setOnLongClickListener(this)
+
     }
-
-
 
     override fun onClick(v: View) {
         if (position >= 0) {
-            clickListener?.invoke(position)
+            clickListener?.invoke(v, position)
         } else {
             Timber.e("Wrong position was set: $position")
         }
     }
 
-    fun setOnSearchItemClickListener(position: Int, clickListener: OnPasswordInfoClickListener) {
+    fun setTouchEventListener(position: Int, touchListener: OnPasswordInfoTouchListener) {
         this.position = position
         this.clickListener = clickListener
     }
 
-    override fun onLongClick(v: View?): Boolean {
+    fun setClickListener(position: Int, clickListener: OnPasswordInfoClickListener) {
+        this.position = position
+        this.clickListener = clickListener
+    }
+
+    override fun onLongClick(v: View): Boolean {
         return if (position >= 0) {
-            clickListener?.invoke(position)
+            clickListener?.invoke(v, position)
             true
         } else {
             Timber.e("Wrong position was set: $position")
@@ -47,5 +52,6 @@ class PasswordInfoView @JvmOverloads constructor(
 /**
  * Int is a view holder position in recycler view
  */
+typealias OnPasswordInfoClickListener = (View, Int) -> Unit
 
-typealias OnPasswordInfoClickListener = (Int) -> Unit
+typealias OnPasswordInfoTouchListener = (View, Int) -> Unit

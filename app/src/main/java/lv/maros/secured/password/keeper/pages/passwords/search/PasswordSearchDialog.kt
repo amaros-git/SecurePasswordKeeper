@@ -31,8 +31,8 @@ class PasswordSearchDialog private constructor(
     private lateinit var passwordsSearchAdapter: PasswordsSearchAdapter
 
     private fun configurePasswordRecyclerView() {
-        val clickListener: OnPasswordInfoClickListener = { position ->
-            processOnSearchSuggestionItemClick(position)
+        val clickListener: OnPasswordInfoClickListener = { _, pos ->
+            processOnSearchSuggestionItemClick(pos)
         }
 
         passwordsSearchAdapter = PasswordsSearchAdapter(clickListener)

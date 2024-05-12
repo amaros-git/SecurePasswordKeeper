@@ -26,7 +26,7 @@ class PasswordsSearchAdapter(
         val passwordItem = getItem(position)
         holder.bind(passwordItem)
 
-        holder.binding.passwordSearchItemView.setOnSearchItemClickListener(position, clickListener)
+        holder.binding.passwordSearchItemView.setClickListener(position, clickListener)
     }
 
   public override fun getItem(position: Int): PasswordSearchResult {

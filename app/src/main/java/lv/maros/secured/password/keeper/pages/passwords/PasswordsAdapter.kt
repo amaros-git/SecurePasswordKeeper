@@ -2,7 +2,6 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,11 +14,11 @@ import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.views.OnPasswordCopyClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordSecretClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
 
 class PasswordListAdapter(
-    private val passwordClickListener: OnPasswordClickListener,
+    private val passwordClickListener: OnPasswordSecretClickListener,
     private val copyClickListener: OnPasswordCopyClickListener,
     private val passwordInfoClickListener: OnPasswordInfoClickListener
 //    private val websiteLongClicker: OnLongClickListener,
@@ -35,9 +34,16 @@ class PasswordListAdapter(
     private var isSearchResultsFilterActive = false
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
-        binding.passwordItemPasswordText.setOnPasswordClickListener(passwordClickListener)
+        binding.passwordItemPasswordText.setPasswordSecretClickListener(passwordClickListener)
 
-        binding.passwordItemWebsiteText.setOnLongClickListener()
+        binding.passwordItemWebsiteText.setClickListener(
+            position,
+            passwordInfoClickListener
+        )
+        binding.passwordItemUsernameText.setClickListener(
+            position,
+            passwordInfoClickListener
+        )
 
 //        binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
 //        binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
@@ -104,22 +110,27 @@ class PasswordListAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     internal fun sortPasswords(sortingType: Int) {
-        when(sortingType) {
+        when (sortingType) {
             SORTING_TYPE_USERNAME_AZ -> {
                 mCurrentList.sortBy { it.username }
             }
+
             SORTING_TYPE_USERNAME_ZA -> {
                 mCurrentList.sortByDescending { it.username }
             }
+
             SORTING_TYPE_WEBSITE_AZ -> {
                 mCurrentList.sortBy { it.website }
             }
+
             SORTING_TYPE_WEBSITE_ZA -> {
                 mCurrentList.sortByDescending { it.website }
             }
+
             SORTING_TYPE_LATEST -> {
                 mCurrentList.sortByDescending { it.passwordLastModificationDate }
             }
+
             SORTING_TYPE_OLDEST -> {
                 mCurrentList.sortBy { it.passwordLastModificationDate }
             }

@@ -4,9 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
-import timber.log.Timber
 
-class PasswordTextView @JvmOverloads constructor(
+class PasswordSecretView_orig @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : AppCompatTextView(context, attrs), View.OnClickListener {
 
@@ -15,7 +14,7 @@ class PasswordTextView @JvmOverloads constructor(
 
     lateinit var encryptedPassword: String //is set in binding adapter
 
-    private var passwordClickListener: OnPasswordClickListener? = null
+    private var passwordClickListener: OnPasswordSecretClickListener? = null
 
     init {
         setOnClickListener(this)
@@ -24,6 +23,7 @@ class PasswordTextView @JvmOverloads constructor(
     private fun toggleVisibility() {
         isPasswordVisible = !isPasswordVisible
     }
+
 
     /**
      * we call OnPasswordClickListener only when is clicked on the hidden password
@@ -42,7 +42,7 @@ class PasswordTextView @JvmOverloads constructor(
     }
 
 
-    fun setOnPasswordClickListener(clickListener: OnPasswordClickListener) {
+    fun setPasswordSecretClickListener(clickListener: OnPasswordSecretClickListener) {
         passwordClickListener = clickListener
     }
 
@@ -50,7 +50,3 @@ class PasswordTextView @JvmOverloads constructor(
         const val PASSWORD_TEXT_VIEW_MASK = "********"
     }
 }
-
-typealias OnPasswordClickListener = (String) -> String
-
-

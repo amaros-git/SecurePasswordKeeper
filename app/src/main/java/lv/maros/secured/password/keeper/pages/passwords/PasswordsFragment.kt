@@ -32,7 +32,8 @@ import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
 import lv.maros.secured.password.keeper.utils.uncheckAllItems
 import lv.maros.secured.password.keeper.views.OnPasswordCopyClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordSecretClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
 import timber.log.Timber
 
 
@@ -169,13 +170,18 @@ class PasswordsFragment : BaseFragment() {
                 processCopyClick(view, position)
             }
 
-        val passwordVisibilityClickListener: OnPasswordClickListener =
+        val passwordVisibilityClickListener: OnPasswordSecretClickListener =
             { s: String ->
                 processPasswordVisibilityClick(s)
             }
 
+        val passwordInfoClickListener: OnPasswordInfoClickListener =
+            { v, pos ->
+                Timber.d("Long Clicked on view ${v.transitionName} at position $pos")
+            }
+
         passwordListAdapter =
-            PasswordListAdapter(passwordVisibilityClickListener, copyClickListener)
+            PasswordListAdapter(passwordVisibilityClickListener, copyClickListener, passwordInfoClickListener)
 
         binding.passwordsPasswordList.setup(passwordListAdapter)
 
