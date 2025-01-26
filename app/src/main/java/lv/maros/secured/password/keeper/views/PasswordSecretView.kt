@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.appcompat.widget.AppCompatTextView
 import timber.log.Timber
-import kotlin.properties.Delegates
 
 class PasswordSecretView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -20,7 +19,8 @@ class PasswordSecretView @JvmOverloads constructor(
 
     lateinit var encryptedPassword: String //is set in binding adapter
 
-    private var passwordClickListener: OnPasswordSecretClickListener? = null
+    private var passwordClickListener: OnPasswordClickListener? = null
+    private var passwordLongClickListener: OnPasswordLongClickListener? = null
 
     private val handler: Handler = Handler(Looper.getMainLooper())
     private var longPressTimeout = ViewConfiguration.getLongPressTimeout().toLong()
@@ -29,7 +29,6 @@ class PasswordSecretView @JvmOverloads constructor(
     private var isLongPress = false
 
     init {
-        //setOnClickListener(this)
         setOnTouchListener(this)
     }
 
@@ -38,11 +37,14 @@ class PasswordSecretView @JvmOverloads constructor(
     }
 
     private fun mPerformLongClick() {
-
+        Timber.d("Long click")
     }
 
     private fun mPerformClick() {
+        Timber.d("Short click")
+
         toggleVisibility()
+
         if (isPasswordVisible) {
             passwordClickListener?.let {
                 val decryptedPassword = it.invoke(encryptedPassword)
@@ -56,15 +58,12 @@ class PasswordSecretView @JvmOverloads constructor(
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                Timber.d("ACTION_DOWN")
                 isLongPress = false
                 handler.postDelayed(this, longPressTimeout)
             }
             MotionEvent.ACTION_UP -> {
-                Timber.d("ACTION_UP")
                 handler.removeCallbacks(this)
                 if (!isLongPress) {
-                    Timber.d("short press")
                     mPerformClick()
                 }
             }
@@ -72,8 +71,12 @@ class PasswordSecretView @JvmOverloads constructor(
         return true
     }
 
-    fun setPasswordSecretClickListener(clickListener: OnPasswordSecretClickListener) {
+    fun setPasswordClickListener(clickListener: OnPasswordClickListener) {
         passwordClickListener = clickListener
+    }
+
+    fun setPasswordLongClickListener(longClickListener: OnPasswordLongClickListener) {
+        passwordLongClickListener = longClickListener
     }
 
 
@@ -83,11 +86,12 @@ class PasswordSecretView @JvmOverloads constructor(
 
     override fun run() {
         isLongPress = true
-        Timber.d("long press")
-        performLongClick()
+        mPerformLongClick()
     }
 }
 
-typealias OnPasswordSecretClickListener = (String) -> String
+typealias OnPasswordClickListener = (String) -> String
+
+typealias OnPasswordLongClickListener = (Unit) -> String
 
 

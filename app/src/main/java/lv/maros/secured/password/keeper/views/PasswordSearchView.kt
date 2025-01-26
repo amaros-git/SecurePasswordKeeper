@@ -6,41 +6,34 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import timber.log.Timber
 
-class PasswordInfoView @JvmOverloads constructor(
+class PasswordSearchView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ): AppCompatTextView(context, attrs), View.OnClickListener, View.OnLongClickListener {
 
     private var position = -1
 
-    private var clickListener: OnPasswordInfoClickListener? = null
+    private var clickListener: OnPasswordSearchClickListener? = null
 
     init {
-        //setOnClickListener(this)
-        setOnLongClickListener(this)
-
+        setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
         if (position >= 0) {
-            clickListener?.invoke(v, position)
+            clickListener?.invoke(position)
         } else {
             Timber.e("Wrong position was set: $position")
         }
     }
 
-    fun setTouchEventListener(position: Int, touchListener: OnPasswordInfoTouchListener) {
+    fun setOnSearchItemClickListener(position: Int, clickListener: OnPasswordSearchClickListener) {
         this.position = position
         this.clickListener = clickListener
     }
 
-    fun setClickListener(position: Int, clickListener: OnPasswordInfoClickListener) {
-        this.position = position
-        this.clickListener = clickListener
-    }
-
-    override fun onLongClick(v: View): Boolean {
+    override fun onLongClick(v: View?): Boolean {
         return if (position >= 0) {
-            clickListener?.invoke(v, position)
+            clickListener?.invoke(position)
             true
         } else {
             Timber.e("Wrong position was set: $position")
@@ -52,6 +45,4 @@ class PasswordInfoView @JvmOverloads constructor(
 /**
  * Int is a view holder position in recycler view
  */
-typealias OnPasswordInfoClickListener = (View, Int) -> Unit
-
-typealias OnPasswordInfoTouchListener = (View, Int) -> Unit
+typealias OnPasswordSearchClickListener = (Int) -> Unit

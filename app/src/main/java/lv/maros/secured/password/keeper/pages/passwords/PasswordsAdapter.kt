@@ -13,16 +13,14 @@ import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordItemBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
-import lv.maros.secured.password.keeper.views.OnPasswordCopyClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordSecretClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordLongClickListener
+import timber.log.Timber
+
 
 class PasswordListAdapter(
-    private val passwordClickListener: OnPasswordSecretClickListener,
-    private val copyClickListener: OnPasswordCopyClickListener,
-    private val passwordInfoClickListener: OnPasswordInfoClickListener
-//    private val websiteLongClicker: OnLongClickListener,
-//    private val usernameLongClicker: OnLongClickListener
+    private val passwordClickListener: OnPasswordClickListener,
+    //private val passwordLongClickListener: OnPasswordLongClickListener
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -34,20 +32,10 @@ class PasswordListAdapter(
     private var isSearchResultsFilterActive = false
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
-        binding.passwordItemPasswordText.setPasswordSecretClickListener(passwordClickListener)
 
-        binding.passwordItemWebsiteText.setClickListener(
-            position,
-            passwordInfoClickListener
-        )
-        binding.passwordItemUsernameText.setClickListener(
-            position,
-            passwordInfoClickListener
-        )
+        binding.passwordItemPasswordText.setPasswordClickListener(passwordClickListener)
 
-//        binding.passwordItemWebsiteCopyButton.setOnCopyClickListener(position, copyClickListener)
-//        binding.passwordItemUsernameCopyButton.setOnCopyClickListener(position, copyClickListener)
-//        binding.passwordItemPasswordCopyButton.setOnCopyClickListener(position, copyClickListener)
+        //binding.passwordItemPasswordText.setPasswordLongClickListener(passwordLongClickListener)
     }
 
     private fun removeDuplicateIds(items: List<PasswordSearchResult>): Set<Int> {

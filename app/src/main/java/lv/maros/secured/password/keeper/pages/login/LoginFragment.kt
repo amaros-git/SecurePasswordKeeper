@@ -29,6 +29,7 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         // if login is not enabled, navigate to Password List
+        // TODO
         if(!viewModel.isLoginEnabled()) {
             findNavController().navigate(
                 LoginFragmentDirections.actionLoginFragmentToPasswordsFragment()

@@ -1,9 +1,6 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +10,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.material.snackbar.Snackbar
 import lv.maros.secured.password.keeper.KeeperApplication
 import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_SNACKBAR_DURATION
@@ -31,9 +26,6 @@ import lv.maros.secured.password.keeper.utils.setDisplayHomeAsUpEnabled
 import lv.maros.secured.password.keeper.utils.setTitle
 import lv.maros.secured.password.keeper.utils.setup
 import lv.maros.secured.password.keeper.utils.uncheckAllItems
-import lv.maros.secured.password.keeper.views.OnPasswordCopyClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordSecretClickListener
-import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
 import timber.log.Timber
 
 
@@ -138,8 +130,6 @@ class PasswordsFragment : BaseFragment() {
     }
 
     private fun configureViews() {
-
-
         _viewModel.passwordList.observe(viewLifecycleOwner) {
             it?.let {
                 passwordListAdapter.submitMyList(it)
@@ -149,7 +139,7 @@ class PasswordsFragment : BaseFragment() {
 
     private fun getPasswordId(swipedPos: Int) = passwordListAdapter.getItem(swipedPos).id
 
-    private val passwordItemClickListener =
+    private val passwordSwipeClickListener =
         object : PasswordItemSwipeListener {
 
             override fun onSwipeLeft(swipedPos: Int) {
@@ -164,33 +154,24 @@ class PasswordsFragment : BaseFragment() {
             }
         }
 
+    private fun processPasswordVisibilityClick(data: String) =
+        _viewModel.decryptString(data)
+
     private fun configurePasswordRecyclerView() {
-        val copyClickListener: OnPasswordCopyClickListener =
-            { view, position ->
-                processCopyClick(view, position)
-            }
-
-        val passwordVisibilityClickListener: OnPasswordSecretClickListener =
-            { s: String ->
-                processPasswordVisibilityClick(s)
-            }
-
-        val passwordInfoClickListener: OnPasswordInfoClickListener =
-            { v, pos ->
-                Timber.d("Long Clicked on view ${v.transitionName} at position $pos")
-            }
 
         passwordListAdapter =
-            PasswordListAdapter(passwordVisibilityClickListener, copyClickListener, passwordInfoClickListener)
+            PasswordListAdapter(
+                passwordClickListener = { password ->
+                    processPasswordVisibilityClick(password)
+                }
+            )
 
         binding.passwordsPasswordList.setup(passwordListAdapter)
-
-        //binding.passwordList.isNestedScrollingEnabled = false
 
         ItemTouchHelper(
             PasswordItemSwipeCallback(
                 requireContext(),
-                passwordItemClickListener
+                passwordSwipeClickListener
             )
         ).attachToRecyclerView(
             binding.passwordsPasswordList
@@ -239,31 +220,6 @@ class PasswordsFragment : BaseFragment() {
         }
     }
 
-    private fun processPasswordVisibilityClick(data: String) =
-        _viewModel.decryptString(data)
-
-    private fun processCopyClick(view: View, position: Int) {
-        val textToCopy =
-            getClickedPasswordItemViewText(view.id, passwordListAdapter.getItem(position))
-
-        val clipboard = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.setPrimaryClip(
-            ClipData.newPlainText(
-                "SecurePasswordKeeper",
-                textToCopy
-            )
-        )
-    }
-
-    private fun getClickedPasswordItemViewText(viewId: Int, password: Password): String =
-        when (viewId) {
-            R.id.passwordItem_website_copy_button -> password.website
-            R.id.passwordItem_username_copy_button -> password.username
-            R.id.passwordItem_password_copy_button ->
-                _viewModel.decryptString(password.encryptedPassword)
-
-            else -> ""
-        }
 
     private fun processPasswordRemoval(swipedPos: Int) {
         val passwordToDelete = passwordListAdapter.getItem(swipedPos)
@@ -339,31 +295,6 @@ class PasswordsFragment : BaseFragment() {
                 }
             }
         }
-    }
-
-    enum class WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
-
-    private fun computeWindowSizeClasses() {
-        val metrics = WindowMetricsCalculator.getOrCreate()
-            .computeCurrentWindowMetrics(getApplicationContext())
-
-        val widthDp = metrics.bounds.width() /
-                resources.displayMetrics.density
-        val widthWindowSizeClass = when {
-            widthDp < 600f -> WindowSizeClass.COMPACT
-            widthDp < 840f -> WindowSizeClass.MEDIUM
-            else -> WindowSizeClass.EXPANDED
-        }
-
-        val heightDp = metrics.bounds.height() /
-                resources.displayMetrics.density
-        val heightWindowSizeClass = when {
-            heightDp < 480f -> WindowSizeClass.COMPACT
-            heightDp < 900f -> WindowSizeClass.MEDIUM
-            else -> WindowSizeClass.EXPANDED
-        }
-
-        // Use widthWindowSizeClass and heightWindowSizeClass.
     }
 
     override fun onCreateView(

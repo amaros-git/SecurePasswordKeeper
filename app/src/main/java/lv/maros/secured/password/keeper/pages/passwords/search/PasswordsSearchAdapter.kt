@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lv.maros.secured.password.keeper.databinding.PasswordSearchItemBinding
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
-import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordSearchClickListener
 
 class PasswordsSearchAdapter(
-    private val clickListener: OnPasswordInfoClickListener
+    private val clickListener: OnPasswordSearchClickListener
 ) : ListAdapter<PasswordSearchResult, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -26,7 +26,7 @@ class PasswordsSearchAdapter(
         val passwordItem = getItem(position)
         holder.bind(passwordItem)
 
-        holder.binding.passwordSearchItemView.setClickListener(position, clickListener)
+        holder.binding.passwordSearchItemView.setOnSearchItemClickListener(position, clickListener)
     }
 
   public override fun getItem(position: Int): PasswordSearchResult {

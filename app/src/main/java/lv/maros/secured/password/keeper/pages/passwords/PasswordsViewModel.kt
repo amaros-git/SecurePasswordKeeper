@@ -1,18 +1,26 @@
 package lv.maros.secured.password.keeper.pages.passwords
 
 import android.app.Application
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import kotlinx.coroutines.launch
-import lv.maros.secured.password.keeper.*
+import lv.maros.secured.password.keeper.PASSWORDS_REMOVAL_TAG
+import lv.maros.secured.password.keeper.PASSWORD_IDS_TO_REMOVE_KEY
+import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_WORKER_INITIAL_DELAY
+import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
 import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 import lv.maros.secured.password.keeper.models.Password
-import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword
 import lv.maros.secured.password.keeper.workers.PasswordRemovalCoroutineWorker
@@ -35,12 +43,12 @@ class PasswordsViewModel(
     private val workManager = WorkManager.getInstance(app.applicationContext)
 
     init {
-        TEST_load_password()
+        TEST_load_password_if_empty()
 
         loadAllPasswords()
     }
 
-    fun TEST_load_password() {
+    fun TEST_load_password_if_empty() {
         viewModelScope.launch {
             val passwords = repository.getAllPasswords()
             if(passwords.isEmpty()) {
@@ -159,6 +167,16 @@ class PasswordsViewModel(
     }
 
     internal fun getPasswordsList(): List<Password>? = _passwordList.value?.toList()
+
+    internal fun copyToClipboard(text: String) {
+        val clipboard = app.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(
+            ClipData.newPlainText(
+                "SecurePasswordKeeper",
+                text
+            )
+        )
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

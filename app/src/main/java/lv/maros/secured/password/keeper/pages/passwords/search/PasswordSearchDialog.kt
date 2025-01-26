@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import lv.maros.secured.password.keeper.databinding.DialogPasswordSearchBinding
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
-import lv.maros.secured.password.keeper.views.OnPasswordInfoClickListener
+import lv.maros.secured.password.keeper.views.OnPasswordSearchClickListener
 import timber.log.Timber
 
 
@@ -31,7 +31,7 @@ class PasswordSearchDialog private constructor(
     private lateinit var passwordsSearchAdapter: PasswordsSearchAdapter
 
     private fun configurePasswordRecyclerView() {
-        val clickListener: OnPasswordInfoClickListener = { _, pos ->
+        val clickListener: OnPasswordSearchClickListener = { pos ->
             processOnSearchSuggestionItemClick(pos)
         }
 
