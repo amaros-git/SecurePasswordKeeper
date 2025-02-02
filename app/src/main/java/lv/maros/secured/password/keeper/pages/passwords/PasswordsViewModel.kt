@@ -169,6 +169,7 @@ class PasswordsViewModel(
     internal fun getPasswordsList(): List<Password>? = _passwordList.value?.toList()
 
     internal fun copyToClipboard(text: String) {
+        Timber.d("copyToClipboard: $text") //TODO REMOVE IT !!!!!!!!!!!!!!!!!!!
         val clipboard = app.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.setPrimaryClip(
             ClipData.newPlainText(

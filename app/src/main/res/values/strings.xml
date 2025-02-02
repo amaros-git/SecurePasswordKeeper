@@ -65,6 +65,7 @@
     <string name="save_generated_password_button">Save</string>
     <string name="show_all_button_text">Show all</string>
     <string name="biometric_radio_text">Biometric</string>
+    <string name="data_copied">Copied</string>
 
 
 </resources>

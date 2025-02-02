@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
@@ -52,18 +53,15 @@ class PasswordsFragment : BaseFragment() {
                         navigateToAddEditFragment(PasswordAddEditFragment.MODE_ADD_PASSWORD)
                         true
                     }
-
                     R.id.searchMenu -> {
                         processSearchMenuItemClick()
 
                         true
                     }
-
                     R.id.sortMenu -> {
                         toggleViewVisibility(binding.passwordsSortChips)
                         true
                     }
-
                     else -> false
                 }
             }
@@ -97,6 +95,14 @@ class PasswordsFragment : BaseFragment() {
         }
     }
 
+    private fun showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            length
+        ).show()
+    }
+
     private fun toggleViewVisibility(view: View) {
         if (view.visibility != View.VISIBLE) {
             view.visibility = View.VISIBLE
@@ -112,14 +118,12 @@ class PasswordsFragment : BaseFragment() {
                     mode
                 )
             }
-
             PasswordAddEditFragment.MODE_EDIT_PASSWORD -> {
                 PasswordsFragmentDirections.actionPasswordsFragmentToPasswordAddEditFragment(
                     mode,
                     passwordId
                 )
             }
-
             else -> {
                 Timber.e("Wrong mode provided for AddEditFragment")
                 null
@@ -158,11 +162,19 @@ class PasswordsFragment : BaseFragment() {
         _viewModel.decryptString(data)
 
     private fun configurePasswordRecyclerView() {
-
         passwordListAdapter =
             PasswordListAdapter(
                 passwordClickListener = { password ->
                     processPasswordVisibilityClick(password)
+                },
+                passwordLongClickListener = { encryptedPassword ->
+                    _viewModel.copyToClipboard(_viewModel.decryptString(encryptedPassword))
+                   //showToast(getString(R.string.data_copied))
+                },
+                textCopyClickListener = { view ->
+                    _viewModel.copyToClipboard((view as TextView).text.toString())
+                    //showToast(getString(R.string.data_copied))
+                    true
                 }
             )
 
@@ -262,7 +274,7 @@ class PasswordsFragment : BaseFragment() {
     //TODO rework
     private fun configureSortChips() {
         binding.passwordsSortChips.setOnClickListener { //TODO ?
-            Timber.d("Clicked")
+            Timber.d("passwordsSortChips clicked")
         }
 
         //by design only one chip can be checked.

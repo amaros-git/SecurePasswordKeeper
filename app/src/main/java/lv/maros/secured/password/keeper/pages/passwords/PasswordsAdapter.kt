@@ -2,6 +2,7 @@ package lv.maros.secured.password.keeper.pages.passwords
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,27 +16,26 @@ import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordSearchResult
 import lv.maros.secured.password.keeper.views.OnPasswordClickListener
 import lv.maros.secured.password.keeper.views.OnPasswordLongClickListener
-import timber.log.Timber
 
 
 class PasswordListAdapter(
     private val passwordClickListener: OnPasswordClickListener,
-    //private val passwordLongClickListener: OnPasswordLongClickListener
+    private val passwordLongClickListener: OnPasswordLongClickListener,
+    private val textCopyClickListener: OnLongClickListener,
 ) : ListAdapter<Password, PasswordViewHolder>(PasswordDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    //TODO these both variables MUST be protected against multithreads !!!!!!!!!!!!!!!!!!
+    //TODO not thread safe
     private val cachedItems = mutableListOf<Password>()
     private var mCurrentList: MutableList<Password> = mutableListOf()
 
     private var isSearchResultsFilterActive = false
 
     private fun setClickListeners(binding: PasswordItemBinding, position: Int) {
-
         binding.passwordItemPasswordText.setPasswordClickListener(passwordClickListener)
-
-        //binding.passwordItemPasswordText.setPasswordLongClickListener(passwordLongClickListener)
+        binding.passwordItemPasswordText.setPasswordLongClickListener(passwordLongClickListener)
+        binding.passwordItemWebsiteText.setOnLongClickListener(textCopyClickListener)
     }
 
     private fun removeDuplicateIds(items: List<PasswordSearchResult>): Set<Int> {
@@ -149,15 +149,10 @@ class PasswordListAdapter(
         const val SORTING_TYPE_LATEST = 4
         const val SORTING_TYPE_OLDEST = 5
     }
-
 }
 
 class PasswordViewHolder(val binding: PasswordItemBinding) :
-    RecyclerView.ViewHolder(binding.root)/*, View.OnLongClickListener*/ {
-
-    init {
-        //binding.root.setOnLongClickListener(this)
-    }
+    RecyclerView.ViewHolder(binding.root){
 
     fun bind(item: Password) {
         binding.password = item
@@ -175,13 +170,6 @@ class PasswordViewHolder(val binding: PasswordItemBinding) :
             return PasswordViewHolder(binding)
         }
     }
-
-    //At the moment isn't implemented.
-    /*override fun onLongClick(v: View): Boolean {
-        Timber.d("PasswordItem long click")
-
-        return true
-    }*/
 }
 
 class PasswordDiffCallback : DiffUtil.ItemCallback<Password>() {

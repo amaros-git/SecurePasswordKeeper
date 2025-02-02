@@ -38,6 +38,7 @@ class PasswordSecretView @JvmOverloads constructor(
 
     private fun mPerformLongClick() {
         Timber.d("Long click")
+        passwordLongClickListener?.invoke(encryptedPassword)
     }
 
     private fun mPerformClick() {
@@ -92,6 +93,6 @@ class PasswordSecretView @JvmOverloads constructor(
 
 typealias OnPasswordClickListener = (String) -> String
 
-typealias OnPasswordLongClickListener = (Unit) -> String
+typealias OnPasswordLongClickListener = (String) -> Unit
 
 
