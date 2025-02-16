@@ -4,7 +4,7 @@ import androidx.room.*
 import lv.maros.secured.password.keeper.data.dto.PasswordDTO
 
 @Dao
-interface PasswordDao {
+interface - {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun savePassword(password: PasswordDTO)
 

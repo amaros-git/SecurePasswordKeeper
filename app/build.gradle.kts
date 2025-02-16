@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.koltin.kapt)
+    alias(libs.plugins.androidx.navigation.safe.args)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -36,6 +39,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -52,6 +57,9 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.nav.ui.ktx)
     implementation(libs.androidx.nav.fragment.ktx)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler) // TODO move to KSP
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

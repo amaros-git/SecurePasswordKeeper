@@ -94,7 +94,7 @@ dependencies {
 
     //Room
     implementation "androidx.room:room-runtime:2.5.2"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //implementation 'androidx.legacy:legacy-support-v4:1.0.0' ???? Do I need this ?
     kapt "androidx.room:room-compiler:2.5.2"
     implementation "androidx.room:room-ktx:2.5.2"
 
