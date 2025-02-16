@@ -4,8 +4,9 @@ import android.app.Application
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import lv.maros.secured.password.keeper.data.PasswordDataSource
-import lv.maros.secured.password.keeper.data.local.PasswordDatabase
-import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
+import lv.maros.secured.password.keeper.data.file.PasswordFileRepository
+//import lv.maros.secured.password.keeper.data.local.PasswordDatabase
+//import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
 import lv.maros.secured.password.keeper.security.KeeperAccessAuthenticator
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
@@ -25,7 +26,7 @@ object ServiceLocator {
     fun provideLocalRepository(app: Application): PasswordDataSource {
         synchronized(lock) {
             return localPasswordsRepository
-                ?: PasswordsLocalRepository(PasswordDatabase.getInstance(app))
+                ?: PasswordFileRepository(app)
         }
     }
 

@@ -19,7 +19,7 @@ import lv.maros.secured.password.keeper.PASSWORD_REMOVAL_WORKER_INITIAL_DELAY
 import lv.maros.secured.password.keeper.R
 import lv.maros.secured.password.keeper.base.BaseViewModel
 import lv.maros.secured.password.keeper.data.PasswordDataSource
-import lv.maros.secured.password.keeper.data.dto.PasswordDTO
+import lv.maros.secured.password.keeper.models.PasswordDTO
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import lv.maros.secured.password.keeper.utils.toPassword

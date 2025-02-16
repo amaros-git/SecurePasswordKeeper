@@ -1,6 +1,6 @@
 package lv.maros.secured.password.keeper.data
 
-import lv.maros.secured.password.keeper.data.dto.PasswordDTO
+import lv.maros.secured.password.keeper.models.PasswordDTO
 
 interface PasswordDataSource {
     suspend fun getPassword(passwordId: Int): PasswordDTO?

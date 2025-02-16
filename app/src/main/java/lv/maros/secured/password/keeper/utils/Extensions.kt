@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import lv.maros.secured.password.keeper.data.dto.PasswordDTO
+import lv.maros.secured.password.keeper.models.PasswordDTO
 import lv.maros.secured.password.keeper.models.Password
 import lv.maros.secured.password.keeper.models.PasswordInputData
 import lv.maros.secured.password.keeper.pages.passwords.PasswordListAdapter
