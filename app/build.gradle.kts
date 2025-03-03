@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.androidx.nav.fragment.ktx)
     implementation(libs.timber)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.security.crypto)
 //    implementation(libs.androidx.room.ktx)
 //    implementation(libs.androidx.room.runtime)
 //    kapt(libs.androidx.room.compiler) // TODO move to KSP
