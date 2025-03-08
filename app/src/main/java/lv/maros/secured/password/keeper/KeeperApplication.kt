@@ -3,25 +3,11 @@ package lv.maros.secured.password.keeper
 import android.app.Application
 import androidx.work.Configuration
 import lv.maros.secured.password.keeper.data.PasswordDataSource
-//import lv.maros.secured.password.keeper.data.local.PasswordsLocalRepository
-import lv.maros.secured.password.keeper.security.KeeperAccessAuthenticator
 import lv.maros.secured.password.keeper.security.KeeperConfigStorage
 import lv.maros.secured.password.keeper.security.KeeperCryptor
 import timber.log.Timber
 
-class KeeperApplication : Application() {
-
-//    override fun getWorkManagerConfiguration(): Configuration {
-//        return if (BuildConfig.DEBUG) {
-//            Configuration.Builder()
-//                .setMinimumLoggingLevel(android.util.Log.DEBUG)
-//                .build()
-//        } else {
-//            Configuration.Builder()
-//                .setMinimumLoggingLevel(android.util.Log.ERROR)
-//                .build()
-//        }
-//    }
+class KeeperApplication : Application(), Configuration.Provider {
 
     val localPasswordsRepository: PasswordDataSource
         get() = ServiceLocator.provideLocalRepository(this)
@@ -32,6 +18,18 @@ class KeeperApplication : Application() {
     val configStorage: KeeperConfigStorage
         get() = ServiceLocator.provideKeeperConfigStorage(this)
 
+    private fun getWorkerConfiguration(): Configuration {
+        return if (BuildConfig.DEBUG) {
+            Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.DEBUG)
+                .build()
+        } else {
+            Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.ERROR)
+                .build()
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -39,4 +37,9 @@ class KeeperApplication : Application() {
             Timber.plant(Timber.DebugTree())
         }
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = getWorkerConfiguration()
+
+
 }
